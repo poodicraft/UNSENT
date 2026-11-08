@@ -33,7 +33,7 @@ var _flipping := false
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 
@@ -49,7 +49,7 @@ func open(id: String) -> void:
 
 	_backdrop = ColorRect.new()
 	_backdrop.color = Color(0.03, 0.03, 0.07, 0.86)
-	_backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(_backdrop)
 
 	var top := VBoxContainer.new()
@@ -153,14 +153,15 @@ func _paper_style() -> StyleBox:
 	if ResourceLoader.exists(p):
 		var s := StyleBoxTexture.new()
 		s.texture = load(p)
+		var header: bool = paper in ["hotel", "logbook", "ticket"]
 		s.texture_margin_left = 60
 		s.texture_margin_right = 60
-		s.texture_margin_top = 90
+		s.texture_margin_top = 130 if header else 90
 		s.texture_margin_bottom = 60
-		s.content_margin_left = 44
-		s.content_margin_right = 40
-		s.content_margin_top = 60 if paper in ["hotel", "logbook", "ticket", "airmail"] else 40
-		s.content_margin_bottom = 40
+		s.content_margin_left = 46
+		s.content_margin_right = 42
+		s.content_margin_top = 118 if header else (64 if paper == "airmail" else 44)
+		s.content_margin_bottom = 44
 		return s
 	var b := Kit.box(Color(PAPER_COLORS.get(paper, "#f3ead8")), 6, 0, Kit.GOLD, 14, 40)
 	return b
@@ -259,7 +260,7 @@ func _detail_chip(d: Dictionary) -> Control:
 	b.add_theme_stylebox_override("pressed", sb)
 	b.add_theme_stylebox_override("hover_pressed", sb)
 	var v := VBoxContainer.new()
-	v.set_anchors_preset(Control.PRESET_FULL_RECT)
+	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	v.offset_left = 18
 	v.offset_right = -18
 	v.offset_top = 10
@@ -354,11 +355,13 @@ func _refresh_leads() -> void:
 		var dots := ""
 		for i in maxi(need, ld.support):
 			dots += "● " if i < ld.support else "○ "
-		h.add_child(Kit.label(dots.strip_edges(), 24, Kit.GOLD))
-		if ld.refute > 0:
-			h.add_child(Kit.label("✗%d" % ld.refute, 24, Kit.BAD, "serif_bold"))
-		if ld.ready:
-			h.add_child(Kit.label("✓", 26, Kit.GOOD, "serif_bold"))
+		for t in [[dots.strip_edges(), Kit.GOLD], ["✗%d" % ld.refute if ld.refute > 0 else "", Kit.BAD], ["✓" if ld.ready else "", Kit.GOOD]]:
+			if t[0] == "":
+				continue
+			var mk := Kit.label(t[0], 24, t[1], "serif_bold")
+			mk.autowrap_mode = TextServer.AUTOWRAP_OFF
+			mk.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			h.add_child(mk)
 		_leads_box.add_child(row)
 	var tip := "● supporting clues   ✗ contradicting clues   ✓ enough to deliver"
 	_leads_box.add_child(Kit.label(tip, 19, Kit.MUTED, "italic"))

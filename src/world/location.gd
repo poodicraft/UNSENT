@@ -27,7 +27,7 @@ const MOODS := {
 		"sea_deep": "#070a14", "sea_hor": "#1a2136", "sea_glint": "#4a587a", "glint": 0.15},
 	"dawn": {"top": "#4673b5", "mid": "#a3bfe0", "hor": "#ffe2aa", "glow": "#fff3c6", "cloud": "#ffd8c2",
 		"sun": -0.09, "stars": 0.0, "clouds": 0.35, "mod": "#fff8ee",
-		"sea_deep": "#2b5c97", "sea_hor": "#ffdca6", "sea_glint": "#fff4cc", "glint": 1.3},
+		"sea_deep": "#2f6098", "sea_hor": "#f6d6a8", "sea_glint": "#fff4cc", "glint": 0.7},
 	"interior": {"mod": "#ffffff"},
 	"storm_interior": {"mod": "#b4b9d4"},
 	"dawn_interior": {"mod": "#fff5e6"},
@@ -181,7 +181,7 @@ func _build_sky() -> void:
 	_sky_layer.layer = -10
 	add_child(_sky_layer)
 	_sky_rect = ColorRect.new()
-	_sky_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_sky_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_sky_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_sky_mat = ShaderMaterial.new()
 	_sky_mat.shader = preload("res://src/world/shaders/sky.gdshader")
@@ -301,12 +301,23 @@ func _build_glows() -> void:
 
 
 func _build_fx() -> void:
-	var lb: Dictionary = def.get("lighthouse_beam", {})
+	# The art pipeline knows where the lamp actually is (and on which parallax
+	# layer); fall back to the gameplay data's position.
+	var lb: Dictionary = meta.get("beam", def.get("lighthouse_beam", {}))
 	if not lb.is_empty():
 		_beam = Beam.new()
-		_beam.position = Vector2(lb.pos[0], lb.pos[1])
+		var bx: float = float(lb.get("x", lb.get("pos", [0, 0])[0]))
+		var by: float = float(lb.get("y", lb.get("pos", [0, 0])[1]))
+		var bf: float = float(lb.get("factor", 1.0))
+		_beam.position = Vector2(bx, by)
 		_beam.scale = Vector2.ONE * float(lb.get("scale", 1.0))
-		_light_layer.add_child(_beam)
+		if bf < 0.99:
+			# A distant lighthouse: sweep behind the nearer scenery.
+			_beam.z_index = -20
+			add_child(_beam)
+			_layers.append({"node": _beam, "factor": bf, "x": bx})
+		else:
+			_light_layer.add_child(_beam)
 	for kind in def.get("particles", []):
 		_add_particles(kind)
 	if id == "harbor":

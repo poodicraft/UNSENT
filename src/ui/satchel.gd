@@ -18,7 +18,7 @@ var _busy := false
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 
@@ -30,12 +30,12 @@ func on_back() -> void:
 func open(tab: String) -> void:
 	var bd := ColorRect.new()
 	bd.color = Color(0.03, 0.03, 0.07, 0.9)
-	bd.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bd.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(bd)
 
 	var sheet := PanelContainer.new()
 	sheet.add_theme_stylebox_override("panel", Kit.box(Color("#161b30"), 28, 2, Color(Kit.GOLD, 0.45), 20, 0))
-	sheet.set_anchors_preset(Control.PRESET_FULL_RECT)
+	sheet.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	sheet.offset_left = 16
 	sheet.offset_right = -16
 	sheet.offset_top = 30

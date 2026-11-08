@@ -1,0 +1,19 @@
+{
+ "width": 1200,
+ "height": 1600,
+ "horizon": 700,
+ "sky": true,
+ "sea": true,
+ "layers": [
+  {
+   "tex": "main.png",
+   "x": -60.0,
+   "y": -200.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -10,
+   "group": "world"
+  }
+ ],
+ "props": []
+}

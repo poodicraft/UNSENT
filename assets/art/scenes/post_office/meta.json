@@ -1,0 +1,45 @@
+{
+ "width": 1800,
+ "height": 1600,
+ "horizon": 840,
+ "layers": [
+  {
+   "tex": "main.png",
+   "x": -60.0,
+   "y": -200.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -10,
+   "group": "world"
+  },
+  {
+   "tex": "fg.png",
+   "x": -60.0,
+   "y": 1340.0,
+   "scale": 1.0,
+   "factor": 1.15,
+   "z": 10,
+   "group": "fg"
+  }
+ ],
+ "props": [
+  {
+   "tex": "counter.png",
+   "x": 318.0,
+   "y": 700.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": 0,
+   "group": "world",
+   "sort_y": 992
+  },
+  {
+   "kind": "clock",
+   "mode": "wall",
+   "x": 565,
+   "y": 360,
+   "r": 44,
+   "z": -4
+  }
+ ]
+}

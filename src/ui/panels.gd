@@ -10,11 +10,11 @@ class Modal extends Control:
 	var backdrop: ColorRect
 
 	func _init() -> void:
-		set_anchors_preset(Control.PRESET_FULL_RECT)
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_STOP
 		backdrop = ColorRect.new()
 		backdrop.color = Color(0.03, 0.03, 0.07, 0.78)
-		backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(backdrop)
 
 	func appear(node: Control) -> void:
@@ -76,14 +76,14 @@ class TitleCard extends Control:
 	var _ready_to_close := false
 
 	func setup(title: String, subtitle: String, on_black: bool) -> void:
-		set_anchors_preset(Control.PRESET_FULL_RECT)
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_STOP
 		var bg := ColorRect.new()
 		bg.color = Color(0.02, 0.02, 0.05, 1.0 if on_black else 0.82)
-		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(bg)
 		var v := VBoxContainer.new()
-		v.set_anchors_preset(Control.PRESET_CENTER)
+		v.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 		v.anchor_left = 0.0
 		v.anchor_right = 1.0
 		v.offset_left = 40
@@ -128,11 +128,11 @@ class ConsequenceCard extends Control:
 	var _can := false
 
 	func setup(title: String, subtitle: String) -> void:
-		set_anchors_preset(Control.PRESET_FULL_RECT)
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_STOP
 		var bg := ColorRect.new()
 		bg.color = Color(0.02, 0.02, 0.06, 0.55)
-		bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+		bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		add_child(bg)
 		var card := PanelContainer.new()
 		card.add_theme_stylebox_override("panel", Kit.paper_box(10, 40))
@@ -180,7 +180,7 @@ class DeliveredStamp extends Control:
 	signal done
 
 	func setup(letter_id: String, who: String) -> void:
-		set_anchors_preset(Control.PRESET_FULL_RECT)
+		set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		mouse_filter = Control.MOUSE_FILTER_STOP
 		var v := VBoxContainer.new()
 		v.anchor_left = 0.0
@@ -588,7 +588,7 @@ class SavePanel extends Modal:
 			line = "%s · %s\n%d letters delivered · %s · %s" % [night, loc, info.delivered, Kit.fmt_time(float(info.play_time)), when]
 		var b := Kit.dark_button("", 120)
 		var vb := VBoxContainer.new()
-		vb.set_anchors_preset(Control.PRESET_FULL_RECT)
+		vb.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		vb.offset_left = 26
 		vb.offset_top = 14
 		vb.offset_right = -20

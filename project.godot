@@ -63,3 +63,12 @@ textures/vram_compression/import_etc2_astc=true
 textures/canvas_textures/default_texture_filter=1
 environment/defaults/default_clear_color=Color(0.0705882, 0.0705882, 0.129412, 1)
 2d/snap/snap_2d_transforms_to_pixel=false
+
+[importer_defaults]
+
+texture={
+"compress/mode": 1,
+"compress/lossy_quality": 0.82,
+"mipmaps/generate": false,
+"process/fix_alpha_border": true
+}

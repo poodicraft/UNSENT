@@ -259,7 +259,7 @@ static func icon_button(icon: String, size := 92) -> Button:
 	var ic := Icon.new()
 	ic.kind = icon
 	ic.color = CREAM
-	ic.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ic.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ic.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	b.add_child(ic)
 	b.pressed.connect(func(): Audio.sfx("ui_tap", -4.0))

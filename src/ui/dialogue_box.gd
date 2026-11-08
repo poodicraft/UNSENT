@@ -28,13 +28,13 @@ var _tween: Tween
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	visible = false
 
 	# Full-screen tap catcher (advances text).
 	_catcher = Control.new()
-	_catcher.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_catcher.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_catcher.mouse_filter = Control.MOUSE_FILTER_STOP
 	_catcher.gui_input.connect(_on_catcher_input)
 	add_child(_catcher)

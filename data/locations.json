@@ -28,7 +28,7 @@
       {"id": "back_door", "label": "Harbour", "rect": [1690, 610, 105, 380], "stand": [1700, 1025], "exit": {"to": "harbor", "spawn": "from_po"}, "arrow": "right"}
     ],
     "npcs": [
-      {"id": "odile", "pos": [560, 978], "face": "left", "if": "not $finale"}
+      {"id": "odile", "pos": [560, 930], "face": "left", "if": "not $finale"}
     ],
     "glows": [
       {"pos": [450, 250], "color": "#ffcf8a", "size": 520, "energy": 0.55, "flicker": 0.06},
@@ -185,7 +185,7 @@
       {"id": "tobias", "pos": [790, 1000], "face": "left", "if": "$lantern_night and lamp_keeper() == \"tobias\""}
     ],
     "glows": [
-      {"pos": [600, 600], "color": "#fff1c4", "size": 900, "energy": 0.95, "flicker": 0.05, "if": "lamp_glowing()"},
+      {"pos": [600, 560], "color": "#fff1c4", "size": 640, "energy": 0.5, "flicker": 0.05, "if": "lamp_glowing()"},
       {"pos": [600, 600], "color": "#ffd9a0", "size": 380, "energy": 0.35, "flicker": 0.05, "if": "not lamp_glowing()"}
     ],
     "particles": ["dust"]

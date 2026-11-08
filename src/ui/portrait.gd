@@ -42,10 +42,10 @@ func _layout() -> void:
 	if puppet == null:
 		return
 	var h := float(Data.characters.get(char_id, {}).get("puppet", {}).get("height", 1.0))
-	var sc := size.x / 92.0
+	var sc := size.x / 108.0
 	puppet.scale = Vector2(sc, sc)
 	# Head centre sits at roughly y = -228*h in puppet space.
-	puppet.position = Vector2(size.x * 0.40, size.y * 0.58 + 228.0 * h * sc - 14.0 * sc)
+	puppet.position = Vector2(size.x * 0.42, size.y * 0.56 + 228.0 * h * sc)
 	puppet.facing = 1
 
 

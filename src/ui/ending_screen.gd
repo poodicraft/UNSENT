@@ -12,7 +12,7 @@ var _bg: ColorRect
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 
 
@@ -26,7 +26,7 @@ func play(id: String) -> void:
 	var E: Dictionary = Data.endings.get(id, {})
 	var dawn: bool = E.get("dawn", false)
 	_bg = ColorRect.new()
-	_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_bg.color = Color(0.03, 0.03, 0.07, 0.0)
 	add_child(_bg)
 	var t := create_tween()

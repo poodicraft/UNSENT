@@ -30,7 +30,7 @@ var _modals: Array = []
 func _ready() -> void:
 	layer = 10
 	root = Control.new()
-	root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.theme = Kit.theme()
 	add_child(root)
@@ -40,14 +40,14 @@ func _ready() -> void:
 	atmo.layer = 5
 	add_child(atmo)
 	_vignette = ColorRect.new()
-	_vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var vm := ShaderMaterial.new()
 	vm.shader = preload("res://src/world/shaders/vignette.gdshader")
 	_vignette.material = vm
 	atmo.add_child(_vignette)
 	_grain = ColorRect.new()
-	_grain.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_grain.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_grain.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var gm := ShaderMaterial.new()
 	gm.shader = preload("res://src/world/shaders/grain.gdshader")
@@ -56,7 +56,7 @@ func _ready() -> void:
 		atmo.add_child(_grain)
 	_grain.material = gm
 	_ripple = ColorRect.new()
-	_ripple.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_ripple.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_ripple.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ripple_mat = ShaderMaterial.new()
 	_ripple_mat.shader = preload("res://src/world/shaders/ripple.gdshader")
@@ -91,7 +91,7 @@ func _ready() -> void:
 	root.add_child(dialogue)
 
 	modal_layer = Control.new()
-	modal_layer.set_anchors_preset(Control.PRESET_FULL_RECT)
+	modal_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(modal_layer)
 
@@ -99,12 +99,12 @@ func _ready() -> void:
 	overlay.layer = 20
 	add_child(overlay)
 	var oroot := Control.new()
-	oroot.set_anchors_preset(Control.PRESET_FULL_RECT)
+	oroot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	oroot.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	oroot.theme = Kit.theme()
 	overlay.add_child(oroot)
 	_flash = ColorRect.new()
-	_flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_flash.color = Color(0.85, 0.9, 1.0, 0.0)
 	_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	oroot.add_child(_flash)
@@ -118,7 +118,7 @@ func _ready() -> void:
 	_toasts.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	oroot.add_child(_toasts)
 	_fade = ColorRect.new()
-	_fade.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_fade.color = Color(0.02, 0.02, 0.05, 0.0)
 	_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	oroot.add_child(_fade)
