@@ -70,7 +70,7 @@ func _fate_card(fate: Dictionary) -> void:
 	p.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	box.add_child(p)
 	var who: String = fate.who
-	p.show_char(who, "happy" if fate.text.find("never") < 0 else "sad", false)
+	p.show_char(who, fate.get("mood", "happy"), false)
 	var name := Kit.label(Data.char_name(who).to_upper(), 26, Data.char_color(who), "display", HORIZONTAL_ALIGNMENT_CENTER)
 	box.add_child(name)
 	var txt := Kit.label(fate.text, 30, Kit.CREAM, "italic", HORIZONTAL_ALIGNMENT_CENTER)

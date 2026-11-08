@@ -58,10 +58,7 @@ func _ready() -> void:
 	_obj_panel.offset_left = 130
 	_obj_panel.offset_right = -146
 	_obj_panel.offset_top = _top_margin + 6
-	_obj_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_obj_panel.gui_input.connect(func(e):
-		if e is InputEventMouseButton and e.pressed:
-			_flash_objective())
+	_obj_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_obj_panel)
 	_objective = Kit.label("", 21, Color("#e9dfcc"), "italic", HORIZONTAL_ALIGNMENT_CENTER)
 	_obj_panel.add_child(_objective)

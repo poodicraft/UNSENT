@@ -26,12 +26,19 @@ func _ready() -> void:
 	add_child(ui)
 	var args := OS.get_cmdline_user_args()
 	for a in args:
-		if a == "--tour" or a.begins_with("--playtest"):
-			var path := "res://tests/screenshot_tour.gd" if a == "--tour" else "res://tests/playthrough.gd"
+		if a == "--tour" or a == "--uismoke" or a.begins_with("--playtest"):
+			var path := "res://tests/playthrough.gd"
+			if a == "--tour":
+				path = "res://tests/screenshot_tour.gd"
+			elif a == "--uismoke":
+				path = "res://tests/ui_smoke.gd"
 			var T: Script = load(path)
-			if T:
+			if T and T.can_instantiate():
 				add_child(T.new())
-				return
+			else:
+				push_error("Test script failed to load: " + path)
+				get_tree().quit(2)
+			return
 	show_title()
 
 

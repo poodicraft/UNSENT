@@ -750,64 +750,89 @@ func fates() -> Array:
 	var out: Array = []
 	# Mari & Theo
 	var t := ""
+	var mood := "happy"
 	if f("theo_home"):
 		t = "Theo came home on the 8:15. The lamp above the blue door never went dark again."
+		mood = "happy"
 	elif f("reply_posted"):
 		t = "Mari's reply crossed the bay. The 8:15 turned back in the storm — but Theo will be on the next one. Mari keeps the lamp lit."
+		mood = "happy"
 	elif f("bakery_lamp_lit"):
 		t = "Mari lights the lamp above the blue door every night now. Someday, someone across the bay will see it."
+		mood = "happy"
 	else:
 		t = "The lamp above the blue door stayed dark. Across the bay, a man on the dock kept letting the 8:15 leave without him."
-	out.append({"who": "mari", "text": t})
+		mood = "sad"
+	out.append({"who": "mari", "text": t, "mood": mood})
 	# Odile & Tobias
 	if f("reunited") and f("lamp_lit"):
 		t = "For one night in forty-one years, another hand kept the Hushwater Light — and two old friends met at the end of the pier."
+		mood = "happy"
 	elif f("reunited"):
 		t = "They met at the end of the pier, in the dark. Forty-one years late. But they met."
+		mood = "happy"
 	elif f("odile_burned"):
 		t = "Odile burned her letter. Some letters stay unsent, and that is its own kind of answer."
+		mood = "happy"
 	else:
 		t = "Tobias never knew there had been a question. Odile kept her lamp lit, and her silence."
-	out.append({"who": "odile", "text": t})
+		mood = "sad"
+	out.append({"who": "odile", "text": t, "mood": mood})
 	# June
 	var jp: String = str(f("june_path"))
 	if jp == "stay":
 		t = "June became keeper of the Hushwater Light. She climbs the hundred and twelve stairs every night, with her whole heart."
+		mood = "happy"
 	elif jp == "leave":
 		if f("june_mum"):
 			t = "June left on the 6:10 with her grandfather's star chart and far too much bread. Her mother waved until the ferry was a speck."
+			mood = "happy"
 		else:
 			t = "June left on the 6:10 with her grandfather's star chart in her pocket. She writes home every week."
+			mood = "happy"
 	else:
 		if f("june_mum"):
 			t = "June left on the 6:10. Mari packed her bread and waved. But June never climbed the lighthouse with her grandfather, and its lamp went dark the winter after."
+			mood = "sad"
 		else:
 			t = "June left before anyone woke, without a word. The lighthouse went dark the winter after."
-	out.append({"who": "june", "text": t})
+			mood = "sad"
+	out.append({"who": "june", "text": t, "mood": mood})
 	# Felix
 	if f("clock_running") and not f("clock_backward"):
 		t = "The town clock started again at 11:53, seventeen years late, and has not lost a second since."
+		mood = "happy"
 	elif f("clock_backward"):
 		t = "The town clock runs backwards now. Felix calls it a calibration issue. June calls it her dad."
+		mood = "happy"
 	elif f("mari_knows_felix"):
 		t = "Mari and Felix don't speak of that night. But on Lantern Night she leaves a bun on his step, and he eats it."
+		mood = "happy"
 	elif f("letter_to_sea"):
 		t = "Felix's letter went out with the tide. He still stands at the stopped clock, waiting for something he can't name."
+		mood = "sad"
 	elif f("felix_locked"):
 		t = "Felix locked his letter in a drawer. The town clock still reads 11:52."
+		mood = "sad"
 	elif f("felix_has_letter"):
 		t = "Felix studies his EXHIBIT in its glass case. He has never been so happy, or so wrong."
+		mood = "happy"
 	else:
 		t = "The typewritten letter was never delivered. The town clock still reads 11:52."
-	out.append({"who": "felix", "text": t})
+		mood = "sad"
+	out.append({"who": "felix", "text": t, "mood": mood})
 	# Bram
 	if f("mari_bow"):
 		t = "On Thursdays, Mari rides the 6:10 at the bow now, beside the wheel. Bram has started spelling 'weather' correctly. Mostly."
+		mood = "happy"
 	elif f("odile_kept_umbrella"):
 		t = "Bram never learned his letter went astray. Odile winks at him every Thursday, which confuses him enormously."
+		mood = "sad"
 	elif f("bram_kept_letter"):
 		t = "Bram still carries his letter in his coat pocket. Someday, he says."
+		mood = "sad"
 	else:
 		t = "Bram still looks back at the stern every Thursday, and never says a word."
-	out.append({"who": "bram", "text": t})
+		mood = "sad"
+	out.append({"who": "bram", "text": t, "mood": mood})
 	return out

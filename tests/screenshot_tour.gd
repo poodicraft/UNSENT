@@ -141,9 +141,9 @@ func _run() -> void:
 		main.ui.pop_modal(a)
 		main.ui.consequence("Mari lit the lamp above the blue door.", "For the first time in two years, someone across the bay might see it.")
 		await _shot("consequence")
-		for c in main.ui.overlay.get_child(0).get_children():
-			if c.has_signal("done"):
-				c.queue_free()
+		for card_node in main.ui.overlay.get_child(0).get_children():
+			if card_node.has_signal("done"):
+				card_node.queue_free()
 
 	if _want("pause"):
 		var P2 := load("res://src/ui/panels.gd")
@@ -177,3 +177,21 @@ func _run() -> void:
 		main.world.set_mood("dawn", 0.0)
 		await _frames(60)
 		await _shot("dawn_harbor")
+
+	if _want("ending"):
+		for fl in ["theo_home", "reunited", "lamp_lit", "clock_running", "mari_bow", "june_mum", "dawn"]:
+			GameState.set_flag(fl, true)
+		GameState.set_flag("june_path", "stay")
+		await main.goto_location("harbor", "finale", false, false)
+		main.world.set_mood("dawn", 0.0)
+		var E = load("res://src/ui/ending_screen.gd").new()
+		main.ui.root.add_child(E)
+		E.play("first_light")
+		await get_tree().create_timer(3.0).timeout
+		await _shot("ending_fate")
+		for i in 6:
+			E._tap = true
+			await get_tree().create_timer(1.8).timeout
+		await get_tree().create_timer(2.0).timeout
+		await _shot("ending_card")
+
