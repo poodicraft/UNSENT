@@ -1,0 +1,362 @@
+# ═══════════════════════════════════════════════════════════════════
+#  ODILE VANCE — Postmistress of the Office of Unsent Letters
+#  Crisp, wry, affectionate; postal idioms; secretly vulnerable.
+# ═══════════════════════════════════════════════════════════════════
+
+=== odile.talk
+[if $lantern_night] -> odile.lantern
+[if not read_letter("blue_door")] odile: The basket, dear. Under the Chute. Letters don't read themselves — more's the pity.
+[if not read_letter("blue_door")] -> END
+[if chute_waiting()] odile: The Chute's got post for you. I can hear it sulking from here.
+[if has_item("mari_reply")] -> odile.reply
+[if can_sleep()] -> odile.sleep_offer
+[if $tobias_knows and not $odile_after_tobias] -> odile.after_tobias
+[if $odile_burned and not $odile_after_burn] -> odile.after_burn
+[if $night == 3] -> odile.n3
+[if $night == 2] -> odile.n2
+-> odile.n1
+
+=== odile.n1
+odile[thinking]: Still looking? Good. Looking is most of the job. The rest is walking.
+* Any advice? -> odile.hint
+* Tell me about Hushwater. -> odile.lore_town
+* What happened to your eyes? -> odile.lore_eyes
+* That's all for now. -> END
+
+=== odile.n2
+odile: Four letters, two of them from the future. In fifty years the Chute's never sent me more than one a week. Something's coming, Wren. I can feel it in my knees.
+* Any advice? -> odile.hint
+* How can a letter come from the future? -> odile.lore_future
+* What was the Long Storm? -> odile.lore_storm
+* That's all for now. -> END
+
+=== odile.n3
+odile[sad]: Lantern Night tomorrow. Seventeen years since the storm. You'd think it would get easier. It gets *quieter*, which isn't the same thing.
+* Any advice? -> odile.hint
+* Why don't you ever leave Hushwater? -> odile.lore_leave
+* What was the Long Storm? -> odile.lore_storm
+* That's all for now. -> END
+
+=== odile.reply
+odile[happy]: You've a letter in your hand that wasn't there before. A *reply!* Well, well. That's the best kind of post.
+odile: Replies go in the outbox — the red box by the stove. Bram takes the outgoing mail across on the morning ferry. Such as our mornings are.
+~ objective "Post Mari's reply in the outbox by the stove."
+
+=== odile.after_tobias
+~ set odile_after_tobias
+odile[shy]: Don't look at me like that.
+odile[shy]: Bram came by with a message. From the lighthouse. It said, and I quote: "Pier. Lantern Night. 11:40. — T."
+odile[thinking]: Five words. Forty-one years, and he sends five words. The man has the soul of a telegram.
+odile[happy]: ...I've read it nineteen times.
+
+=== odile.after_burn
+~ set odile_after_burn
+odile: We'll not talk about it. I've had a great deal of practice not talking about it, and I'm very good.
+odile[sad]: Thank you, though. For bringing it to me. Most people wouldn't have.
+
+=== odile.sleep_offer
+[if $night == 1] odile[happy]: One letter, one lamp lit. That's a good night's work for a first night.
+[if $night == 2] odile: The Chute's gone quiet. It does that when it's thinking.
+[if $night == 3] odile[sad]: Tomorrow is Lantern Night. Everyone will be down at the harbour with their paper lanterns.
+[if $night == 3] odile: Any letters you haven't delivered by then... well. You'll still have them on Lantern Night. But not after.
+odile: Go up and get some sleep, dear. The letters will keep. They're very good at keeping.
+* Sleep until the next night. -> odile.sleep
+* Not yet — I want to look around. -> odile.not_yet
+* Any advice first? -> odile.hint
+
+=== odile.not_yet
+odile: Suit yourself. I'll be here. I'm always here. It's rather my defining quality.
+
+=== odile.sleep
+~ sleep
+
+=== odile.lantern
+[if $finale] -> odile.finale
+[if $tobias_knows] odile[shy]: Eleven-forty. The end of the pier. I've changed my hat three times. Don't say anything.
+[if $tobias_knows and lamp_keeper() == "nobody"] odile[sad]: And there's nobody in that lamp room, Wren. Somebody has to be. You know that.
+[if not $tobias_knows] odile: Off you go, down to the harbour. I'll be along. I always come down for the lanterns, even if I never light one.
+* Any advice? -> odile.hint
+* That's all. -> END
+
+=== odile.finale
+odile[happy]: Look at them all. Every lantern a name.
+
+# ─── Lore ────────────────────────────────────────────────────────────
+
+=== odile.lore_town
+odile: Hushwater. Four hundred souls, three hundred gulls, one bakery, no sunrise.
+odile: Fishing town, once. Then the Long Storm came, seventeen years ago, and took the Marguerite and three good men, and the sun went down that night and simply... didn't finish.
+odile[thinking]: We're not unhappy. Don't think that. We've just been holding our breath for a very long time.
+
+=== odile.lore_eyes
+odile[sad]: Cataracts. And time. Mostly time.
+odile: I can still read violet ink, if it's big enough and I'm angry enough. But the letters... the letters deserve better than an old woman squinting. They deserve good eyes.
+odile[happy]: Hence you. Don't let it go to your head.
+
+=== odile.lore_future
+odile[thinking]: I don't know, dear. The Chute's never explained itself. It's a Chute.
+odile: My theory? Somebody, somewhere, someday, wants these words delivered very badly. Badly enough to send them backwards.
+odile[sad]: And if a letter can come from the future... then the future it came from must be worried about something.
+
+=== odile.lore_storm
+odile[sad]: Fourteenth of October, two thousand and nine. The barometer fell like a stone down a well.
+odile: The Marguerite was out past the Teeth when it hit. The lighthouse went dark — first time in a hundred years — and she went onto the rocks at eight minutes to midnight. Daniel Fenn. Arlo Pike. Sam Reyes.
+odile: The clock stopped. The sun stopped. And Hushwater has been waiting for something ever since. Nobody knows what.
+
+=== odile.lore_leave
+odile: Someone has to mind the Chute. It doesn't like being left.
+odile[sad]: And... I suppose if I'm honest, the last time I made up my mind to leave Hushwater, I was going to do it at the end of the pier, with someone. And he didn't come. And after that, staying seemed easier than deciding again.
+~ clue c5_never_leaves
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== odile.ask.c1_lamp
+odile: My door's blue and my lamp is lit. Don't look at me like that.
+odile: I lit it the night I took this post, so the letters could find their way. I have never once let it go out.
+~ clue c1_po_lamp
+
+=== odile.ask.c1_po_lamp
+odile[happy]: Fifty years without going out. It's the most reliable thing in Hushwater, that lamp. Including me.
+
+=== odile.ask.c1_cinnamon
+odile[thinking]: I do drink cinnamon tea, if that's what you're implying. Medicinal. For the eyes. Hush.
+~ clue c1_tea
+
+=== odile.ask.c1_tea
+odile: Cinnamon tea, three sugars. Mari sells me the sticks. If you tell her about the three sugars, I'll have you sorting parcels until the sun comes up. Which is to say, forever.
+
+=== odile.ask.c1_cinnamon_sign
+odile: Mari's cinnamon loaves. Four o'clock every morning, regular as a clock — a working one. The whole square smells of it. I complain, and then I send for two.
+
+=== odile.ask.c1_funeral
+odile: Papa's funeral? Not mine, dear. I was an only child, and my father went to sea when I was four and didn't come back. There was no funeral. There was a very large hat.
+odile[thinking]: Whoever wrote that had a father to bury, and someone to quarrel with over the coffin. Brothers and sisters do that. It's practically traditional.
+~ clue c1_only_child
+
+=== odile.ask.c1_only_child
+odile: No brothers, no sisters, no cousins worth the stamp. Just me and the post. We've got on very well.
+
+=== odile.ask.c1_ferry
+odile: The 8:15 is Bram's evening run from Port Ardent. If you want to know who's been watching it leave without them, ask the man who sings at it. Bram notices everything except himself.
+
+=== odile.ask.c1_hotel
+odile: Port Ardent. A lot of Hushwater's runaways wash up there. It's close enough to see home on a clear night, and far enough to pretend you can't.
+
+=== odile.ask.c1_theo
+odile[sad]: Theo Okafor. A good boy with a bad temper and a worse sense of timing. Mari lit a lamp for him every night for ten years. Then she stopped.
+
+=== odile.ask.c1_dark_lamp
+odile[sad]: Mari's lamp has been dark two years. I notice. I notice everything that goes dark.
+
+=== odile.ask.c1_dockman
+odile: A man on the far dock who never gets on the ferry. Hm. People are like letters, dear. Some of them need carrying the last few steps.
+
+=== odile.ask.c2_dear_t
+odile[thinking]: "T." There are a great many T's in the world. Tea, for one. Let me put the kettle on.
+n: *She doesn't put the kettle on.*
+
+=== odile.ask.c2_lamp
+odile: "If you light the lamp." There's only one lamp in Hushwater anyone asks questions of, dear. It's up on the cliff.
+
+=== odile.ask.c2_married
+odile[sad]: Married on a Sunday... October, 1985. Yes. I was there. I wore green. I left early.
+
+=== odile.ask.c2_pier
+odile[sad]: The end of the pier. I haven't been to the end of the pier in forty-one years.
+n: *She says it too quickly, as if she's said it to herself many times.*
+
+=== odile.ask.c2_date
+odile: Thirteenth of October, 1985. The night before... well. The night before a great many things.
+
+=== odile.ask.c2_violet
+-> odile.confession
+
+=== odile.ask.c2_inkwell
+-> odile.confession
+
+=== odile.ask.c2_photo
+odile[surprised]: He kept that? That old thing? The summer of '85. Bram's father took it. I'd forgotten — no. No, I hadn't forgotten.
+-> odile.confession
+
+=== odile.ask.c2_rosa
+odile: Rosa was lovely. That was the trouble. It's very hard to resent somebody lovely. I tried for years. Never managed it.
+
+=== odile.confession
+[if not held("lamp_lit")] odile: Lots of people use violet ink. Well. I do. Next question.
+[if not held("lamp_lit")] -> END
+[if $odile_confessed] -> odile.confession.again
+~ set odile_confessed
+~ clue c2_inkwell
+odile[sad]: ...Show me.
+n: *You hold the letter close to her spectacles. She doesn't need to read it. Her lips move along with the first line.*
+odile[sad]: Forty-one years. The Chute certainly takes its time.
+odile: I wrote that the night before he married Rosa. I sat at the end of the pier until two in the morning, and the lamp burned the whole time, and I thought — well. There's my answer.
+odile[thinking]: I never sent it. Never had the courage. And then I told myself it was a kindness. He was happy. She was lovely. I was... the postmistress.
+* Do you want me to deliver it? -> odile.confession.ask
+* I think he should read it. -> odile.confession.should
+
+=== odile.confession.again
+odile[sad]: You've still got it, then. I can feel it in your satchel like a stone in a shoe.
+* I'm going to deliver it to Tobias. -> odile.confession.should
+* Do you want it back? -> odile.confession.ask
+* I'm still thinking. -> odile.confession.think
+
+=== odile.confession.ask
+odile[sad]: Want? I'm seventy-two, dear. I've wanted a great many things.
+odile: No. Don't deliver it. Let an old woman keep her foolishness in a drawer. Give it back to me and I'll... put it somewhere safe.
+~ set odile_asked_keep
+n: *She holds out her hand. It is shaking, only a little.*
+* Give it back to her. -> odile.confession.return
+* "Not yet. Let me think about it." -> odile.confession.think
+
+=== odile.confession.should
+odile[angry]: Should he! Should *he*. And what about what I should, hm? Forty-one years of not making a fool of myself, and you'd undo it in an afternoon.
+odile[sad]: ...
+odile[sad]: The Chute sent it. The Chute has never been wrong. Not once in fifty years.
+odile: Do what you think is right, Wren. That's the job. I'll not stop you. I'll only glare.
+~ set odile_blessing
+
+=== odile.confession.return
+~ deliver lamp_lit odile
+
+=== odile.confession.think
+odile: Think, then. You've good eyes. Use the rest of you too.
+
+=== odile.ask.c3_stargazer
+odile: A stargazer? Felix calls himself one, the pompous cog. But the only real stargazer in Hushwater sits at the end of the pier every night with a telescope bigger than her sense.
+~ clue c3_june_scope
+
+=== odile.ask.c3_grandpa
+odile: Grandpa's lamp. Well, there's only the one lamp worth calling a lamp, and only the one keeper. Tobias has a granddaughter. June. Sharp little thing.
+~ clue c3_granddaughter
+
+=== odile.ask.c3_postmark
+odile[thinking]: Twenty forty-six. You see what I mean? Colder. Future letters are always colder in the hand.
+
+=== odile.ask.c34_same_hand
+odile[sad]: Two letters from one person, from two different lives. Oh, Wren. I've had that happen only once before, in fifty years.
+odile: You can't deliver both, you know. Whichever one you give her, the other one won't have happened. It'll fade. Futures don't share.
+
+=== odile.ask.c4_keeper
+odile: The keeper of the Hushwater Light has been a Fenn for a hundred years. Tobias. His father. His grandmother before that, if you can believe it — rowed out to the Teeth in a nightdress.
+
+=== odile.ask.c5_umbrella
+odile[happy]: My green umbrella? It's by the door. I haven't opened it in twenty years. I haven't needed to. I haven't gone anywhere it rains.
+~ clue c5_po_umbrella
+
+=== odile.ask.c5_po_umbrella
+odile: That umbrella was a present. From someone who thought I'd go places. Shows what they knew.
+
+=== odile.ask.c5_thursday
+odile: The 6:10 on a Thursday? Me? On a ferry? Dear, I haven't left Hushwater since the night of the Long Storm. Not once.
+~ clue c5_never_leaves
+
+=== odile.ask.c5_never_leaves
+odile: Seventeen years. Somebody has to mind the Chute.
+
+=== odile.ask.c5_wheel
+odile[happy]: The man at the wheel? There's only one wheel in Hushwater, and only one man who sings at it. Badly.
+
+=== odile.ask.c5_crusts
+odile: Crusts that smell like heaven. That's Mari's bread or I'm a pillar box.
+
+=== odile.ask.c6_marguerite
+odile[sad]: The Marguerite. Three men. The memorial's down by the harbour. Every name on it is somebody's husband, or son, or father. Most are all three.
+
+=== odile.ask.c6_daniel
+odile[sad]: Daniel Fenn. Tobias's son, Mari's husband, June's father. Kindest man I ever knew. He used to carry my parcels without being asked and then pretend he'd been going that way anyway.
+
+=== odile.ask.c6_1152
+odile: 11:52. Felix's clock has said it so long nobody looks any more. That's the trouble with stopped things. You stop seeing them.
+
+=== odile.ask.c6_dark
+odile[sad]: The lighthouse went dark that night. First time in a hundred years. Tobias has never forgiven himself. Or the machine. Or the sky. He's very thorough about not forgiving things.
+
+=== odile.ask.c6_typed
+odile: A typewriter with a high 'e'? Felix Harrow writes his complaints to the council on one exactly like that. I'd know them anywhere. They're very long.
+
+=== odile.ask.c6_felix_shift
+odile[sad]: Felix was supposed to be on that boat. Everyone knows. Nobody says. That's how Hushwater handles most things.
+
+=== odile.ask.c7_bird
+odile[happy]: "My little bird"? Well, you're a wren, aren't you? Ha. No — I'm teasing. That's what Mari calls June. Has done since June was a loaf-sized baby in a bread basket on the counter.
+~ clue c7_june_bird
+
+=== odile.ask.c7_flour
+odile: Flour in the creases and the Sleepless Loaf's own stamp? I don't need good eyes for that one, dear.
+
+=== odile.ask.c8_1140
+odile[sad]: Eleven-forty. That's when it went dark the first time. If I wrote you that... then I must have seen it happen again.
+odile: Don't let me see it happen again, Wren.
+
+=== odile.ask.default
+[if pick(3) == 0] odile[thinking]: Hm. Nothing comes to mind. Things come to mind less often, at my age. They take the scenic route.
+[if pick(3) == 1] odile: I've no idea, dear. Ask somebody younger. Everybody is.
+[if pick(3) == 2] odile: That's not my department. My department is the post, the Chute, and minding everyone's business but my own.
+
+# ─── Hints ───────────────────────────────────────────────────────────
+
+=== odile.hint
+[if chute_waiting()] odile: There's post waiting in the Chute, dear. Start there.
+[if chute_waiting()] -> END
+[if has_item("mari_reply")] odile: Post that reply! The red box by the stove. Words don't do anyone any good in a pocket.
+[if has_item("mari_reply")] -> END
+[if held("blue_door")] -> hint.blue_door
+[if held("eleven_fifty_two")] -> hint.eleven
+[if held("lamp_lit")] -> hint.lamp_lit
+[if held("far_shore") or held("lamp_room")] -> hint.june
+[if held("umbrella")] -> hint.umbrella
+[if held("little_bird")] -> hint.little_bird
+[if $lantern_night] -> hint.lantern
+[if can_sleep()] odile: Advice? Go to bed. The Chute will have more for you tomorrow.
+[if can_sleep()] -> END
+odile: Advice? Drink something warm. Trust your eyes. Don't trust Felix's clocks.
+
+=== hint.blue_door
+[if not has_clue("c1_dark_lamp") and not has_clue("c1_po_lamp")] odile: A lamp above a blue door. There's more than one blue door in Hushwater, you know. Go out into the square and look at them. Look *up*.
+[if not has_clue("c1_dark_lamp") and not has_clue("c1_po_lamp")] -> END
+[if not has_clue("c1_theo")] odile: "Papa's funeral." Somebody in this town buried their father and quarrelled with somebody over it. Ask around — gently. Bakers know everyone's business. So do ferrymen.
+[if not has_clue("c1_theo")] -> END
+[if not has_clue("c1_dockman")] odile: The 8:15 is Bram's evening run from Port Ardent. If somebody's been watching it leave without them, Bram will have seen.
+[if not has_clue("c1_dockman")] -> END
+odile: You've enough to go on, I think. A lamp gone dark. Somebody who went away. Trust it — and don't be fooled by an old woman's teacup.
+
+=== hint.lamp_lit
+[if not has_clue("c2_lamp")] odile: Read it again. "If you light the lamp tonight." Who in Hushwater lights a lamp that a person might ask a question of?
+[if not has_clue("c2_lamp")] -> END
+[if not has_clue("c2_rosa")] odile[shy]: Who married on a Sunday in October 1985? Ask around. Ask Mari. Ask Bram. Don't ask me.
+[if not has_clue("c2_rosa")] -> END
+odile[shy]: You know who it's for. You might even know who wrote it. Do as you think best, dear. I'll... be here.
+
+=== hint.june
+[if not has_clue("c3_grandpa") and not has_clue("c4_keeper")] odile: "Dear Stargazer." Two stargazers in this town, and one of them has a grandfather with a lamp. Read them both again.
+[if not has_clue("c3_grandpa") and not has_clue("c4_keeper")] -> END
+[if not has_clue("c3_granddaughter")] odile: Whose granddaughter sits on the pier every night? Ask Tobias. Or ask her.
+[if not has_clue("c3_granddaughter")] -> END
+odile[sad]: You know who they're for. The question is which one. You can only give her one, Wren. The other will fade. Choose the one you'd want to receive.
+
+=== hint.umbrella
+[if not has_clue("c5_po_umbrella") and not has_clue("c5_bakery_umbrella")] odile: A green umbrella. There's one by my door, as it happens. There may be others. Look around.
+[if not has_clue("c5_po_umbrella") and not has_clue("c5_bakery_umbrella")] -> END
+[if not has_clue("c5_flour_run") and not has_clue("c5_never_leaves")] odile: Who rides the 6:10 on a Thursday? Not me, I'll tell you that for nothing. Ask the passengers. Ask the baker.
+[if not has_clue("c5_flour_run") and not has_clue("c5_never_leaves")] -> END
+odile[happy]: Somebody's been staring at somebody's back for thirty-one years. Put him out of his misery.
+
+=== hint.eleven
+[if not has_clue("c6_memorial")] odile[sad]: The Marguerite. There's a memorial stone by the harbour with every name on it. Daniel's is the last.
+[if not has_clue("c6_memorial")] -> END
+[if not has_clue("c6_logbook") and not has_clue("c6_tobias_guilt")] odile[sad]: Daniel's gone, so it can't go to him. It has to go to whoever needs it most. Tobias keeps a logbook on his porch. Tobias keeps everything.
+[if not has_clue("c6_logbook") and not has_clue("c6_tobias_guilt")] -> END
+odile[sad]: A letter for a man who isn't here any more. It's yours to decide where it goes, Wren. Choose who it would *free*.
+
+=== hint.little_bird
+[if not has_clue("c7_june_bird") and not has_clue("c7_wren_bird")] odile[happy]: "My little bird." Well, I know one little bird, and she's not you. Ask her mother. Or ask Bram what he called you when you got off the ferry.
+[if not has_clue("c7_june_bird") and not has_clue("c7_wren_bird")] -> END
+odile: A ticket in a coat pocket. A father gone. An uncle who left in the night. That's not your story, dear, however much you'd like it to be.
+
+=== hint.lantern
+[if lamp_keeper() == "nobody" and not has_item("lighthouse_key")] odile[sad]: Nobody's going to be in that lamp room at eleven-forty. Tobias has the only key. Go and get it off him.
+[if lamp_keeper() == "nobody" and not has_item("lighthouse_key")] -> END
+[if lamp_keeper() == "nobody"] odile[sad]: You've the key. Climb, Wren. A hundred and twelve stairs. Oil, wick, flame.
+[if lamp_keeper() == "nobody"] -> END
+odile: The lamp's in good hands tonight. Go down to the harbour, and see who comes home.

@@ -1,0 +1,234 @@
+# ═══════════════════════════════════════════════════════════════════
+#  MARI FENN — The Sleepless Loaf
+#  Warm, loud, run-on sentences, calls everyone "sweetheart".
+# ═══════════════════════════════════════════════════════════════════
+
+=== mari.talk
+[if $lantern_night] -> mari.lantern
+[if not $met_mari] -> mari.first
+[if delivered("blue_door") == "mari" and not $mari_after_theo] -> mari.after_theo
+[if delivered("umbrella") == "mari" and not $mari_after_bram] -> mari.after_bram
+[if delivered("eleven_fifty_two") == "mari" and not $mari_after_felix] -> mari.after_felix
+[if $june_mum and not $mari_after_june] -> mari.after_june
+-> mari.default
+
+=== mari.first
+~ set met_mari
+mari[happy]: Oh! A new face! Nobody has a new face in Hushwater. Come here, let me — you've got dusk all over your coat, sweetheart, here—
+n: *She brushes at your shoulder with a floury hand, which makes it considerably worse.*
+mari[happy]: There. Perfect. I'm Mari. This is the Sleepless Loaf. We never close, because the sun never comes up to tell us to.
+wren: I'm Wren. The new night clerk, at the post office.
+mari[surprised]: Odile hired someone? Odile *hired* someone? She told me she'd sooner hire a seagull.
+mari[thinking]: Well. A wren's a sort of seagull. Smaller. Less shouting.
+mari: You come by whenever you like. There's always something warm. Cinnamon loaves at four, every morning — such as our mornings are.
+
+=== mari.default
+[if $night == 1] mari: Busy night? You've got that look. Like a letter that's lost its envelope.
+[if $night == 2] mari[happy]: The ovens are singing tonight. Don't ask me what that means, it's a baker thing.
+[if $night == 3] mari[sad]: Lantern Night tomorrow. I'm making the lantern loaves — little round ones, one for every name on the stone.
+[if $night == 3] mari: I always make one extra. Don't know who for. Habit.
+* How's business? -> mari.business
+* Tell me about the bakery. -> mari.bakery
+* Nothing — just saying hello. -> END
+
+=== mari.business
+mari[happy]: Business? Sweetheart, in a town where it's always half past dinner and never quite bedtime, everyone's always peckish. I could sell a bun to a gravestone.
+mari[thinking]: Some of them I do. Lantern Night.
+
+=== mari.bakery
+mari: Papa opened it the year I was born. Okafor's, it was called then. After Papa went, I renamed it. The Sleepless Loaf. Because I couldn't sleep, and neither could the dough.
+mari[sad]: He put that iron bracket above the door himself. For a lamp. So the fishermen coming home could smell bread and see a light in the same breath.
+
+=== mari.after_theo
+~ set mari_after_theo
+mari[happy]: The lamp's lit. Did you see? I keep going outside to look at it like an idiot.
+mari[thinking]: Twelve years. Ten years I lit it every single night, and then two years ago I thought — that's enough, Mari. He's not coming. Trim the wick.
+mari[sad]: And all that time he was standing on a dock across the bay. Waiting for permission.
+[if not $reply_posted] mari: You'll post it, won't you? My reply. Bram takes the post over on the morning run. Just — make sure it goes.
+
+=== mari.after_bram
+~ set mari_after_bram
+mari[shy]: Don't. Don't look at me like that. I'm a grown woman with a bakery.
+mari[shy]: ...He spells "weather" without the A. *Both* As.
+mari[happy]: I'm going to sit at the bow on Thursday. Right in front of the wheel. Let's see how he steers *then*.
+
+=== mari.after_felix
+~ set mari_after_felix
+mari[sad]: I went round. To the clock shop. I stood outside the door for half an hour and then I left a bun on the step and came home.
+mari: Next time I'll knock. Probably. Daniel would've knocked.
+
+=== mari.after_june
+~ set mari_after_june
+mari[happy]: She came in. My June. She came in and put on an apron without a word and started shaping the lantern loaves. She's terrible at it. Absolutely terrible.
+mari[sad]: Best loaves I ever sold.
+
+=== mari.lantern
+[if $finale] -> mari.finale
+mari[sad]: Lantern Night. Every name on that stone gets a loaf and a lantern. I've done Daniel's. I always do Daniel's first.
+[if $reply_posted] mari[shy]: And... I keep looking out at the water. For the 8:15. Stupid. In this weather.
+[if delivered("umbrella") == "mari"] mari[shy]: Bram's out there too, bringing her across. The great idiot. If he drowns before Thursday I'll kill him.
+
+=== mari.finale
+[if $theo_home] mari[happy]: He's here. He's *here*, sweetheart. He's eating my bread like a starving wolf and crying into it. I'm going to need more bread.
+[if not $theo_home] mari: Look at the lanterns. Every one of them a name. I used to think that was sad. Now I think it's... crowded. In a good way.
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== mari.ask.c1_lamp
+mari[sad]: The lamp above my door? Papa put that bracket up when we opened the shop. And then later, I lit it every night. For somebody.
+mari: I stopped two years ago. You can't keep a light on forever for someone who isn't looking.
+~ clue c1_dark_lamp
+
+=== mari.ask.c1_dark_lamp
+-> mari.ask.c1_lamp
+
+=== mari.ask.c1_cinnamon
+mari[happy]: Cinnamon? Sweetheart, I *am* cinnamon. Four o'clock every morning, cinnamon loaves, thirty of them. The whole square smells of it. Odile complains, then sends for two.
+~ clue c1_cinnamon_sign
+
+=== mari.ask.c1_cinnamon_sign
+mari[happy]: Thirty loaves, four o'clock, every morning since Papa. Theo used to steal the ends off the tray and blame the cat.
+
+=== mari.ask.c1_funeral
+mari[sad]: ...Where did you hear that?
+n: *She sets down the dough. For a moment she doesn't look at you.*
+mari[sad]: Papa's funeral was twelve years ago. My little brother, Theo — he said some things. I said some things back. Worse things.
+mari: He left on the night ferry and I never — well. That's done now. He's in Port Ardent, last I heard. Working the docks. He doesn't write.
+~ clue c1_theo
+
+=== mari.ask.c1_theo
+mari[sad]: Theo. He was the funny one. He'd do Papa's voice behind his back, and Papa would pretend to be furious and then laugh so hard he'd have to sit on the flour sacks.
+mari: If he walked through that door tomorrow, I'd hit him with a baguette. And then I'd never let him go.
+
+=== mari.ask.c1_ferry
+mari: The 8:15? That's the evening ferry from Port Ardent. Comes in empty most nights. Bram says it's restful. Bram is lying.
+
+=== mari.ask.c1_hotel
+mari[thinking]: The Harbor Arms? That's a dock hotel in Port Ardent. Cheap rooms, damp walls, men who work the cranes. Why would anyone — oh.
+mari[surprised]: Oh, you're *investigating*. How thrilling.
+
+=== mari.ask.c1_dockman
+mari[surprised]: A man on the dock who never gets on? With... with my eyes?
+mari[sad]: Don't. Don't do that to me, sweetheart. Don't make me hope. I've only just got used to not.
+
+=== mari.ask.c1_po_lamp
+mari: Odile's lamp? That old thing has been burning since before I was born. She says it's so the letters can find their way. I think it's so *she* can.
+
+=== mari.ask.c1_tea
+mari[happy]: Odile's tea! She thinks it's medicinal. It's mostly sugar. I sell her the cinnamon sticks and she pretends she's buying them for Postscript.
+
+=== mari.ask.c1_only_child
+mari: Odile? No family at all, I don't think. Just the post. And Tobias, once, people say. But people say a lot of things.
+
+=== mari.ask.c2_married
+mari[thinking]: Married in October? Oh — that'll be Tobias and Rosa. 1985. Mum used to talk about it. The whole town on the cliff, Rosa in her mother's dress, the wind stealing the vicar's hat clean out over the sea.
+mari[sad]: Rosa was Daniel's mum. June's grandmother. She passed twenty years ago. I never met her. Everyone says June has her laugh.
+~ clue c2_rosa
+
+=== mari.ask.c2_dear_t
+mari[thinking]: T? Theo, my brother. Tobias, up the cliff. Tilly Marsh, but she's ninety and only writes to the council about gulls.
+
+=== mari.ask.c2_violet
+mari: Violet ink? There's only one person in Hushwater who'd use violet ink. She sends me her bread orders in it. Like a duchess.
+~ clue c2_inkwell
+
+=== mari.ask.c2_pier
+mari[happy]: The end of the pier is where June sits every night with her telescope. It's where everyone in Hushwater goes when they need to think. Or sulk. Same thing.
+
+=== mari.ask.c2_rosa
+mari: Rosa Fenn. Tobias still sets a place for her at Lantern Night. Doesn't say anything about it. Just sets it.
+
+=== mari.ask.c3_stargazer
+mari[happy]: A stargazer? That's my June. Out on that pier every night with the brass telescope her grandad gave her.
+mari[thinking]: Although Felix calls himself "a student of the heavens". Insufferable man. I bring him buns.
+~ clue c3_june_scope
+
+=== mari.ask.c3_grandpa
+mari: Grandpa's lamp... June's grandfather is Tobias Fenn. Keeps the lighthouse. My Daniel was his son.
+~ clue c3_granddaughter
+
+=== mari.ask.c3_granddaughter
+mari: Tobias adores her. He'd never say. He shows it by grumbling at her slightly less than at everyone else.
+
+=== mari.ask.c3_postmark
+mari[surprised]: The fourteenth of March? That's June's birthday! She came in the first gale of spring, all lungs.
+mari[thinking]: Twenty forty-six, though. She'd be thirty-seven. What a strange thing to write on an envelope.
+~ clue c4_birthday
+
+=== mari.ask.c4_date
+-> mari.ask.c3_postmark
+
+=== mari.ask.c3_ferry
+mari[sad]: The ferry. Mm. Everyone young in Hushwater talks about the ferry, sooner or later. Most of them don't mean it.
+mari: Some of them do.
+
+=== mari.ask.c3_manifest
+mari[sad]: A ticket. One way. ...I know. I found it in her coat on Tuesday. I put it back.
+mari: Don't tell her I know. She has to tell me herself. That's the rule. I just made it up, but it's the rule.
+
+=== mari.ask.c4_sunrise
+mari[sad]: June's never seen one. Not a real one. She was a baby when the dusk came. She talks about the sun like it's a person she's never met.
+~ clue c4_june_sunrise
+
+=== mari.ask.c4_keeper
+mari[surprised]: June? Keeping the light? That girl can't keep her room tidy. Although... she does go quiet, up on the cliff with her grandad. A good quiet.
+
+=== mari.ask.c5_umbrella
+mari[happy]: My green umbrella? It was Mum's. I take it everywhere. If it rains, I'm ready. If it doesn't, I'm *prepared*. There's a difference.
+~ clue c5_bakery_umbrella
+
+=== mari.ask.c5_bakery_umbrella
+-> mari.ask.c5_umbrella
+
+=== mari.ask.c5_thursday
+mari: Thursdays I take the 6:10 to Port Ardent for flour. Mill flour, the good kind. And I feed the gulls the crusts on the way over. They know me. They queue.
+~ clue c5_flour_run
+
+=== mari.ask.c5_crusts
+-> mari.ask.c5_thursday
+
+=== mari.ask.c5_wheel
+mari[happy]: The man at the wheel? On the Lark? That's Bram. He sings at the wheel, did you know? Terribly. The gulls leave.
+
+=== mari.ask.c5_po_umbrella
+mari: Odile's got a green umbrella? Has she? I've never once seen her open it. I've never once seen her *leave*, come to think of it.
+
+=== mari.ask.c6_marguerite
+mari[sad]: The Marguerite. My Daniel was on her.
+mari: Some mornings I still put out two mugs. Seventeen years, and my hands haven't heard the news.
+~ clue c6_mari_daniel
+
+=== mari.ask.c6_daniel
+-> mari.ask.c6_marguerite
+
+=== mari.ask.c6_memorial
+-> mari.ask.c6_marguerite
+
+=== mari.ask.c6_1152
+mari: 11:52. The clock's said that since the night of the storm. Felix has been trying to fix it for seventeen years. I bring him buns. He forgets to eat them.
+
+=== mari.ask.c6_felix_shift
+mari[surprised]: Felix? Felix was meant to be on the — no. No. Daniel never said. Daniel never said anything.
+mari[sad]: That's exactly like him, though. Isn't it.
+
+=== mari.ask.c6_dark
+mari[sad]: The light went out. I was in here, with June in the bread basket, and I looked up and the window went black where the beam should've been. I knew. Right then. I knew.
+
+=== mari.ask.c7_bird
+mari[shy]: Little bird? That's what I call June. Always have. She hates it. She loves it. Both, at once, like a teenager.
+~ clue c7_june_bird
+
+=== mari.ask.c7_flour
+mari[shy]: That's one of my bags... Where did you — oh. Oh no. Did I *write* something? Don't tell me. Don't. I don't want to know.
+mari[shy]: ...Yes I do. No. Go away. Come back later.
+
+=== mari.ask.c7_ticket
+-> mari.ask.c3_manifest
+
+=== mari.ask.c7_uncle
+mari[sad]: Her uncle. Theo. He went in the night, without a word. I found out from Bram, the next morning, over a coffee. I've never forgiven Bram for being the one to tell me. Which isn't fair. Nothing about it was fair.
+
+=== mari.ask.default
+[if pick(3) == 0] mari[thinking]: Hm? No, sweetheart, that's not ringing any bells. Only the oven timer.
+[if pick(3) == 1] mari: No idea! But have a bun while you think about it. Go on. It's warm.
+[if pick(3) == 2] mari: You'd have to ask someone cleverer than me. Felix, maybe. He'll tell you. At length.

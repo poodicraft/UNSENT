@@ -1,0 +1,193 @@
+{
+  "post_office": {
+    "name": "The Office of Unsent Letters",
+    "width": 1800,
+    "interior": true,
+    "music": "office",
+    "ambience": "interior",
+    "surface": "wood",
+    "walk": {"top": [[40, 992], [1780, 992]], "bottom": [[40, 1052], [1780, 1052]]},
+    "depth": {"far": 992, "near": 1052, "far_scale": 0.95, "near_scale": 1.0},
+    "spawns": {"default": [600, 1025], "from_square": [190, 1025], "from_harbor": [1650, 1025], "bed": [1195, 1025]},
+    "on_enter": [
+      {"node": "po.first_visit", "if": "not $met_odile"},
+      {"node": "po.lantern_start", "if": "$lantern_night and not $lantern_started"}
+    ],
+    "objects": [
+      {"id": "front_door", "label": "Lantern Square", "rect": [50, 640, 150, 350], "stand": [150, 1025], "exit": {"to": "square", "spawn": "from_po"}, "arrow": "left"},
+      {"id": "umbrella_stand", "label": "Umbrella stand", "rect": [212, 850, 80, 140], "stand": [255, 1025], "node": "po.umbrella_stand", "clues": ["c5_po_umbrella"]},
+      {"id": "bell", "label": "Brass bell", "rect": [348, 712, 50, 52], "stand": [380, 1025], "node": "po.bell"},
+      {"id": "clock", "label": "Wall clock", "rect": [505, 300, 120, 120], "stand": [560, 1025], "node": "po.clock"},
+      {"id": "inkwell", "label": "Violet inkwell", "rect": [604, 712, 56, 52], "stand": [630, 1025], "node": "po.inkwell", "clues": ["c2_inkwell"]},
+      {"id": "teacup", "label": "Teacup", "rect": [676, 716, 56, 48], "stand": [700, 1025], "node": "po.teacup", "clues": ["c1_tea"]},
+      {"id": "pigeonholes", "label": "The Archive", "rect": [780, 300, 360, 620], "stand": [960, 1025], "node": "po.pigeonholes"},
+      {"id": "stairs", "label": "Stairs to your room", "rect": [1150, 380, 95, 600], "stand": [1195, 1025], "node": "po.stairs"},
+      {"id": "chute", "label": "The Chute", "rect": [1270, 140, 170, 760], "stand": [1355, 1025], "node": "po.chute"},
+      {"id": "outbox", "label": "Outbox", "rect": [1470, 760, 84, 230], "stand": [1510, 1025], "node": "po.outbox"},
+      {"id": "cat", "label": "Postscript", "rect": [1556, 900, 118, 80], "stand": [1600, 1030], "node": "po.cat", "actor": "cat", "actor_pos": [1612, 968]},
+      {"id": "back_door", "label": "Harbour", "rect": [1690, 610, 105, 380], "stand": [1700, 1025], "exit": {"to": "harbor", "spawn": "from_po"}, "arrow": "right"}
+    ],
+    "npcs": [
+      {"id": "odile", "pos": [560, 978], "face": "left", "if": "not $finale"}
+    ],
+    "glows": [
+      {"pos": [450, 250], "color": "#ffcf8a", "size": 520, "energy": 0.55, "flicker": 0.06},
+      {"pos": [1000, 232], "color": "#ffcf8a", "size": 560, "energy": 0.5, "flicker": 0.05},
+      {"pos": [1520, 250], "color": "#ffcf8a", "size": 520, "energy": 0.5, "flicker": 0.06},
+      {"pos": [1625, 880], "color": "#ff9a4a", "size": 420, "energy": 0.6, "flicker": 0.18},
+      {"pos": [1355, 840], "color": "#bfe6ff", "size": 380, "energy": 0.75, "flicker": 0.1, "if": "chute_waiting()", "pulse": true}
+    ],
+    "particles": ["dust"]
+  },
+
+  "square": {
+    "name": "Lantern Square",
+    "width": 2200,
+    "music": "town",
+    "ambience": "town",
+    "surface": "stone",
+    "walk": {"top": [[20, 940], [2180, 940]], "bottom": [[20, 1038], [2180, 1038]]},
+    "depth": {"far": 940, "near": 1038, "far_scale": 0.9, "near_scale": 1.0},
+    "spawns": {"default": [1100, 1000], "from_po": [2000, 1000], "felix_scene": [600, 1000]},
+    "on_enter": [],
+    "objects": [
+      {"id": "lane", "label": "Hill lane", "rect": [0, 640, 120, 380], "stand": [80, 1000], "node": "sq.lane"},
+      {"id": "clock_face", "label": "Town clock", "rect": [272, 212, 176, 176], "stand": [360, 1000], "node": "sq.clock", "clues": ["c6_1152"]},
+      {"id": "felix_scope", "label": "Telescope", "rect": [462, 400, 130, 90], "stand": [470, 1000], "node": "sq.felix_scope", "clues": ["c3_felix_scope"]},
+      {"id": "typewriter", "label": "Workshop window", "rect": [196, 700, 300, 230], "stand": [420, 1000], "node": "sq.typewriter", "clues": ["c6_typewriter"]},
+      {"id": "notice_board", "label": "Notice board", "rect": [640, 760, 140, 210], "stand": [710, 1000], "node": "sq.notice"},
+      {"id": "fountain", "label": "Fountain", "rect": [850, 800, 260, 190], "stand": [980, 1032], "node": "sq.fountain"},
+      {"id": "bakery_window", "label": "Bakery window", "rect": [1200, 720, 150, 190], "stand": [1275, 1000], "node": "sq.bakery_window"},
+      {"id": "bakery_lamp", "label": "Lamp bracket", "rect": [1410, 590, 70, 92], "stand": [1445, 1000], "node": "sq.bakery_lamp", "clues": ["c1_dark_lamp"]},
+      {"id": "bakery_door", "label": "Blue door", "rect": [1380, 700, 130, 290], "stand": [1445, 1000], "node": "sq.bakery_door"},
+      {"id": "bakery_umbrella", "label": "Green umbrella", "rect": [1518, 776, 56, 176], "stand": [1545, 1000], "node": "sq.umbrella", "clues": ["c5_bakery_umbrella"]},
+      {"id": "chalkboard", "label": "Chalkboard", "rect": [1580, 846, 92, 146], "stand": [1622, 1000], "node": "sq.chalkboard", "clues": ["c1_cinnamon_sign"]},
+      {"id": "bench", "label": "Bench", "rect": [1720, 896, 170, 96], "stand": [1800, 1000], "node": "sq.bench"},
+      {"id": "po_lamp", "label": "Post office lamp", "rect": [2036, 584, 70, 92], "stand": [2070, 1000], "node": "sq.po_lamp", "clues": ["c1_po_lamp"]},
+      {"id": "po_door", "label": "Post Office", "rect": [2000, 690, 140, 300], "stand": [2070, 1000], "exit": {"to": "post_office", "spawn": "from_square"}, "arrow": "right"}
+    ],
+    "npcs": [
+      {"id": "felix", "pos": [305, 952], "face": "right", "if": "true"},
+      {"id": "mari", "pos": [1318, 956], "face": "left", "if": "not $lantern_night"}
+    ],
+    "glows": [
+      {"pos": [1445, 640], "color": "#ffc46b", "size": 460, "energy": 0.85, "flicker": 0.12, "if": "$bakery_lamp_lit"},
+      {"pos": [2071, 630], "color": "#ffc46b", "size": 420, "energy": 0.8, "flicker": 0.1},
+      {"pos": [1275, 815], "color": "#ffb45e", "size": 360, "energy": 0.6, "flicker": 0.05},
+      {"pos": [345, 815], "color": "#ffd9a0", "size": 380, "energy": 0.5, "flicker": 0.04},
+      {"pos": [360, 300], "color": "#fff0c8", "size": 300, "energy": 0.35, "flicker": 0.0}
+    ],
+    "festoon": [[560, 520], [1180, 600]],
+    "particles": ["leaves", "motes"]
+  },
+
+  "harbor": {
+    "name": "Hushwater Harbour",
+    "width": 2400,
+    "music": "harbor",
+    "ambience": "harbor",
+    "surface": "wood",
+    "sea": true,
+    "walk": {"top": [[20, 942], [1740, 942], [1800, 976], [2390, 976]], "bottom": [[20, 1036], [1740, 1036], [1800, 1014], [2390, 1014]]},
+    "depth": {"far": 942, "near": 1036, "far_scale": 0.9, "near_scale": 1.0},
+    "spawns": {"default": [600, 1000], "from_po": [250, 1000], "from_cliff": [1665, 995], "intro": [1010, 1000], "finale": [1950, 995]},
+    "on_enter": [
+      {"node": "intro.harbor", "if": "not $intro_done"}
+    ],
+    "objects": [
+      {"id": "po_back_door", "label": "Post Office", "rect": [90, 640, 140, 340], "stand": [170, 1000], "exit": {"to": "post_office", "spawn": "from_harbor"}, "arrow": "left"},
+      {"id": "shed", "label": "Lost & Found", "rect": [330, 560, 230, 430], "stand": [440, 1000], "node": "hb.shed"},
+      {"id": "lifering", "label": "Life ring", "rect": [604, 694, 100, 100], "stand": [650, 1000], "node": "hb.lifering", "clues": ["c6_marguerite"]},
+      {"id": "ferry", "label": "The Morning Lark", "rect": [780, 640, 440, 290], "stand": [1000, 1000], "node": "hb.ferry", "if": "not $lantern_night or $lamp_resolved"},
+      {"id": "ticket_booth", "label": "Ticket booth", "rect": [1240, 690, 150, 300], "stand": [1315, 1000], "node": "hb.booth", "clues": ["c3_manifest"]},
+      {"id": "memorial", "label": "Memorial stone", "rect": [1440, 810, 130, 180], "stand": [1505, 1000], "node": "hb.memorial", "clues": ["c6_memorial"], "recipient": "memorial"},
+      {"id": "cliff_steps", "label": "Cliff path", "rect": [1590, 460, 150, 540], "stand": [1665, 995], "exit": {"to": "cliff", "spawn": "from_harbor", "if": "$night >= 2", "locked_node": "hb.cliff_locked"}, "arrow": "up"},
+      {"id": "pier_end", "label": "End of the pier", "rect": [2180, 820, 220, 190], "stand": [2200, 995], "node": "hb.pier_end"}
+    ],
+    "npcs": [
+      {"id": "bram", "pos": [470, 962], "face": "right", "if": "not $lantern_night"},
+      {"id": "june", "pos": [1330, 968], "face": "right", "if": "$lantern_night and $june_path != \"stay\""},
+      {"id": "june", "pos": [2335, 990], "face": "left", "if": "not $lantern_night and $june_path == \"\""},
+      {"id": "mari", "pos": [1430, 972], "face": "right", "if": "$lantern_night"},
+      {"id": "odile", "pos": [2350, 992], "face": "left", "if": "$finale"},
+      {"id": "tobias", "pos": [2285, 990], "face": "right", "if": "$finale and $tobias_knows and lamp_keeper() != \"tobias\""}
+    ],
+    "glows": [
+      {"pos": [160, 600], "color": "#ffc46b", "size": 380, "energy": 0.6, "flicker": 0.1},
+      {"pos": [1315, 720], "color": "#ffd28a", "size": 300, "energy": 0.55, "flicker": 0.06},
+      {"pos": [1905, 760], "color": "#ffd28a", "size": 360, "energy": 0.7, "flicker": 0.08},
+      {"pos": [2160, 770], "color": "#ffd28a", "size": 360, "energy": 0.7, "flicker": 0.08},
+      {"pos": [1000, 760], "color": "#ffbf7a", "size": 420, "energy": 0.5, "flicker": 0.05, "if": "not $lantern_night"}
+    ],
+    "lighthouse_beam": {"pos": [2050, 330], "scale": 0.55},
+    "particles": ["spray", "gulls"]
+  },
+
+  "cliff": {
+    "name": "Lighthouse Cliff",
+    "width": 2000,
+    "music": "cliff",
+    "ambience": "cliff",
+    "surface": "grass",
+    "sea": true,
+    "walk": {"top": [[20, 958], [700, 936], [1990, 930]], "bottom": [[20, 1040], [700, 1032], [1990, 1028]]},
+    "depth": {"far": 932, "near": 1036, "far_scale": 0.9, "near_scale": 1.0},
+    "spawns": {"default": [400, 1000], "from_harbor": [160, 1010], "from_lighthouse": [1510, 1000]},
+    "on_enter": [
+      {"node": "cl.first_visit", "if": "not $visited_cliff"}
+    ],
+    "objects": [
+      {"id": "path_down", "label": "Harbour", "rect": [0, 700, 140, 330], "stand": [100, 1010], "exit": {"to": "harbor", "spawn": "from_cliff"}, "arrow": "left"},
+      {"id": "rosa_bench", "label": "Bench", "rect": [280, 860, 210, 120], "stand": [385, 1010], "node": "cl.bench"},
+      {"id": "cottage_window", "label": "Cottage window", "rect": [660, 690, 130, 120], "stand": [725, 1005], "node": "cl.window", "clues": ["c2_photo"]},
+      {"id": "logbook", "label": "Logbook", "rect": [952, 852, 110, 70], "stand": [1000, 1005], "node": "cl.logbook", "clues": ["c6_logbook"]},
+      {"id": "lighthouse_door", "label": "Lighthouse door", "rect": [1448, 720, 124, 270], "stand": [1510, 1000], "node": "cl.door", "clues": ["c4_112"]},
+      {"id": "cliff_edge", "label": "Cliff edge", "rect": [1780, 820, 220, 200], "stand": [1860, 1000], "node": "cl.edge"}
+    ],
+    "npcs": [
+      {"id": "tobias", "pos": [1300, 966], "face": "left", "if": "not ($lantern_night and (lamp_keeper() == \"tobias\" or $finale))"},
+      {"id": "june", "pos": [1160, 970], "face": "right", "if": "not $lantern_night and $june_path != \"\""}
+    ],
+    "glows": [
+      {"pos": [725, 750], "color": "#ffc46b", "size": 340, "energy": 0.6, "flicker": 0.08},
+      {"pos": [1010, 820], "color": "#ffd28a", "size": 260, "energy": 0.45, "flicker": 0.1}
+    ],
+    "lighthouse_beam": {"pos": [1510, 118], "scale": 1.0},
+    "particles": ["fireflies"]
+  },
+
+  "lamp_room": {
+    "name": "The Lamp Room",
+    "width": 1200,
+    "interior": true,
+    "music": "cliff",
+    "ambience": "lamp",
+    "surface": "metal",
+    "walk": {"top": [[40, 980], [1160, 980]], "bottom": [[40, 1042], [1160, 1042]]},
+    "depth": {"far": 980, "near": 1042, "far_scale": 0.96, "near_scale": 1.0},
+    "spawns": {"default": [200, 1015], "from_stairs": [200, 1015]},
+    "on_enter": [
+      {"node": "lr.first_visit", "if": "not $visited_lamp_room and not $lantern_night"},
+      {"node": "finale.lamp_room", "if": "$lantern_night and not $lamp_resolved"}
+    ],
+    "objects": [
+      {"id": "stairs_down", "label": "Stairs down", "rect": [60, 820, 170, 200], "stand": [150, 1015], "exit": {"to": "cliff", "spawn": "from_lighthouse"}, "arrow": "down"},
+      {"id": "star_chart", "label": "Star chart", "rect": [270, 470, 170, 230], "stand": [355, 1015], "node": "lr.chart", "clues": ["c3_star_chart"]},
+      {"id": "lamp", "label": "The lamp", "rect": [450, 250, 300, 560], "stand": [600, 1015], "node": "lr.lamp"},
+      {"id": "valve", "label": "Oil valve", "rect": [458, 850, 76, 76], "stand": [500, 1015], "node": "lamp.valve", "if": "$lamp_sequence >= 1 and $lamp_sequence < 4"},
+      {"id": "wick", "label": "Wick", "rect": [560, 640, 80, 80], "stand": [600, 1015], "node": "lamp.wick", "if": "$lamp_sequence >= 1 and $lamp_sequence < 4"},
+      {"id": "matchbox", "label": "Matches", "rect": [680, 850, 76, 66], "stand": [720, 1015], "node": "lamp.match", "if": "$lamp_sequence >= 1 and $lamp_sequence < 4"},
+      {"id": "auto_lamp", "label": "Auto-lamp", "rect": [840, 750, 160, 230], "stand": [920, 1015], "node": "lr.auto"},
+      {"id": "window_view", "label": "The view", "rect": [1010, 380, 180, 420], "stand": [1090, 1015], "node": "lr.view"}
+    ],
+    "npcs": [
+      {"id": "june", "pos": [760, 1000], "face": "left", "if": "$lantern_night and lamp_keeper() == \"june\""},
+      {"id": "tobias", "pos": [790, 1000], "face": "left", "if": "$lantern_night and lamp_keeper() == \"tobias\""}
+    ],
+    "glows": [
+      {"pos": [600, 600], "color": "#fff1c4", "size": 900, "energy": 0.95, "flicker": 0.05, "if": "lamp_glowing()"},
+      {"pos": [600, 600], "color": "#ffd9a0", "size": 380, "energy": 0.35, "flicker": 0.05, "if": "not lamp_glowing()"}
+    ],
+    "particles": ["dust"]
+  }
+}

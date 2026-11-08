@@ -1,0 +1,24 @@
+# Godot 4 generated data
+.godot/
+*.translation
+export_credentials.cfg
+
+# Build intermediates (the final APK in build/ is kept on purpose)
+build/*.idsig
+build/*.tmp
+build/*-unaligned.apk
+
+# Python
+__pycache__/
+*.pyc
+
+# Art/audio pipeline scratch
+tools/art/_cache/
+tools/audio/_cache/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/

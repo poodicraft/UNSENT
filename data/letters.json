@@ -1,0 +1,315 @@
+[
+  {
+    "id": "blue_door",
+    "title": "The Light Above the Blue Door",
+    "origin": "present",
+    "arrive_night": 1,
+    "manual_arrival": true,
+    "writer": "theo",
+    "font": "caveat",
+    "paper": "hotel",
+    "ink": "#26314d",
+    "date": "",
+    "body": "I walked down to the dock six times today. Six times I watched [[the 8:15 for Hushwater|c1_ferry]] pull out without me.\n\nDo you still light [[the lamp above the blue door|c1_lamp]]? You said you'd keep it burning until I came home. I can still smell [[the cinnamon|c1_cinnamon]] when I close my eyes — the whole street smelled of it at four in the morning, remember?\n\nI'm sorry for what I said at [[Papa's funeral|c1_funeral]]. I was angry at the sea, not at you. I've been angry at the sea for twelve years.\n\nIf the light's still on, I'll know I can come home.",
+    "signature": "— T.",
+    "envelope": {
+      "front": "No name. No address. A coffee ring on one corner.",
+      "details": [
+        {"label": "Letterhead", "text": "HARBOR ARMS HOTEL · PORT ARDENT", "clue": "c1_hotel"},
+        {"label": "Ink", "text": "Cheap ballpoint, pressed hard. Written fast, then gone over again.", "clue": ""}
+      ]
+    },
+    "candidates": ["mari", "odile"],
+    "min_evidence": 2,
+    "outcomes": {
+      "mari": {"node": "out.blue_door.mari", "hope": 2, "correct": true},
+      "odile": {"node": "out.blue_door.odile", "hope": 0, "returns": true}
+    }
+  },
+  {
+    "id": "lamp_lit",
+    "title": "If the Lamp Is Lit",
+    "origin": "past",
+    "arrive_night": 2,
+    "writer": "odile",
+    "font": "dancing",
+    "paper": "fine",
+    "ink": "#5b3a8c",
+    "date": "13th October, 1985",
+    "body": "[[Dear T.,|c2_dear_t]]\n\nThey say you're [[to be married on Sunday|c2_married]], and that she is kind, and that she laughs at your terrible jokes. I'm glad. I am. I've been practising being glad all week.\n\nBut I would be a coward if I never said it, so here it is: I love you. I have loved you since you fell off the harbour wall at nine years old and climbed out holding a crab.\n\nI won't ask you to choose. I'll ask the lighthouse. [[If you light the lamp tonight|c2_lamp]], I'll know the answer is no, and I will never speak of this again.\n\nIf the lighthouse stays dark, I'll be waiting at [[the end of the pier|c2_pier]].",
+    "signature": "Yours, whatever the lamp says,\nO.",
+    "envelope": {
+      "front": "Heavy cream stationery, gone soft with age. A pressed violet slips out of the fold.",
+      "details": [
+        {"label": "Date", "text": "13th October, 1985 — forty-one years ago.", "clue": "c2_date"},
+        {"label": "Ink", "text": "Violet ink, browning at the edges.", "clue": "c2_violet"}
+      ]
+    },
+    "candidates": ["tobias", "odile"],
+    "min_evidence": 2,
+    "outcomes": {
+      "tobias": {"node": "out.lamp_lit.tobias", "hope": 2, "correct": true},
+      "odile": {"node": "out.lamp_lit.odile", "hope": 0, "returned_to_writer": true}
+    }
+  },
+  {
+    "id": "far_shore",
+    "title": "The Far Shore",
+    "origin": "future",
+    "arrive_night": 2,
+    "group": "june_futures",
+    "writer": "june",
+    "font": "patrick",
+    "paper": "airmail",
+    "ink": "#2f4f8f",
+    "date": "Aboard the Halcyon · 14 March 2046",
+    "body": "[[Dear Stargazer,|c3_stargazer]]\n\nI'm writing from the deck of the Halcyon, two days south of anywhere. Last night I watched the sun come up over the ice. It was every bit as big as we dreamed.\n\nI want you to know: [[we got on the ferry|c3_ferry]]. We made it. I've named a comet. (It's small and grumpy. I love it.)\n\nBut I need to tell you what it cost. [[Grandpa's lamp|c3_grandpa]] went dark the winter after we left, and nobody lit it again. I found out from a postcard. I never climbed the lighthouse with him. Not once.\n\nGo. Please go. But before the ferry leaves, climb the stairs with him. Ask him about [[the stars he named for Grandma|c3_rosa_stars]].",
+    "signature": "— J.",
+    "envelope": {
+      "front": "Airmail. The paper is so thin the words show through from the other side.",
+      "details": [
+        {"label": "Postmark", "text": "SOUTHERN OCEAN · 14 MAR 2046", "clue": "c3_postmark"},
+        {"label": "Stamp", "text": "A small, grumpy-looking comet.", "clue": "c3_comet"}
+      ]
+    },
+    "candidates": ["june", "felix"],
+    "min_evidence": 2,
+    "outcomes": {
+      "june": {"node": "out.far_shore.june", "hope": 2, "correct": true},
+      "felix": {"node": "out.far_shore.felix", "hope": 0}
+    }
+  },
+  {
+    "id": "lamp_room",
+    "title": "A Hundred and Twelve Stairs",
+    "origin": "future",
+    "arrive_night": 2,
+    "group": "june_futures",
+    "writer": "june",
+    "font": "patrick",
+    "paper": "logbook",
+    "ink": "#1e1e26",
+    "date": "Hushwater Light · 14 March 2046",
+    "body": "[[Dear Stargazer,|c3_stargazer]]\n\nI'm writing this by the lamp. [[I'm the keeper now|c4_keeper]] — Grandpa taught me everything, the winter before he went. Every night I climb [[a hundred and twelve stairs|c4_stairs]] and I talk to him while the wick catches.\n\nWe never got on that ferry. Some nights I'm certain we chose right. Some nights I watch the ships slide past the point and I ache all the way down.\n\n[[I've never seen a sunrise.|c4_sunrise]] Not a real one.\n\nSo here's my only advice: if you go, go with your whole heart. If you stay, stay with your whole heart. Don't do what I did and stay with half of it.",
+    "signature": "— J.",
+    "envelope": {
+      "front": "Not an envelope at all — a page, folded in three, smelling of lamp oil.",
+      "details": [
+        {"label": "Paper", "text": "Torn from a logbook. Printed along the top: HUSHWATER LIGHT.", "clue": "c4_logpaper"},
+        {"label": "Date", "text": "14 March 2046", "clue": "c4_date"}
+      ]
+    },
+    "candidates": ["june", "felix"],
+    "min_evidence": 2,
+    "outcomes": {
+      "june": {"node": "out.lamp_room.june", "hope": 2, "correct": true},
+      "felix": {"node": "out.lamp_room.felix", "hope": 0}
+    }
+  },
+  {
+    "id": "umbrella",
+    "title": "The Lady with the Green Umbrella",
+    "origin": "present",
+    "arrive_night": 2,
+    "writer": "bram",
+    "font": "gochi",
+    "paper": "ticket",
+    "ink": "#3c3c3c",
+    "date": "",
+    "body": "To [[the lady with the green umbrella|c5_umbrella]],\n\n[[Evry Thursday you ride the 6:10|c5_thursday]] with that green umbrella, even when it isnt raining. You sit at the stern and feed the gulls [[the crusts off somthing that smells like heven|c5_crusts]].\n\nIve captained this ferry thirty one years and you are the only wether I look forward to.\n\nI wont sign my name. Id only spell it wrong.",
+    "signature": "— [[the man at the wheel|c5_wheel]]",
+    "envelope": {
+      "front": "Folded small enough to hide in a fist.",
+      "details": [
+        {"label": "Paper", "text": "A blank page from a ticket book: MORNING LARK · PASSENGER TICKET · No. 0417.", "clue": "c5_ticketbook"},
+        {"label": "Writing", "text": "Pencil, pressed hard. Several words crossed out and tried again.", "clue": ""}
+      ]
+    },
+    "candidates": ["mari", "odile", "bram"],
+    "min_evidence": 2,
+    "outcomes": {
+      "mari": {"node": "out.umbrella.mari", "hope": 1, "correct": true},
+      "odile": {"node": "out.umbrella.odile", "hope": 0},
+      "bram": {"node": "out.umbrella.bram", "hope": 0, "returned_to_writer": true}
+    }
+  },
+  {
+    "id": "eleven_fifty_two",
+    "title": "Eleven Fifty-Two",
+    "origin": "past",
+    "arrive_night": 3,
+    "writer": "felix",
+    "font": "special",
+    "paper": "typed",
+    "ink": "#1c1c1c",
+    "date": "14 October 2009",
+    "body": "[[Daniel,|c6_daniel]]\n\n[[It is 11:52|c6_1152]] and the storm has put out every window in [[the clock room|c6_clockroom]]. I can see the harbour from up here. I cannot see [[the Marguerite|c6_marguerite]].\n\nYou took my place tonight because I told you I had a fever. I had no fever. I was afraid — of the sky, of the black water, of the way the barometer fell like a stone. You looked at me and you knew. You said, \"Everyone's allowed to be afraid once, Fe.\"\n\nWhen you come back I will tell you the truth, and I will buy every round at the Lantern until I am ruined.\n\n[[The lighthouse is dark. Why is the lighthouse dark?|c6_dark]]\n\nCome back.",
+    "signature": "— F.",
+    "envelope": {
+      "front": "The paper ripples, as if it was soaked through once and dried by a stove.",
+      "details": [
+        {"label": "Type", "text": "Typewritten. Every letter 'e' sits a hair above the line.", "clue": "c6_typed"},
+        {"label": "Date", "text": "14 October 2009 — the night of the Long Storm.", "clue": "c6_date"}
+      ]
+    },
+    "candidates": ["tobias", "june", "mari", "memorial", "felix"],
+    "min_evidence": 2,
+    "outcomes": {
+      "tobias": {"node": "out.eleven_fifty_two.tobias", "hope": 3, "correct": true},
+      "june": {"node": "out.eleven_fifty_two.june", "hope": 2},
+      "mari": {"node": "out.eleven_fifty_two.mari", "hope": 1},
+      "memorial": {"node": "out.eleven_fifty_two.memorial", "hope": 1},
+      "felix": {"node": "out.eleven_fifty_two.felix", "hope": 0, "returned_to_writer": true}
+    }
+  },
+  {
+    "id": "little_bird",
+    "title": "Little Bird",
+    "origin": "present",
+    "arrive_night": 3,
+    "writer": "mari",
+    "font": "kalam",
+    "paper": "kraft",
+    "ink": "#4a3b2e",
+    "date": "",
+    "body": "[[My little bird,|c7_bird]]\n\nI found [[the ferry ticket in your coat pocket|c7_ticket]] on Tuesday. I didn't say anything. I put it back exactly where it was.\n\nI've been practising this all week, so here it is: I won't stop you. [[Your father would have bought you that ticket himself|c7_father]], and then cried all the way home.\n\nJust don't go [[the way your uncle did|c7_uncle]] — in the night, without a word, leaving me to find out from Bram.\n\nLet me pack you bread for the journey. Let me wave.",
+    "signature": "— Mum",
+    "envelope": {
+      "front": "Written on a paper bag, folded into quarters.",
+      "details": [
+        {"label": "Paper", "text": "A bakery bag stamped THE SLEEPLESS LOAF. Flour in the creases.", "clue": "c7_flour"}
+      ]
+    },
+    "candidates": ["june", "wren"],
+    "min_evidence": 2,
+    "outcomes": {
+      "june": {"node": "out.little_bird.june", "hope": 1, "correct": true},
+      "wren": {"node": "out.little_bird.wren", "hope": 0}
+    }
+  },
+  {
+    "id": "ps_1140",
+    "title": "P.S. — Eleven Forty",
+    "origin": "future",
+    "arrive_if": "$tobias_knows",
+    "auto_keep": true,
+    "writer": "odile",
+    "font": "dancing",
+    "paper": "fine",
+    "ink": "#5b3a8c",
+    "date": "Hushwater · 2031",
+    "body": "To the Night Clerk,\n\nIf you're reading this, Tobias knows. Good. Good. I'll be at the end of the pier on Lantern Night, and so will he — I'd bet my last stamp on it.\n\nBut listen to me carefully. [[The automatic lamp fails at 11:40.|c8_1140]] It failed on the night of the Long Storm, and on Lantern Night it fails again — the same minute, the same storm. I know, because I was on the pier, and I watched it go.\n\nSomeone must be in the lamp room. It can't be him. It can't be me.\n\nThe Morning Lark will be out there in the dark.",
+    "signature": "— O.\n\nP.S. My eyes are quite gone now. Forgive the handwriting. You of all people will understand it.",
+    "envelope": {
+      "front": "Addressed in large, careful, shaking letters: THE NIGHT CLERK.",
+      "details": [
+        {"label": "Postmark", "text": "HUSHWATER · 2031. Five years from now.", "clue": ""}
+      ]
+    },
+    "candidates": ["wren"],
+    "min_evidence": 0,
+    "outcomes": {
+      "wren": {"node": "out.ps_1140", "hope": 0, "correct": true}
+    }
+  },
+  {
+    "id": "ticking",
+    "title": "Twenty Years Without a Second Lost",
+    "origin": "future",
+    "arrive_if": "$clock_running and not $clock_backward",
+    "auto_keep": true,
+    "writer": "felix",
+    "font": "special",
+    "paper": "typed",
+    "ink": "#1c1c1c",
+    "date": "Lantern Square · 14 October 2046",
+    "body": "To whoever sorts the post at Hushwater,\n\nThe town clock has now run for twenty years without losing a second. I check it every morning. Every MORNING, you understand. The word still feels extravagant in my mouth.\n\nI am told I have a night clerk to thank, though no one will tell me how. Tobias just taps his nose. Insufferable man. I miss him terribly.\n\nEnclosed, one second. I saved it. You'll know what to do with it.",
+    "signature": "— F. Harrow, Clockmaker (retired, under protest)",
+    "envelope": {
+      "front": "Something tiny and bright rattles in the bottom of the envelope.",
+      "details": [
+        {"label": "Enclosed", "text": "A single brass gear-tooth, no bigger than a grain of rice.", "clue": ""}
+      ]
+    },
+    "candidates": ["wren"],
+    "min_evidence": 0,
+    "outcomes": {
+      "wren": {"node": "out.ticking", "hope": 0, "correct": true}
+    }
+  },
+  {
+    "id": "second_oven",
+    "title": "The Second Oven",
+    "origin": "future",
+    "arrive_if": "$reply_posted",
+    "auto_keep": true,
+    "writer": "theo",
+    "font": "caveat",
+    "paper": "kraft",
+    "ink": "#26314d",
+    "date": "The Sleepless Loaf · 2046",
+    "body": "To the night clerk,\n\nThe lamp above the blue door hasn't gone out in twenty years. I trim the wick myself now. We put in a second oven, and I take the night shift. Mari says I knead like a drowning man. Mari says a lot of things. I listen to every one of them.\n\nI don't know who you are. Mari won't say. But somebody carried my letter the last twelve steps, and I'll be grateful to them for the rest of my life.",
+    "signature": "— Theo Okafor",
+    "envelope": {
+      "front": "A bakery bag again — but the stamp says THE SLEEPLESS LOAF & BROTHER.",
+      "details": [
+        {"label": "Handwriting", "text": "The same fast, hard-pressed hand as the hotel letter. Steadier, now.", "clue": ""}
+      ]
+    },
+    "candidates": ["wren"],
+    "min_evidence": 0,
+    "outcomes": {
+      "wren": {"node": "out.second_oven", "hope": 0, "correct": true}
+    }
+  },
+  {
+    "id": "final_dawn",
+    "title": "Unsent",
+    "origin": "future",
+    "manual_arrival": true,
+    "auto_keep": true,
+    "writer": "wren",
+    "font": "handlee",
+    "paper": "silver",
+    "ink": "#2c3e66",
+    "date": "The Office of Unsent Letters · 14 October 2076",
+    "body": "To the Night Clerk, on the morning after Lantern Night —\n\nYou don't remember applying for this job, because you didn't. I did. Or rather: I will.\n\nI have kept the Office of Unsent Letters for fifty years. Odile taught me everything, in the end. Her eyes went, but she never once misdelivered — she says so herself, often.\n\nThe Chute works both ways. I found that out the winter she left us. So I've been sending the letters back, one at a time, to the only clerk I knew would read them closely enough.\n\n[[The handwriting is yours.|c9_hand]] You've noticed by now. You always notice.\n\nThe sun is up. I can feel it on my hands as I write.\n\nWhatever you choose now — the post office, or the ferry, or something I never thought of — choose it with your whole heart. A girl on a pier told me that, once.",
+    "signature": "— W.",
+    "envelope": {
+      "front": "Addressed: THE NIGHT CLERK, ON THE MORNING AFTER LANTERN NIGHT.",
+      "details": [
+        {"label": "Postmark", "text": "HUSHWATER · 2076. Fifty years from now.", "clue": ""}
+      ]
+    },
+    "candidates": ["wren"],
+    "min_evidence": 0,
+    "outcomes": {
+      "wren": {"node": "", "hope": 0, "correct": true}
+    }
+  },
+  {
+    "id": "final_dusk",
+    "title": "Not Yet",
+    "origin": "future",
+    "manual_arrival": true,
+    "auto_keep": true,
+    "writer": "wren",
+    "font": "handlee",
+    "paper": "silver",
+    "ink": "#2c3e66",
+    "date": "The Office of Unsent Letters",
+    "body": "To the Night Clerk,\n\nNot yet.\n\nThe lamp went dark, or a letter went astray, or a door stayed shut. It doesn't matter which. The dusk is patient, and so am I.\n\nI'll send them again. All of them. Read them more closely this time. Ask one more question. Turn over one more envelope.\n\nSomeday the sun will come up over Hushwater, and you will be standing on the pier when it does. I know, because I've seen it.\n\n[[The handwriting is yours.|c9_hand]] You've noticed by now.",
+    "signature": "— W.",
+    "envelope": {
+      "front": "Addressed: THE NIGHT CLERK.",
+      "details": [
+        {"label": "Postmark", "text": "Smudged. The year could be anything.", "clue": ""}
+      ]
+    },
+    "candidates": ["wren"],
+    "min_evidence": 0,
+    "outcomes": {
+      "wren": {"node": "", "hope": 0, "correct": true}
+    }
+  }
+]

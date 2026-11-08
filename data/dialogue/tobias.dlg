@@ -1,0 +1,237 @@
+# ═══════════════════════════════════════════════════════════════════
+#  TOBIAS FENN — Keeper of the Hushwater Light
+#  Terse, nautical, gruff tenderness, long silences, dry humour.
+# ═══════════════════════════════════════════════════════════════════
+
+=== tobias.talk
+[if $lantern_night] -> tobias.lantern
+[if not $met_tobias] -> tobias.first
+[if delivered("lamp_lit") == "tobias" and not $tobias_after_letter] -> tobias.after_letter
+[if delivered("eleven_fifty_two") == "tobias" and not $tobias_after_felix] -> tobias.after_felix
+[if $june_path == "stay" and not $tobias_after_june] -> tobias.after_june_stay
+[if $june_path == "leave" and not $tobias_after_june] -> tobias.after_june_leave
+-> tobias.default
+
+=== tobias.first
+~ set met_tobias
+n: *An old man in a knitted cap sits by the lighthouse door, mending a net he will never use.*
+tobias: ...
+wren: Hello. I'm Wren, from the post office.
+tobias: Post office. Hm.
+tobias: I don't get letters.
+wren: I'm not here to give you one. Not yet.
+tobias[thinking]: "Not yet." Hm. Odile's been talking.
+tobias: Tobias Fenn. I keep the light. Somebody has to.
+* Isn't the lighthouse automatic? -> tobias.first.auto
+* What's it like up there? -> tobias.first.up
+
+=== tobias.first.auto
+tobias[angry]: Automatic. Hm. So they told me. Installed it in '98. Very clever box of gears.
+tobias[sad]: It failed once. Once is enough.
+tobias: So I light it by hand. Every night. Oil, wick, flame. In that order, or you'll lose your eyebrows.
+~ set knows_lamp_order
+
+=== tobias.first.up
+tobias: A hundred and twelve steps. Wind singing in the glass. The whole bay laid out like a chart, and every boat on it a little light you're keeping alive.
+tobias[sad]: Not a place for visitors.
+tobias: Oil, wick, flame. That's all it is. Anyone could do it. Nobody does.
+~ set knows_lamp_order
+
+=== tobias.default
+[if $night == 2] tobias: Wind's backing westerly. Hm. Storm coming. Always is, this time of year.
+[if $night == 3] tobias[sad]: Lantern Night tomorrow. I'll set a place for Rosa. I'll light the lamp for Daniel. Same as every year.
+* How do you light the lamp? -> tobias.how
+* Tell me about the lighthouse. -> tobias.light
+* I'll leave you to it. -> END
+
+=== tobias.how
+tobias: Oil first — open the valve, let the reservoir fill. Then trim the wick square, so it burns clean. Then flame.
+tobias: Oil, wick, flame. Get it backwards and you'll lose your eyebrows. Get it right, and every ship in the bay gets home.
+~ set knows_lamp_order
+
+=== tobias.light
+tobias: Built in 1871. Fenns have kept it since 1902. My grandmother rowed out to the Teeth in her nightdress once, to haul a schooner's crew off the rocks. Seven men. She was sixty-one.
+tobias[thinking]: We're not a family that does things by halves. Or quickly.
+
+=== tobias.after_letter
+~ set tobias_after_letter
+tobias: Been thinking. Hm.
+tobias[sad]: Every night for forty-one years she watched that light from the post office window. Thinking it was my answer.
+tobias: It wasn't an answer. It was just a lamp. I'd have lit it for anybody.
+tobias[thinking]: ...That's not true. I'd have let it go dark for her.
+
+=== tobias.after_felix
+~ set tobias_after_felix
+tobias: Felix came up the cliff this morning. First time in seventeen years. Brought a bottle of something terrible and sat on the step and didn't say a word.
+tobias[happy]: Best morning I've had in years. Hm. Morning. That's a word.
+
+=== tobias.after_june_stay
+~ set tobias_after_june
+tobias: June wants to learn the lamp. All of it. Every night.
+tobias[sad]: I told her it's cold, and it's lonely, and it's a hundred and twelve stairs, forever.
+tobias[happy]: She said, "Good." Just like that. "Good." Like Rosa.
+
+=== tobias.after_june_leave
+~ set tobias_after_june
+tobias: June climbed the tower with me. Every step. Asked about Rosa's Crown. I told her.
+tobias[sad]: She's still going. On the 6:10. Good. She should.
+tobias: She'll have the stars with her, anyway. Wherever she ends up, they'll be the same stars.
+
+=== tobias.lantern
+[if $finale] -> tobias.finale
+[if $tobias_knows and lamp_keeper() == "nobody" and not has_item("lighthouse_key")] -> tobias.lantern.key
+[if $tobias_knows and lamp_keeper() == "nobody"] tobias: Pier at eleven-forty. Forty-one years late. Somebody else has the lamp tonight, I hope. You've got the key.
+[if $tobias_knows and lamp_keeper() == "nobody"] -> END
+[if $tobias_knows and lamp_keeper() == "june"] tobias[happy]: June's got the lamp. She won't let me near it. Pushed me out the door and told me to go and "be romantic". Hm.
+[if $tobias_knows and lamp_keeper() == "june"] -> END
+tobias: Lantern Night. I'll be up top. Always am.
+
+=== tobias.lantern.key
+tobias: Eleven-forty. The pier. I'll be there.
+tobias[thinking]: The auto-lamp'll hold. Seventeen years and not a hiccup.
+* "Let me keep watch in the lamp room tonight." -> tobias.lantern.give
+* "Are you sure it'll hold?" -> tobias.lantern.sure
+
+=== tobias.lantern.sure
+tobias[sad]: ...No.
+tobias: I'm never sure. That's why I climb up there every night. But tonight I've a question to answer, and it's been waiting forty-one years.
+* "Then let me keep the light." -> tobias.lantern.give
+* "Go. Don't worry about it." -> END
+
+=== tobias.lantern.give
+tobias: Hm.
+n: *He looks at you for a long moment. Then he unhooks the brass key from his belt and puts it in your hand, and folds your fingers over it.*
+tobias: Oil, wick, flame. A hundred and twelve stairs. Don't let it go dark, clerk.
+~ item lighthouse_key
+~ set knows_lamp_order
+
+=== tobias.finale
+[if $reunited] tobias: Forty-one years. Hm. Felt like a Tuesday.
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== tobias.ask.c2_dear_t
+tobias[thinking]: T? Hm. Tobias. Theo, Mari's boy, wherever he's got to. Tilly Marsh, but she's ninety and mostly asleep.
+
+=== tobias.ask.c2_lamp
+tobias: I light the lamp every night. Have since I was twenty. Never missed but the once.
+
+=== tobias.ask.c2_married
+tobias[sad]: Married Rosa on a Sunday in October. '85. Wind took the vicar's hat clean off the cliff.
+tobias: She's been gone twenty years. I still talk to her. She doesn't say much back. Never did, when I was being a fool.
+~ clue c2_rosa
+
+=== tobias.ask.c2_rosa
+-> tobias.ask.c2_married
+
+=== tobias.ask.c2_date
+tobias[thinking]: Thirteenth of October, '85. Night before the wedding. I was up top all night. Couldn't sleep. Lit the lamp at six and stood with it till dawn — back when we had dawns.
+
+=== tobias.ask.c2_photo
+tobias[thinking]: That photograph? That's me, before I was old. And that's... Odile. Summer of '85.
+tobias: Before the wedding. Before... hm. Before a lot of things.
+
+=== tobias.ask.c2_pier
+tobias[thinking]: The end of the pier. ...Hm.
+n: *He looks out toward the harbour for a long moment, and says nothing at all.*
+
+=== tobias.ask.c2_violet
+tobias: Violet ink. Odile's. She sends the lighthouse bill in violet ink, every quarter. Like a love letter from the council.
+n: *He hears himself say "love letter", and frowns at the net.*
+~ clue c2_inkwell
+
+=== tobias.ask.c2_inkwell
+-> tobias.ask.c2_violet
+
+=== tobias.ask.c3_stargazer
+tobias: Stargazer. That's what Daniel called June when she was a scrap. She'd sit on his shoulders and grab at the stars like they were apples.
+~ clue c3_granddaughter
+
+=== tobias.ask.c3_grandpa
+tobias[happy]: I'm a grandpa. June. Daniel's girl. Sharp as a gaff hook and twice as stubborn.
+~ clue c3_granddaughter
+
+=== tobias.ask.c3_granddaughter
+-> tobias.ask.c3_grandpa
+
+=== tobias.ask.c3_rosa_stars
+tobias[surprised]: ...Who told you that?
+tobias[sad]: Three stars. Little ones, low in the west. I named them for Rosa the night we married. Rosa's Crown. Never told a soul.
+tobias: The chart's up in the lamp room. Here — go and look, if you like. Mind the stairs. Don't touch anything that's hot.
+~ item lighthouse_key
+~ set knows_lamp_order
+
+=== tobias.ask.c3_star_chart
+tobias: You found it. Hm. Rosa's Crown. Crooked little thing. She liked crooked things. Married one.
+
+=== tobias.ask.c3_ferry
+tobias[sad]: June's leaving. On the 6:10. Thinks I don't know. Bram tells me everything — he can't help it, it falls out of him like water out of a boot.
+tobias: Good. She should go. Nothing for her here but dusk and old men.
+
+=== tobias.ask.c3_manifest
+-> tobias.ask.c3_ferry
+
+=== tobias.ask.c3_postmark
+tobias[thinking]: Twenty forty-six. Hm. I'll be dead. Good. Saves me reading it.
+
+=== tobias.ask.c4_keeper
+tobias[angry]: June? Keeper? She'd hate it. Cold, lonely, a hundred and twelve stairs, every night, forever.
+tobias[sad]: ...She'd be good at it. Don't tell her I said that.
+
+=== tobias.ask.c4_stairs
+tobias: A hundred and twelve. I count them every night. Some nights there's a hundred and thirteen. Those are the bad nights.
+
+=== tobias.ask.c4_112
+-> tobias.ask.c4_stairs
+
+=== tobias.ask.c4_logpaper
+tobias[thinking]: That's my logbook paper. Mine. Torn out, too. Nobody tears pages out of a logbook. It's practically a crime at sea.
+
+=== tobias.ask.c4_sunrise
+tobias[sad]: June's never seen one. I used to watch it every morning from the gallery. I never thought to take her up. Then there weren't any more to see.
+
+=== tobias.ask.c6_dark
+tobias: ...
+n: *He stops mending. His hands stay very still on the net.*
+tobias[sad]: The automatic lamp failed at 11:40. Salt in the gears, they said after. I was asleep in the cottage. I'd trusted it. First night in thirty years I slept straight through.
+tobias[sad]: The Marguerite hit the Teeth at 11:52. My boy was on her.
+tobias: So now I light it by hand. Every night. I don't sleep much.
+~ clue c6_tobias_guilt
+
+=== tobias.ask.c6_tobias_guilt
+tobias: I don't talk about it.
+n: *He doesn't.*
+
+=== tobias.ask.c6_marguerite
+tobias[sad]: Daniel. My son. Went out on the Marguerite the night of the storm. Wasn't even his shift.
+
+=== tobias.ask.c6_memorial
+-> tobias.ask.c6_marguerite
+
+=== tobias.ask.c6_daniel
+-> tobias.ask.c6_marguerite
+
+=== tobias.ask.c6_logbook
+tobias[thinking]: You've been reading my log. Hm. Nosy.
+tobias: Daniel came by at nine that night. Said he was taking Felix Harrow's shift. Felix was white as a sail, he said. Scared. Daniel knew. Told me not to let on.
+tobias[sad]: "Everyone's allowed to be afraid once, Da." That's what he said. Last thing he ever said to me.
+
+=== tobias.ask.c6_felix_shift
+tobias: Felix. Hm. Seventeen years he's been up that tower, and seventeen years he's not looked me in the eye. I know why. He thinks I don't.
+
+=== tobias.ask.c6_1152
+tobias: 11:52. Felix's clock. He stopped it, or it stopped itself. Same thing, with Felix.
+
+=== tobias.ask.c6_typed
+tobias: Typewriter. Felix has one. Writes to the council about my "unauthorised manual lamp operation". Every year. I use them to light the stove.
+
+=== tobias.ask.c8_1140
+tobias[sad]: Eleven-forty. That's when it went dark. You don't need to tell me that time, clerk. I hear it in my sleep.
+
+=== tobias.ask.c7_bird
+tobias: Little bird. Mari calls June that. Has done since the cradle. June pretends to hate it. Fenns are good at pretending to hate things.
+
+=== tobias.ask.default
+[if pick(3) == 0] tobias: Hm.
+[if pick(3) == 1] tobias: Don't know. Don't need to.
+[if pick(3) == 2] tobias[thinking]: Ask Odile. She knows everything. She'll tell you, too. Twice.
