@@ -8,7 +8,9 @@ const TitleScreen := preload("res://src/ui/title_screen.gd")
 const EndingScreen := preload("res://src/ui/ending_screen.gd")
 
 var world: Node2D = null
-var ui: CanvasLayer
+var ui: Node
+var test_mode := false
+var last_ending := ""
 var title: Control = null
 var _holder: Node2D
 var _changing := false
@@ -23,12 +25,13 @@ func _ready() -> void:
 	ui = UIRoot.new()
 	add_child(ui)
 	var args := OS.get_cmdline_user_args()
-	if "--tour" in args:
-		var Tour := load("res://tests/screenshot_tour.gd")
-		if Tour:
-			var tour: Node = Tour.new()
-			add_child(tour)
-			return
+	for a in args:
+		if a == "--tour" or a.begins_with("--playtest"):
+			var path := "res://tests/screenshot_tour.gd" if a == "--tour" else "res://tests/playthrough.gd"
+			var T: Script = load(path)
+			if T:
+				add_child(T.new())
+				return
 	show_title()
 
 
@@ -158,6 +161,9 @@ func goto_location(loc_id: String, spawn: String, run_on_enter := true, fade := 
 
 func play_ending(id: String) -> void:
 	GameState.record_ending(id)
+	last_ending = id
+	if test_mode:
+		return
 	ui.set_world_ui(false)
 	var e := EndingScreen.new()
 	ui.root.add_child(e)

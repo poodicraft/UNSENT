@@ -51,6 +51,7 @@
   "c5_po_umbrella": {"letters": ["umbrella"], "title": "Odile's green umbrella", "note": "A green umbrella stands in the post office's umbrella stand — furled tight and furred with dust.", "supports": ["odile"]},
   "c5_bakery_umbrella": {"letters": ["umbrella"], "title": "Mari's green umbrella", "note": "A green umbrella hangs by the bakery door, still beaded with sea spray. It was her mother's.", "supports": ["mari"]},
   "c5_flour_run": {"letters": ["umbrella"], "title": "Mari's Thursday flour run", "note": "Every Thursday, Mari takes the 6:10 to Port Ardent for mill flour, and feeds the gulls her crusts on the way.", "supports": ["mari"]},
+  "c5_odile_gulls": {"letters": ["umbrella"], "title": "Odile feeds the gulls", "note": "Odile feeds the gulls stale crusts from the post office's back step every evening.", "supports": ["odile"]},
   "c5_never_leaves": {"letters": ["umbrella"], "title": "Odile never leaves", "note": "Odile hasn't set foot off Hushwater since the night of the Long Storm. Not once.", "supports": [], "refutes": ["odile"]},
   "c5_blush": {"letters": ["umbrella"], "title": "Bram's blush", "note": "Asked about green umbrellas, Bram went red to the ears and talked about clouds for five minutes.", "supports": ["bram"]},
 

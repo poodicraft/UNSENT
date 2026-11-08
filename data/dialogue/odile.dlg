@@ -41,6 +41,7 @@ odile[sad]: Lantern Night tomorrow. Seventeen years since the storm. You'd think
 odile[happy]: You've a letter in your hand that wasn't there before. A *reply!* Well, well. That's the best kind of post.
 odile: Replies go in the outbox — the red box by the stove. Bram takes the outgoing mail across on the morning ferry. Such as our mornings are.
 ~ objective "Post Mari's reply in the outbox by the stove."
+[if can_sleep()] -> odile.sleep_offer
 
 === odile.after_tobias
 ~ set odile_after_tobias
@@ -258,7 +259,9 @@ odile: Seventeen years. Somebody has to mind the Chute.
 odile[happy]: The man at the wheel? There's only one wheel in Hushwater, and only one man who sings at it. Badly.
 
 === odile.ask.c5_crusts
-odile: Crusts that smell like heaven. That's Mari's bread or I'm a pillar box.
+odile[shy]: Crusts? Well. I do feed the gulls from the back step of an evening. Stale crusts. Mari's, as it happens.
+odile: Don't tell her. She'd start charging me for them.
+~ clue c5_odile_gulls
 
 === odile.ask.c6_marguerite
 odile[sad]: The Marguerite. Three men. The memorial's down by the harbour. Every name on it is somebody's husband, or son, or father. Most are all three.

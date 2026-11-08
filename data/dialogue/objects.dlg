@@ -210,7 +210,7 @@ n: *Locked. Tobias keeps the key on his belt.*
 
 === cl.door.climb
 ~ sfx door
-~ goto_location lamp_room from_stairs
+~ goto_location lamp_room from_stairs enter
 
 === cl.edge
 n: *Far below, the sea chews at a reef of black rocks that the fishermen call the Teeth. The spray reaches almost all the way up.*

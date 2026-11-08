@@ -298,7 +298,6 @@ func _exec(node_id: String) -> void:
 					next = opts[clampi(idx, 0, opts.size() - 1)].target
 					break
 		if next == "END":
-			_end_requested = true
 			return
 		node_id = next
 
@@ -586,6 +585,11 @@ func _cmd(cmd: String, args: Array) -> void:
 		"goto_location":
 			ui.dialogue.close()
 			await main.goto_location(_arg(args, 0), _arg(args, 1, "default"), false)
+			if _arg(args, 2) == "enter" and world:
+				for e in world.def.get("on_enter", []):
+					if eval(e.get("if", "true")):
+						await _exec(e.node)
+						break
 		"sleep":
 			await advance_night()
 		"run":
