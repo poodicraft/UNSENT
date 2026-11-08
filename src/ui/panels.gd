@@ -540,6 +540,9 @@ class SettingsPanel extends Modal:
 		c.custom_minimum_size = Vector2(0, 72)
 		c.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		c.add_theme_font_size_override("font_size", Settings.font(24))
+		var sb := Kit.box(Color("#232944"), 20, 1, Color(Kit.GOLD, 0.35), 0, 14)
+		for st in ["normal", "hover", "pressed", "hover_pressed", "focus", "disabled"]:
+			c.add_theme_stylebox_override(st, sb)
 		c.add_theme_color_override("font_color", Kit.CREAM)
 		c.add_theme_color_override("font_pressed_color", Kit.CREAM)
 		c.add_theme_color_override("font_hover_color", Kit.CREAM)

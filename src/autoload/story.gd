@@ -419,6 +419,8 @@ func deliver(letter_id: String, who: String) -> void:
 		await _exec(node)
 		_end_requested = true
 	check_arrivals()
+	if can_sleep() and not GameState.has_item("mari_reply"):
+		GameState.set_objective("The night's work is done. Return to Odile when you're ready to sleep — or keep exploring.")
 	GameState.autosave()
 
 

@@ -66,7 +66,7 @@ n: *You slide Mari's reply through the slot. It lands with a small, decided soun
 ~ set reply_posted
 ~ add hope 1
 ~ consequence "Mari's reply is on its way." "Bram will carry it to Port Ardent on the morning run."
-~ objective "Return to Odile."
+~ objective "Return to Odile when you're ready to sleep."
 
 === po.cat
 ~ sfx purr

@@ -22,3 +22,9 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# Test output (curated screenshots live in docs/screenshots)
+build/shots/
+build/export.log
+build/puppets.png
+build/UNSENT-debug.apk
