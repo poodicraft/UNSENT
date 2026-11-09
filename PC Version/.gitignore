@@ -1,0 +1,30 @@
+# Godot 4 generated data
+.godot/
+*.translation
+export_credentials.cfg
+
+# Build output. The zip in build/ is kept on purpose: it's what players
+# download. The unzipped folder and logs are rebuilt by tools/build_windows.sh.
+build/UNSENT-Windows/
+build/UNSENT-Windows-debug/
+build/UNSENT-Windows-debug.zip
+build/export-windows.log
+build/*.tmp
+
+# Python
+__pycache__/
+*.pyc
+
+# Art/audio pipeline scratch
+tools/art/_cache/
+tools/audio/_cache/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Test output (curated screenshots live in docs/screenshots)
+build/shots/

@@ -1,0 +1,308 @@
+# ═══════════════════════════════════════════════════════════════════
+#  Delivery outcomes — the consequences of every letter, every recipient.
+# ═══════════════════════════════════════════════════════════════════
+
+# ─── The Light Above the Blue Door (Theo → Mari) ─────────────────────
+
+=== out.blue_door.mari
+~ letterbox on
+~ npc mari hold on
+n: *Mari wipes her hands on her apron twice before she takes it. She reads it standing up. Then she reads it again, sitting down on the step.*
+mari[sad]: "If the light's still on..."
+mari[sad]: That idiot. That beautiful, *stupid* idiot. Two years. I stopped two years ago.
+~ music sad
+mari[sad]: ...
+~ npc mari hold off
+n: *She stands, drags a crate under the iron bracket above the blue door, and climbs it in her floury shoes.*
+~ npc mari walk 1445 952
+~ npc mari face right
+~ npc mari anim reach
+~ wait 0.6
+~ sfx match
+~ set bakery_lamp_lit
+~ refresh
+n: *The wick catches. Gold light spills down the blue door and over the cobbles, as if it had only been waiting to be asked.*
+mari[happy]: There. *There* you are.
+mari: Wait — wait here.
+~ npc mari walk 1318 956
+n: *She vanishes inside. You hear a drawer, a pencil, a sniff. She comes back with a folded square of paper.*
+mari: My reply. Three words. Took me twelve years and a minute and a half. Will you post it? Bram takes the post across on the morning run.
+~ item mari_reply
+~ letterbox off
+~ consequence "Mari lit the lamp above the blue door." "For the first time in two years, someone across the bay might see it."
+~ objective "Post Mari's reply in the post office outbox."
+
+=== out.blue_door.odile
+odile[thinking]: Hm. A blue door, a lamp, cinnamon. You've been thorough, I'll give you that.
+odile[happy]: But it's not mine, dear. My lamp has never once gone out — that's rather the point of me. Whoever this is for has let *theirs* go dark.
+odile: And I've never had a brother or sister to quarrel with at a funeral. Look again. Look *up*.
+n: *She hands the letter back with a little pat, the way you'd return a lost glove.*
+~ return_letter blue_door
+~ set misdelivered_once
+~ objective "Find who 'The Light Above the Blue Door' was really written for."
+
+# ─── If the Lamp Is Lit (Odile → Tobias) ─────────────────────────────
+
+=== out.lamp_lit.tobias
+~ letterbox on
+~ npc tobias hold on
+n: *Tobias reads the letter once, very slowly, holding it out at arm's length the way old men do.*
+n: *Then he sits down on the lighthouse step, as if his legs have simply resigned.*
+tobias[sad]: "If you light the lamp tonight..."
+tobias[sad]: I lit it. Of course I lit it. I lit it every night of my life.
+tobias: I never knew there was a question.
+~ music sad
+tobias[sad]: Thirteenth of October. The night before the wedding. She was down there on the pier. Watching my light. Thinking it was my answer.
+tobias[angry]: Forty-one years she's let me think she simply didn't care for me. Forty-one *years*, Odile Vance.
+n: *He laughs — a short, cracked, astonished sound, like ice breaking on a pond.*
+~ npc tobias hold off
+tobias: ...Lantern Night. Hm. The anniversary. The pier.
+tobias: The lamp can manage without me for one night. Just one. After forty-one years, I think it's owed.
+[if $odile_asked_keep] n: *You think of Odile's shaking hand, held out for the letter. You hope you've done right.*
+~ set tobias_knows
+[if not has_item("lighthouse_key")] tobias: Here. Take this. If I'm going to be standing on a pier, somebody else had better have a key to the lamp.
+[if not has_item("lighthouse_key")] ~ item lighthouse_key
+~ arrive ps_1140
+~ letterbox off
+~ ripple
+~ consequence "Tobias knows." "On Lantern Night, at 11:40, he'll be waiting at the end of the pier."
+~ objective "The Chute is ringing at the post office."
+
+=== out.lamp_lit.odile
+odile[sad]: Thank you, dear. For bringing it to me, and not to him.
+n: *She opens the stove door and holds the letter over the coals. For a long moment, she doesn't let go.*
+~ music sad
+n: *Then she does.*
+~ sfx fire
+odile: There. Forty-one years, and it went up in four seconds. Paper's like that.
+odile[happy]: Now. Tea. And we'll never speak of this again. I've had a great deal of practice at that.
+~ set odile_burned
+~ consequence "Odile burned her letter." "Some letters stay unsent. That is its own kind of answer."
+
+# ─── The Far Shore (future June → June) ──────────────────────────────
+
+=== out.far_shore.june
+~ letterbox on
+~ npc june hold on
+n: *June reads it twice by the little brass lamp on her telescope. The second time, her lips move.*
+june[surprised]: "We got on the ferry." We... I made it. I *make* it.
+june[happy]: A comet! I named a comet! It's grumpy! Of *course* it's grumpy!
+n: *Then she reaches the third paragraph, and goes quiet.*
+june[sad]: "Grandpa's lamp went dark the winter after we left."
+june[sad]: I never climbed it with him. Not once.
+~ music sad
+june: He's never told me about any stars he named for Grandma. He never tells me anything. He just lights the lamp and looks at the sea like it owes him money.
+~ npc june hold off
+june[thinking]: Okay. Okay. New plan. I'm still going. But before I go, I'm climbing those stupid stairs. All hundred and twelve of them. With him.
+~ fade_letter lamp_room
+~ set june_path "leave"
+~ set june_climbed
+~ letterbox off
+~ ripple
+~ consequence "June will still take the ferry — but first, she'll climb the lighthouse with her grandfather." "Somewhere in 2046, a letter written by lamplight quietly unwrites itself."
+
+=== out.far_shore.felix
+felix[thinking]: "Dear Stargazer." Well, that's obviously — and then "Grandpa's lamp"? My grandfather hated lamps.
+felix[surprised]: Twenty forty-six! A letter from twenty years hence! Do you understand what this means? *Evidence*, Wren! Physical evidence!
+n: *Before you can stop him, he's sealed it in a glass specimen case with a brass label: EXHIBIT A.*
+felix: I'll return it when my study is complete. Ten years. Fifteen at most.
+~ set felix_has_letter
+~ consequence "Felix sealed the letter in a glass case." "It will never reach the stargazer it was written for."
+
+# ─── A Hundred and Twelve Stairs (future June → June) ───────────────
+
+=== out.lamp_room.june
+~ letterbox on
+~ npc june hold on
+n: *June reads the logbook page standing very still, the wind tugging at her yellow coat.*
+june[sad]: "I'm the keeper now."
+june[angry]: No. No, no. That's — I'd never. I'd *never*.
+june[sad]: "I've never seen a sunrise. Not a real one."
+~ music sad
+n: *She sits down hard on the boards. For a long time, she watches the thin gold line at the edge of the sea.*
+june[sad]: "Don't do what I did and stay with half of it."
+june: ...
+~ npc june hold off
+june[thinking]: She's not telling me to stay. She's telling me — if I stay, I have to actually *stay*. Not just... not leave.
+n: *She takes a ticket out of her coat pocket. Turns it over. Holds it out to you.*
+june: Hold onto this for me? If I'm staying, I'm doing it properly. Whole heart.
+june[happy]: Grandpa's going to be *insufferable* about this.
+~ item ferry_ticket
+~ fade_letter far_shore
+~ set june_path "stay"
+~ letterbox off
+~ ripple
+~ consequence "June gave you her ferry ticket." "Somewhere in 2046, a research ship sails south without her — and a lamp is lit with a whole heart."
+
+=== out.lamp_room.felix
+felix[thinking]: "I'm the keeper now"? Of what? I keep *time*, not lamps. A hundred and twelve stairs — the tower only has ninety.
+felix[surprised]: But the date! Twenty forty-six! Wren, this is extraordinary. I must study it.
+n: *He seals it in a glass specimen case with a brass label: EXHIBIT B.*
+~ set felix_has_letter
+~ consequence "Felix sealed the letter in a glass case." "It will never reach the stargazer it was written for."
+
+# ─── The Lady with the Green Umbrella (Bram → Mari) ──────────────────
+
+=== out.umbrella.mari
+~ letterbox on
+~ npc mari hold on
+n: *Mari reads it, and frowns, and reads it again, and then claps a floury hand over her mouth.*
+mari[surprised]: "The only weather I look forward to"?
+mari[happy]: "Evry Thursday"? "Wether"? Oh, there's only one man alive who spells like that.
+mari[happy]: *Bram Calloway.*
+~ music town
+n: *She laughs until she has to sit down on a flour sack. Then she stops laughing, rather suddenly, and looks at the letter for a long time.*
+mari[shy]: Thirty-one years at that wheel. And he's been looking back at the stern. At *me*.
+~ npc mari hold off
+mari: The old walrus. The great, soft, ridiculous walrus.
+mari[thinking]: Thursday's the day after Lantern Night. I think... I think I might sit at the bow this week.
+~ set mari_bow
+~ letterbox off
+~ consequence "Mari knows who the man at the wheel is." "This Thursday, she'll sit at the bow."
+
+=== out.umbrella.odile
+odile[surprised]: For me? "The lady with the green umbrella"...
+odile[happy]: Oh, how *lovely*. I haven't had a love letter since the Coronation.
+odile[thinking]: I haven't ridden the 6:10 in seventeen years, of course. Somebody's got muddled. But I shan't tell him. Let the poor man wonder.
+n: *She tucks it into her shawl with a smile that you suspect will be very confusing for someone, come Thursday.*
+~ set odile_kept_umbrella
+~ consequence "Odile kept the letter, delighted." "On the 6:10, a man at the wheel will never know why the postmistress winks at him."
+
+=== out.umbrella.bram
+bram[shy]: Oh. Oh no. You found me out.
+bram[sad]: I wrote it in April. And May. And June, and July. I keep it in my coat. Every Thursday I think, today, Bram. Today. And every Thursday she feeds the gulls, and I steer the boat.
+bram: Give it here. I'll... I'll give it her myself. Someday.
+~ set bram_kept_letter
+~ consequence "Bram took his letter back." "Someday, he says."
+
+# ─── Eleven Fifty-Two (Felix → Daniel) ──────────────────────────────
+
+=== out.eleven_fifty_two.tobias
+~ letterbox on
+~ npc tobias hold on
+n: *Tobias reads it standing. His thumb moves over one line, again and again: "Everyone's allowed to be afraid once, Fe."*
+tobias[sad]: That's Daniel. That's my boy, that is. That's exactly how he talked.
+tobias: Felix wrote this. That night. From up the tower.
+tobias[angry]: Seventeen years he's carried this. Seventeen years thinking I'd curse him for it.
+~ npc tobias hold off
+tobias[sad]: ...Come with me.
+~ fade out 0.8
+~ goto_location square felix_scene
+~ npc tobias show 520 960
+~ npc tobias face left
+~ npc felix face right
+~ fade in 0.8
+n: *Felix is at his bench when Tobias walks in without knocking. He sees the letter in the old man's hand and goes the colour of candle wax.*
+felix[sad]: Tobias. I—
+tobias: He knew, Felix. Daniel knew. He came by the cottage at nine and he told me. "Felix is scared, Da. Don't let him know I know."
+tobias[sad]: He went because he wanted you safe. Because he loved you, you daft old cog.
+felix[sad]: I should have been on that boat.
+tobias[sad]: And I should have been awake. And the gears should have been dry. And the sky should have been kind.
+tobias: The lighthouse was my fault, Felix. Not yours.
+felix[sad]: The lighthouse wasn't yours either.
+~ music hope
+n: *For a long while, two old men sit in a clock shop and say nothing at all. It is the best conversation either of them has had in seventeen years.*
+n: *Then Felix stands, climbs the tower stairs, and does something to the escapement with a tiny brass key.*
+~ sfx clock_start
+~ set clock_running
+~ refresh
+~ wait 1.0
+n: *Above Lantern Square, for the first time in seventeen years, the town clock ticks. 11:53.*
+~ letterbox off
+~ ripple
+~ consequence "The town clock is running again." "11:53 — seventeen years late, and exactly on time."
+
+=== out.eleven_fifty_two.june
+~ letterbox on
+~ npc june hold on
+n: *June reads it slowly, mouthing the words. When she reaches the line in quotation marks, she stops.*
+june[sad]: "Everyone's allowed to be afraid once, Fe."
+june[sad]: That's him. That's Dad. I've never heard him say *anything*. I've got one photo and his name on a stone. And now I've got a sentence.
+~ music sad
+n: *She folds it very carefully into her inside pocket, next to her heart, the way you'd carry something alive.*
+~ npc june hold off
+june[thinking]: Felix wrote this. He's been up that tower for seventeen years thinking it was his fault.
+june: I'm going to go and tell him thank you. For giving me a sentence.
+~ fade out 0.8
+~ wait 0.6
+~ fade in 0.8
+n: *That night, Felix climbed the clock tower and turned a tiny brass key.*
+~ sfx clock_start
+~ set clock_running
+~ set clock_backward
+~ refresh
+n: *The town clock started again — backwards. Felix says it's a calibration issue. June says it's her dad, being funny.*
+~ letterbox off
+~ ripple
+~ consequence "The town clock is running — backwards." "June carries a sentence of her father's next to her heart."
+
+=== out.eleven_fifty_two.mari
+~ letterbox on
+~ npc mari hold on
+n: *Mari reads it in the bakery doorway. She reads it twice. Her face does nothing at all.*
+mari[sad]: He knew. Of course he knew. Daniel always knew when someone was frightened. He'd go and stand next to them like a wall.
+mari[angry]: Felix let him. Felix let him go out there and—
+mari[sad]: No. No. That's not fair. Daniel chose. Daniel always chose.
+~ npc mari hold off
+n: *She folds the letter into her apron pocket.*
+mari: I'll talk to Felix. Not tonight. But I will.
+~ set mari_knows_felix
+~ letterbox off
+~ consequence "Mari knows the truth about the Marguerite." "She'll talk to Felix. Someday. Not tonight."
+
+=== out.eleven_fifty_two.memorial
+~ letterbox on
+n: *You kneel at the memorial stone and tuck the letter beneath the jar of sea-lavender at its foot.*
+n: *DANIEL FENN, the stone says. Beloved son, husband, father.*
+~ music sad
+n: *The wind picks at a corner of the envelope. By morning it has carried the letter out over the water — toward wherever the Marguerite went.*
+~ set letter_to_sea
+~ letterbox off
+~ consequence "Felix's letter went out with the tide, to Daniel." "Felix will never know it was read."
+
+=== out.eleven_fifty_two.felix
+felix[surprised]: Where did you — no. No, that's mine. That's—
+n: *He snatches it, reads the first line, and goes white.*
+felix[sad]: I wrote this. That night. I didn't know where to send it, so I didn't send it anywhere.
+felix[angry]: Some letters should stay unsent, Wren.
+n: *He locks it in a drawer, turns the little key, and goes back to the stopped clock as if you had never come in.*
+~ set felix_locked
+~ consequence "Felix locked his letter away." "The town clock still reads 11:52."
+
+# ─── Little Bird (Mari → June) ──────────────────────────────────────
+
+=== out.little_bird.june
+~ letterbox on
+~ npc june hold on
+n: *June reads it, and her face crumples and uncrumples like paper in a fist.*
+june[sad]: She knew. She *knew*, about the ticket. Since Tuesday.
+june[sad]: "Let me pack you bread for the journey. Let me wave."
+~ music sad
+june[angry]: Why does she have to be so — so — *Mum* about everything.
+~ npc june hold off
+n: *She wipes her face hard on a yellow sleeve.*
+june: I'm going to go and help her with the lantern loaves. Don't follow me. Don't tell anyone I was crying. I wasn't. It's the wind.
+~ set june_mum
+~ letterbox off
+~ consequence "June and Mari are baking the Lantern Night loaves together." "Whatever June decides, she won't leave in silence."
+
+=== out.little_bird.wren
+n: *You fold the letter and tuck it into your own coat, near your heart.*
+n: *"My little bird." It's silly. It isn't for you. But you keep it anyway — it is very difficult to give away a letter like that, once you've read it.*
+~ set kept_little_bird
+~ consequence "You kept a letter that wasn't yours." "In the bakery, the words go unsaid."
+
+# ─── Letters from changed futures (addressed to you) ────────────────
+
+=== out.ps_1140
+~ set read_ps_1140
+~ consequence "A warning from 2031." "On Lantern Night, someone must be in the lamp room at 11:40."
+[if lamp_keeper() == "nobody" and not has_item("lighthouse_key")] ~ objective "On Lantern Night, someone must be in the lamp room by 11:40."
+
+=== out.ticking
+~ set read_ticking
+~ consequence "A letter from a future where the clock never stopped again." "Twenty years without a second lost."
+
+=== out.second_oven
+~ set read_second_oven
+~ consequence "A letter from a future where Theo came home." "The lamp above the blue door hasn't gone out in twenty years."

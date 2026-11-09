@@ -1,0 +1,199 @@
+# ═══════════════════════════════════════════════════════════════════
+#  JUNE FENN — Stargazer, seventeen
+#  Sardonic, impatient, astronomy nerd, poetic in spite of herself.
+# ═══════════════════════════════════════════════════════════════════
+
+=== june.talk
+[if $lantern_night] -> june.lantern
+[if not $met_june] -> june.first
+[if delivered("far_shore") == "june" and not $june_after_far] -> june.after_far
+[if delivered("lamp_room") == "june" and not $june_after_lamp] -> june.after_lamp
+[if $june_mum and not $june_after_bird] -> june.after_bird
+-> june.default
+
+=== june.first
+~ set met_june
+n: *A girl in a yellow raincoat sits at the very end of the pier, one eye screwed shut against a brass telescope.*
+june: If you're here to tell me it's cold, I know. If you're here to tell me it's late, it's always late. If you're here to tell me to come home, tell Mum I'm *thinking*.
+wren: I'm just the new night clerk.
+june[surprised]: ...Oh. Huh. Odile actually hired someone. I had five shillings on "never".
+june: I'm June. That's Vega, that's Deneb, and that's a gull. You can tell the gull because it's eating a chip.
+* What are you looking for? -> june.first.looking
+* Isn't it always dusk here? -> june.first.dusk
+
+=== june.first.looking
+june[thinking]: The edge. Where the sky goes from violet to that thin gold line. If you look long enough, you can almost see it move.
+june[sad]: It doesn't, though. It hasn't moved since I was born. Everyone says the sun's just *there*, under the sea, like a coin under a sofa.
+june: I've never seen it come up. Not once. Seventeen years.
+-> june.first.end
+
+=== june.first.dusk
+june: Always. The sun went down the night of the Long Storm and just... stopped. Like it forgot its lines.
+june[sad]: I was six months old. I've never seen it rise. Not once.
+-> june.first.end
+
+=== june.first.end
+~ clue c4_june_sunrise
+june[thinking]: There are places where it comes up every single morning. Like it's nothing. Like it's *cheap*.
+june: I'm going to see one. Soon.
+n: *She pats her coat pocket — then catches herself, and pretends she was brushing off a crumb.*
+
+=== june.default
+[if $june_path == "stay"] june[happy]: Grandpa let me trim the wick last night. He stood behind me the entire time breathing like a walrus. It was the best night of my life.
+[if $june_path == "leave"] june: I counted the stairs with Grandpa. One hundred and twelve. He told me the name of every single star from the top. Rosa's Crown is the little one. It's crooked. It's perfect.
+[if $june_path == ""] june: Clear night. Well. Clear-ish. Same as every night, if you don't count the clouds, which I do, professionally.
+* What can you see tonight? -> june.sky
+* Tell me about your family. -> june.family
+* See you around. -> END
+
+=== june.sky
+[if pick(3) == 0] june[happy]: Jupiter, low in the east, being smug. Four moons. Galileo saw those with a worse telescope than mine. I think about that a lot.
+[if pick(3) == 1] june: The Pleiades. Seven sisters. You can only see six. Nobody agrees on what happened to the seventh. I think she left town.
+[if pick(3) == 2] june[thinking]: A satellite, going over. Somebody somewhere launched that. Somebody *went* somewhere.
+
+=== june.family
+june: Mum runs the bakery. Grandpa runs the lighthouse. Dad... was on the Marguerite. I don't remember him.
+june[thinking]: We're a family of people who stay up all night looking after things. Bread. Lamps. Me.
+june[sad]: Sometimes I'd like to be the thing that goes somewhere, instead of the thing that's looked after.
+
+=== june.after_far
+~ set june_after_far
+june[happy]: Grandpa's teaching me the lamp. Well — he's teaching me to *watch* him do the lamp. Baby steps. A hundred and twelve of them.
+june: I'm still going, Wren. On the 6:10. But now when I go, I'll know what's up those stairs.
+june[shy]: Thanks. For the letter. For... whoever I'm going to be.
+
+=== june.after_lamp
+~ set june_after_lamp
+june: Whole heart. I keep saying it to myself. Whole heart, whole heart. It sounds like a heartbeat if you say it fast enough.
+june[happy]: Grandpa cried when I told him. He'll deny it. He said it was "lamp smoke". The lamp wasn't lit.
+
+=== june.after_bird
+~ set june_after_bird
+june[shy]: I helped Mum with the lantern loaves. Don't make a thing of it.
+june[happy]: She's been humming all evening. Mum doesn't hum. It's deeply unsettling.
+
+=== june.lantern
+[if $finale] -> june.finale
+[if $june_path == "leave"] june: Bag's packed. Grandpa gave me his old star chart. Mum gave me eleven loaves. I can't carry eleven loaves, Wren.
+[if $june_path == ""] june[sad]: Lantern Night. Everyone's so... sad and nice. I hate it. I'm leaving on the 6:10 tomorrow. Don't tell anyone.
+[if $june_path == ""] june: Not that anyone would notice.
+
+=== june.finale
+[if $june_path == "leave"] june[happy]: When the sun comes up — *if* it comes up — I'll be on the ferry going towards it. That's the plan. That's the whole plan.
+[if $june_path == ""] june[thinking]: Look at all the lanterns. Dad's in there somewhere. Somewhere up there in all that.
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== june.ask.c3_stargazer
+june[happy]: Stargazer? That's... that's what Dad used to call me. Apparently. I was a baby, I don't remember. Grandpa told me.
+june[thinking]: Who's calling me that? What have you got?
+~ clue c3_june_scope
+
+=== june.ask.c3_june_scope
+june: It was Grandpa's. Before that, his grandmother's. She used it to spot wrecks. I use it to spot the edge of everything.
+
+=== june.ask.c3_ferry
+june[surprised]: Who told you about the ferry? Was it Bram? It was Bram. Bram couldn't keep a secret in a locked safe at the bottom of the sea.
+june[sad]: ...Yes. I've got a ticket. One way. The morning after Lantern Night. Don't tell Mum.
+~ clue c3_manifest
+
+=== june.ask.c3_manifest
+-> june.ask.c3_ferry
+
+=== june.ask.c7_ticket
+-> june.ask.c3_ferry
+
+=== june.ask.c3_grandpa
+june: Grandpa? Tobias Fenn, lighthouse keeper, world champion at saying nothing. He's up on the cliff. He lights the lamp by hand every night, like it'll bite him if he doesn't.
+~ clue c3_granddaughter
+
+=== june.ask.c3_granddaughter
+june: Yep. Granddaughter. Only one. He says I'm "a lot". He's not wrong.
+
+=== june.ask.c3_rosa_stars
+june[surprised]: Stars he named for Grandma? He never — he's never told me that. He never tells me anything.
+june[thinking]: There's a chart up in the lamp room. He won't let me up there. Says the stairs are "not a playground". I'm *seventeen*.
+
+=== june.ask.c3_star_chart
+june[surprised]: Rosa's Crown? He named them? Three little stars in the west — I've *looked* at those. I've looked at them a hundred times. I never knew they were hers.
+
+=== june.ask.c3_postmark
+june[thinking]: Twenty forty-six? That's... that's not funny. Where did you get this?
+june: Southern Ocean. That's where the big research ships go. That's where I'd go. If I...
+june[shy]: Never mind.
+
+=== june.ask.c3_comet
+june[happy]: A grumpy comet? Ha. If I ever found a comet, I'd want it grumpy. A comet with *opinions*.
+
+=== june.ask.c34_same_hand
+june[thinking]: Same handwriting, same date, two different lives? That's not a letter. That's a fork in the road that someone put a stamp on.
+
+=== june.ask.c4_keeper
+june[angry]: The *keeper*? Of the lighthouse? Me? No. No way. I'd rather eat my telescope.
+june[sad]: ...Would I?
+
+=== june.ask.c4_stairs
+june: A hundred and twelve steps. It says so over the door. I counted them once when I was eight, and Grandpa caught me on step sixty. Never been higher.
+
+=== june.ask.c4_112
+-> june.ask.c4_stairs
+
+=== june.ask.c4_sunrise
+june[sad]: Never seen a sunrise. Yeah. That's me. That's my whole personality.
+~ clue c4_june_sunrise
+
+=== june.ask.c4_june_sunrise
+june: Seventeen years of the same orange. It's like living inside a sentence that never gets to the full stop.
+
+=== june.ask.c4_birthday
+june[surprised]: The fourteenth of March is my birthday. How do you — oh. *Oh.* Both of them? On my birthday?
+june[thinking]: Thirty-seven. I'll be thirty-seven. That's so *old*.
+
+=== june.ask.c4_logpaper
+june: Hushwater Light logbook paper. Grandpa orders it from a printer in Port Ardent. Says the cheap stuff "doesn't take ink honest".
+
+=== june.ask.c7_bird
+june[angry]: "Little bird"? Ugh. That's Mum. She calls me that. I hate it.
+june[shy]: Don't tell her I said I hate it.
+~ clue c7_june_bird
+
+=== june.ask.c7_father
+-> june.ask.c6_marguerite
+
+=== june.ask.c7_uncle
+june: My uncle? Theo. I don't remember him. Mum doesn't talk about him. Which means she talks about him constantly, just without saying his name.
+~ clue c1_theo
+
+=== june.ask.c6_marguerite
+june[sad]: Dad was on the Marguerite. I've got one photo. He's holding me up like a fish he's caught. That's all I've got of him. A photo, and his name on a stone.
+~ clue c6_june_daniel
+
+=== june.ask.c6_memorial
+-> june.ask.c6_marguerite
+
+=== june.ask.c6_daniel
+-> june.ask.c6_marguerite
+
+=== june.ask.c6_dark
+june[sad]: Grandpa never talks about the night the lamp went out. Not once. That's how I know it's the only thing he thinks about.
+
+=== june.ask.c6_felix_shift
+june[surprised]: Felix was meant to be on the boat? Instead of Dad?
+june[sad]: ...Huh. That's why he can't look at me. I always thought he just didn't like teenagers.
+
+=== june.ask.c1_theo
+june: Uncle Theo? I don't remember him. Mum doesn't talk about him. Which means she talks about him constantly, just without saying his name.
+
+=== june.ask.c3_felix_scope
+june[happy]: Felix's telescope? It's older than Felix. He uses it to set clocks, which is like using a violin to hammer nails.
+
+=== june.ask.c2_pier
+june: The end of the pier? You're standing on it. Best seat in Hushwater. Everyone ends up here eventually.
+
+=== june.ask.c5_wheel
+june[happy]: The man at the wheel is Bram. He lets me steer sometimes, when the sea's flat. Then he sings. Then I give the wheel back.
+
+=== june.ask.default
+[if pick(3) == 0] june: No idea. Ask me about stars. Ask me about anything that's more than four light-years away.
+[if pick(3) == 1] june[thinking]: Hm. Nope. That's a ground-level problem. I'm more of an up person.
+[if pick(3) == 2] june: Do I look like I know things? Don't answer that.

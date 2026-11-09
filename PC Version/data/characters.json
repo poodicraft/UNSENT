@@ -1,0 +1,155 @@
+{
+  "wren": {
+    "name": "Wren",
+    "role": "Night Clerk, Hushwater Post Office",
+    "color": "#e8c07a",
+    "voice": 1.0,
+    "bio": "That's you. You arrived on the evening ferry with a letter of employment you don't remember writing.",
+    "puppet": {
+      "height": 1.0, "build": 0.95, "skin": "#e9c3a6", "cheek": "#e79a8a",
+      "hair": "#2b2335", "hair_style": "short",
+      "body": "longcoat", "coat": "#2e5a60", "coat2": "#244a50", "trim": "#c9a45c",
+      "pants": "#262838", "shoes": "#3b2a22",
+      "scarf": "#d9a441", "hat": "postal", "hat_color": "#25324d",
+      "satchel": "#7a4e2d"
+    }
+  },
+  "odile": {
+    "name": "Odile Vance",
+    "role": "Postmistress",
+    "color": "#b48ee0",
+    "voice": 1.25,
+    "bio": "Seventy-two. Has run the Office of Unsent Letters for fifty years. Drinks cinnamon tea, writes in violet ink, and is going quietly blind.",
+    "notes": [
+      {"if": "has_clue(\"c1_only_child\")", "text": "An only child. Her father went to sea when she was four and never came back."},
+      {"if": "has_clue(\"c5_never_leaves\")", "text": "Hasn't left Hushwater since the night of the Long Storm."},
+      {"if": "$odile_confessed", "text": "Wrote a letter to Tobias the night before his wedding, in 1985. Never sent it."}
+    ],
+    "puppet": {
+      "height": 0.86, "build": 1.18, "skin": "#f1d2bd", "cheek": "#e8a0a0",
+      "hair": "#dcd8e4", "hair_style": "bun", "pencil": true,
+      "body": "dress", "coat": "#4a3550", "coat2": "#3b2a40", "trim": "#d8c6e8",
+      "shawl": "#7b5aa6", "pants": "#3b2a40", "shoes": "#1f1a22",
+      "glasses": "round"
+    }
+  },
+  "tobias": {
+    "name": "Tobias Fenn",
+    "role": "Lighthouse Keeper",
+    "color": "#8fb3d9",
+    "voice": 0.72,
+    "bio": "Seventy-six. Keeps the Hushwater Light and lights the lamp by hand every night, though it was made automatic years ago. Says very little.",
+    "notes": [
+      {"if": "has_clue(\"c2_rosa\")", "text": "Married Rosa in October 1985. A widower for twenty years."},
+      {"if": "has_clue(\"c3_granddaughter\")", "text": "June is his granddaughter. His son Daniel was her father."},
+      {"if": "has_clue(\"c6_tobias_guilt\")", "text": "The automatic lamp failed on the night of the Long Storm while he slept. His son was at sea."},
+      {"if": "$tobias_knows", "text": "He knows about Odile's letter now. Forty-one years late."}
+    ],
+    "puppet": {
+      "height": 1.1, "build": 1.12, "stoop": 0.12, "skin": "#e0b59a", "cheek": "#d98a7a",
+      "hair": "#e8e6e2", "hair_style": "short",
+      "beard": "full", "beard_color": "#eeece8",
+      "body": "sweater", "coat": "#34486b", "coat2": "#2a3a58", "trim": "#4a5f86",
+      "pants": "#4f5462", "shoes": "#2b241f",
+      "hat": "beanie", "hat_color": "#2c3e5c"
+    }
+  },
+  "mari": {
+    "name": "Mari Fenn",
+    "role": "Baker, The Sleepless Loaf",
+    "color": "#f0a070",
+    "voice": 1.12,
+    "bio": "Forty-four. Runs the bakery that never closes, because the sun never rises to tell it to. Laughs easily, cries easily, feeds everyone.",
+    "notes": [
+      {"if": "has_clue(\"c1_theo\")", "text": "Her younger brother Theo left town after their father's funeral, twelve years ago."},
+      {"if": "has_clue(\"c6_mari_daniel\")", "text": "Widow of Daniel Fenn, who was lost on the Marguerite."},
+      {"if": "has_clue(\"c5_flour_run\")", "text": "Rides the 6:10 ferry to Port Ardent every Thursday for flour."}
+    ],
+    "puppet": {
+      "height": 0.97, "build": 1.22, "skin": "#9c6142", "cheek": "#c9705a",
+      "hair": "#1d1512", "hair_style": "curly",
+      "hat": "headscarf", "hat_color": "#e07a3f",
+      "body": "dress", "coat": "#a44a3f", "coat2": "#8a3b33", "trim": "#e8b84a",
+      "apron": "#efe6d6", "pants": "#5a2b26", "shoes": "#2b1d18",
+      "flour": true, "sleeves": "rolled"
+    }
+  },
+  "june": {
+    "name": "June Fenn",
+    "role": "Stargazer, aged seventeen",
+    "color": "#f2c14e",
+    "voice": 1.18,
+    "bio": "Seventeen. Spends every night at the end of the pier with a brass telescope. Has never once seen the sun rise.",
+    "notes": [
+      {"if": "has_clue(\"c3_manifest\")", "text": "Has a one-way ticket on the 6:10 ferry, the morning after Lantern Night."},
+      {"if": "has_clue(\"c6_june_daniel\")", "text": "Her father Daniel was lost on the Marguerite when she was six months old."},
+      {"if": "$june_path == \"stay\"", "text": "Staying in Hushwater. Learning the lamp. Whole heart."},
+      {"if": "$june_path == \"leave\"", "text": "Still leaving on the 6:10 — but not before climbing the lighthouse with her grandfather."}
+    ],
+    "puppet": {
+      "height": 1.03, "build": 0.84, "skin": "#c48a66", "cheek": "#d9806a",
+      "hair": "#3a2620", "hair_style": "messy",
+      "body": "raincoat", "coat": "#f2c14e", "coat2": "#d9a531", "trim": "#fff1b8",
+      "pants": "#3d4f7a", "shoes": "#b8443a",
+      "mittens": ["#c8423a", "#3f8f5a"],
+      "telescope": true
+    }
+  },
+  "felix": {
+    "name": "Felix Harrow",
+    "role": "Clockmaker",
+    "color": "#a9c987",
+    "voice": 0.95,
+    "bio": "Fifty-eight. Has spent seventeen years trying to restart the town clock, stopped at 11:52 on the night of the Long Storm. Precise. Prickly. Lonely.",
+    "notes": [
+      {"if": "has_clue(\"c6_felix_shift\")", "text": "Was supposed to crew the Marguerite on the night of the storm. Called in sick."},
+      {"if": "$clock_running", "text": "The town clock is running again."}
+    ],
+    "puppet": {
+      "height": 1.05, "build": 0.8, "skin": "#efd1bb", "cheek": "#e0a090",
+      "hair": "#b9b4ae", "hair_style": "wild",
+      "beard": "mustache", "beard_color": "#a8a39c",
+      "body": "waistcoat", "coat": "#5b6b3a", "coat2": "#4a5830", "trim": "#e9e4d8",
+      "bowtie": "#8b2e2e", "pants": "#383844", "shoes": "#1e1b1a",
+      "goggles": true
+    }
+  },
+  "bram": {
+    "name": "Bram Calloway",
+    "role": "Captain of the Morning Lark",
+    "color": "#7fb5e6",
+    "voice": 0.82,
+    "bio": "Sixty-one. Has captained the ferry to Port Ardent for thirty-one years, runs the harbour Lost & Found, and sings at the wheel. Badly.",
+    "notes": [
+      {"if": "has_clue(\"c5_blush\")", "text": "Turns bright red at any mention of green umbrellas."}
+    ],
+    "puppet": {
+      "height": 1.0, "build": 1.48, "skin": "#d9a083", "cheek": "#e0786a",
+      "hair": "#8f8a84", "hair_style": "short",
+      "beard": "full", "beard_color": "#9a9590",
+      "body": "peacoat", "coat": "#22304a", "coat2": "#1a2538", "trim": "#d6b45a",
+      "pants": "#4a4f5c", "shoes": "#2a2420",
+      "hat": "beanie", "hat_color": "#2f6db3"
+    }
+  },
+  "theo": {
+    "name": "Theo Okafor",
+    "role": "Mari's brother",
+    "color": "#d9a46c",
+    "voice": 0.9,
+    "bio": "Mari's younger brother. Left Hushwater twelve years ago.",
+    "puppet": {
+      "height": 1.08, "build": 1.3, "skin": "#94593b", "cheek": "#b86a52",
+      "hair": "#141010", "hair_style": "short",
+      "beard": "stubble", "beard_color": "#2a1e1a",
+      "body": "jacket", "coat": "#6b5a3a", "coat2": "#574830", "trim": "#c9b48a",
+      "scarf": "#a8473b", "pants": "#3a3a40", "shoes": "#2a2018"
+    }
+  },
+  "n": {
+    "name": "",
+    "role": "",
+    "color": "#d8d0c0",
+    "voice": 0.0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "first_light": {
+    "title": "First Light",
+    "subtitle": "You stayed. Fifty years from now, you will send these letters back.",
+    "dawn": true
+  },
+  "morning_ferry": {
+    "title": "The Morning Ferry",
+    "subtitle": "You rode the 6:10 into the first sunrise Hushwater had seen in seventeen years.",
+    "dawn": true
+  },
+  "long_dusk": {
+    "title": "The Long Dusk",
+    "subtitle": "The sun did not rise. Not this time. The letters will come again.",
+    "dawn": false
+  }
+}

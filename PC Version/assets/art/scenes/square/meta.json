@@ -1,0 +1,73 @@
+{
+ "width": 2200,
+ "height": 1600,
+ "horizon": 900,
+ "layers": [
+  {
+   "tex": "far.png",
+   "x": -80.0,
+   "y": 694.0,
+   "scale": 2.0,
+   "factor": 0.14,
+   "z": -40,
+   "group": "world"
+  },
+  {
+   "tex": "mid.png",
+   "x": -80.0,
+   "y": 420.0,
+   "scale": 1.3333,
+   "factor": 0.42,
+   "z": -30,
+   "group": "world"
+  },
+  {
+   "tex": "main.png",
+   "x": -80.0,
+   "y": -163.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -10,
+   "group": "world"
+  },
+  {
+   "tex": "fg.png",
+   "x": -80.0,
+   "y": 1315.0,
+   "scale": 1.0,
+   "factor": 1.28,
+   "z": 10,
+   "group": "fg"
+  }
+ ],
+ "props": [
+  {
+   "tex": "lamp_dark.png",
+   "x": 1413.0,
+   "y": 613.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -5,
+   "group": "world",
+   "if": "not $bakery_lamp_lit"
+  },
+  {
+   "tex": "lamp_lit.png",
+   "x": 1413.0,
+   "y": 613.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -5,
+   "group": "world",
+   "if": "$bakery_lamp_lit"
+  },
+  {
+   "kind": "clock",
+   "mode": "tower",
+   "x": 360,
+   "y": 300,
+   "r": 78,
+   "z": -4
+  }
+ ]
+}

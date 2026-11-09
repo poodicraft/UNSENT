@@ -17,6 +17,9 @@ and the future changes too.
 - **Download:** [`build/UNSENT.apk`](build/UNSENT.apk) — version **1.0.1** (signed, Android 7.0+, ~62 MB)
 - **Engine:** Godot 4.5.1 (GDScript), GL Compatibility renderer
 - **No ads, no login, no internet, zero Android permissions.**
+- **PC (Windows) version:** [`PC Version/`](PC%20Version/) — widescreen, mouse & keyboard;
+  download [`PC Version/build/UNSENT-Windows.zip`](PC%20Version/build/UNSENT-Windows.zip),
+  unzip it and run `UNSENT.exe`.
 
 ---
 

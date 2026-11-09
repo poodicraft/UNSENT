@@ -1,0 +1,63 @@
+{
+	"asked": {
+		"mari:c1_funeral": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"chalkboard": true,
+		"chute": true,
+		"outbox": true,
+		"teacup": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"delivered_any": true,
+		"hope": 3,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_mari": true,
+		"met_odile": true,
+		"night": 2,
+		"reply_posted": true,
+		"tutorial_done": true,
+		"visited_harbor": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		},
+		"second_oven": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		}
+	},
+	"location": "post_office",
+	"objective": "Return to Odile when you're ready to sleep.",
+	"play_time": 3.38239233333332,
+	"player_pos": [
+		190.0,
+		1025.0
+	],
+	"saved_at": 1794148410.28024,
+	"spawn": "from_square",
+	"version": 1
+}

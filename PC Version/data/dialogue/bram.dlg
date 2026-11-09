@@ -1,0 +1,175 @@
+# ═══════════════════════════════════════════════════════════════════
+#  BRAM CALLOWAY — Captain of the Morning Lark, Lost & Found
+#  Jolly, booming, sea-shanty snippets, terrible speller, shy in love.
+# ═══════════════════════════════════════════════════════════════════
+
+=== bram.talk
+[if not $met_bram] -> bram.meet
+[if delivered("umbrella") == "mari" and not $bram_after_seen] -> bram.after_mari
+[if delivered("umbrella") == "odile" and not $bram_after_seen] -> bram.after_odile
+[if $reply_posted and not $bram_reply_seen] -> bram.reply
+-> bram.default
+
+=== bram.meet
+~ set met_bram
+bram[happy]: Bram Calloway, captain of the Morning Lark. You'll be the new night clerk. Welcome to Hushwater, little bird!
+
+=== bram.default
+[if $night == 1] bram[happy]: Wren! Little bird! How's the post? Heavy? Light? Somewhere in between, like a good loaf?
+[if $night == 2] bram[happy]: *(singing)* Oh, the dusk came down on Hushwater, and it never went away... *(stops)* I'm working on a second verse. It's mostly the first verse again.
+[if $night == 3] bram: Lantern Night tomorrow. I'll be bringing the 8:15 across in it. Barometer's dropping like a stone in a bucket.
+* What's in the Lost & Found? -> bram.lostfound
+* Tell me about the ferry. -> bram.ferry
+* See you, Bram. -> END
+
+=== bram.lostfound
+bram[happy]: Everything the sea gives back! Boots — never pairs. A teapot. A wedding ring, inscribed "for Agnes, who said yes", which I've been trying to return since 1994. Nobody's called Agnes.
+bram[sad]: And bits of the Marguerite. A life ring. An oar. The sea gives those back every year, near Lantern Night. Like it's sorry.
+
+=== bram.ferry
+bram: The Morning Lark! Sixty foot of stubborn. Two runs a day: the 6:10 out to Port Ardent, the 8:15 back. Been doing it thirty-one years.
+bram[thinking]: Never missed a crossing. Turned back once, in the Long Storm. Couldn't see the light. You can't come home if you can't see the light.
+
+=== bram.reply
+~ set bram_reply_seen
+bram[happy]: Odile tells me there's a letter in the outbox addressed to a "THEO". In Mari's hand.
+bram: I'll carry it across myself. Personally. I'll hand it to the big lad on the dock if I have to chase him up a crane.
+
+=== bram.after_mari
+~ set bram_after_seen
+bram[shy]: Wren. Wren, I have to tell you something, and I can't tell anyone else, because they'll laugh, and you won't, because you're a professional.
+bram[shy]: Mari Fenn came down to the dock this morning and said, "I know how you spell weather, Bram Calloway."
+bram[happy]: And then she *winked*. What does that mean? Don't tell me. I want to work it out myself. It might take years. I've got years.
+
+=== bram.after_odile
+~ set bram_after_seen
+bram[thinking]: Strangest thing. Odile Vance waved at me from the post office window today. Waved! And then she — I think she winked. Odile Vance doesn't wink. Odile Vance has never winked in her life.
+bram[surprised]: Do you think she's unwell?
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== bram.ask.c1_ferry
+bram[thinking]: The 8:15 from Port Ardent? That's my evening run. Funny you ask.
+bram: There's a fellow on the Port Ardent dock. Big lad. Every night for a fortnight he comes down, buys a ticket, stands at the gangplank... and doesn't board. Just watches us go.
+bram[sad]: Got a face I know, too. Took me a week to place it. He's got Mari's eyes.
+~ clue c1_dockman
+
+=== bram.ask.c1_dockman
+-> bram.ask.c1_ferry
+
+=== bram.ask.c1_hotel
+bram: The Harbor Arms? Dockside, Port Ardent. Where the stevedores sleep. Mari's brother Theo worked the docks over there, last I heard. Not that she'll have his name said in the shop.
+~ clue c1_theo
+
+=== bram.ask.c1_funeral
+bram[sad]: A funeral, twelve years back? That'd be old Okafor's. Mari's dad. Terrible day. Theo — that's Mari's brother — left on my ferry that very night. Never said a word the whole crossing.
+bram: I was the one had to tell Mari in the morning. Worst coffee of my life.
+~ clue c1_theo
+
+=== bram.ask.c1_theo
+bram: Theo Okafor. Could lift a barrel on each shoulder and cry at a sad song. Good lad. Terrible at saying sorry. So's his sister. Runs in the family, like freckles.
+
+=== bram.ask.c1_lamp
+bram: A lamp over a blue door? There's two of those in Hushwater. The post office, and Mari's. One's always lit. And one's... well. Not any more.
+
+=== bram.ask.c1_cinnamon
+bram[happy]: Mari's cinnamon loaves! I can smell them from the harbour at four in the morning. Steer by 'em, some nights. Better than a compass.
+
+=== bram.ask.c2_married
+bram: Tobias and Rosa? 1985. I was fifteen. Rosa danced with everyone, and Tobias danced with no one, and halfway through the night I saw him up on the cliff, looking down at the pier like he'd lost something.
+~ clue c2_rosa
+
+=== bram.ask.c2_pier
+bram[thinking]: The end of the pier? Funny. Odile used to go there. Long time ago, when I was a lad. Every night for a week. Then never again.
+
+=== bram.ask.c2_dear_t
+bram: T? Tobias. Theo. Tilly Marsh. The tide. I've had a letter to the tide, once, washed up in a bottle. "Dear Tide, please bring him back." I kept it. It's in the shed.
+
+=== bram.ask.c2_photo
+bram[happy]: A photo of Tobias and Odile on the pier? My old dad took that! Summer of '85. He said they were the only two people he ever photographed who didn't look at the camera. Only at each other.
+
+=== bram.ask.c3_ferry
+bram[sad]: June? Bought a ticket off me last week. One way, the morning after Lantern Night. Made me swear on my beard.
+bram: I've broken the oath twice already. Once to Tobias, once to a gull. The gull doesn't count.
+~ clue c3_manifest
+
+=== bram.ask.c3_manifest
+-> bram.ask.c3_ferry
+
+=== bram.ask.c7_ticket
+-> bram.ask.c3_ferry
+
+=== bram.ask.c3_stargazer
+bram[happy]: Stargazer? That's our June. Or Felix, if you let him tell it. Ha! June watches the stars. Felix *audits* them.
+
+=== bram.ask.c3_granddaughter
+bram: June's Tobias's granddaughter, aye. Daniel's girl. Got her grandad's stubbornness and her mum's laugh, and her dad's... well. Her dad's everything else.
+
+=== bram.ask.c3_postmark
+bram[surprised]: The Southern Ocean? Twenty forty-six? Blimey. That's a long way to send a letter. Longer than the Lark goes, anyway.
+
+=== bram.ask.c5_umbrella
+bram[shy]: G-green umbrella? Never noticed one. Not ever. Not a green one. Bit of weather coming in, eh? Look at those clouds. Cumulo... something. Big ones.
+~ clue c5_blush
+
+=== bram.ask.c5_thursday
+bram[shy]: Thursdays? Ha! Thursdays. Yes. The 6:10. Popular run. Flour, mostly. People need flour. For... bread. And such.
+~ clue c5_blush
+
+=== bram.ask.c5_crusts
+bram[shy]: Crusts? Gulls? I don't — the gulls on the Thursday run are very well fed, I'll say that. Very well fed. Lucky gulls.
+~ clue c5_blush
+
+=== bram.ask.c5_wheel
+bram[shy]: That's — where did you get that? That's not — I didn't—
+bram[sad]: Oh, Wren. Don't. Please don't read it out.
+~ clue c5_blush
+
+=== bram.ask.c5_ticketbook
+-> bram.ask.c5_wheel
+
+=== bram.ask.c5_blush
+bram[shy]: I'm not blushing. It's windburn. Thirty-one years of windburn. All at once.
+
+=== bram.ask.c5_po_umbrella
+bram: Odile's got a green umbrella? Never seen her use it. Never seen Odile get on a boat, come to that. Not since the storm.
+~ clue c5_never_leaves
+
+=== bram.ask.c5_flour_run
+bram[shy]: Mari, on a Thursday, with her flour sacks. Yes. I— the 6:10 is a very regular run. Very regular. I look forward to it. Professionally.
+
+=== bram.ask.c6_marguerite
+bram[sad]: The Marguerite. Three men on her that night. Daniel Fenn, Arlo Pike, Sam Reyes.
+bram: Should've been Felix Harrow instead of Daniel. Felix rang in sick at the last minute. Daniel took his place without a word. That was Daniel all over.
+~ clue c6_felix_shift
+
+=== bram.ask.c6_memorial
+-> bram.ask.c6_marguerite
+
+=== bram.ask.c6_daniel
+-> bram.ask.c6_marguerite
+
+=== bram.ask.c6_dark
+bram[sad]: The light went out at twenty to midnight. I was in the harbour office, watching. I'll never forget it. Like someone closing an eye.
+
+=== bram.ask.c6_1152
+bram: The town clock stopped at 11:52 that night. Felix says it's "resting". I say it's sulking. We've agreed to disagree, loudly, at the pub.
+
+=== bram.ask.c7_bird
+bram[happy]: Little bird? That's what I call *you*, isn't it! A wren's a little bird. Ha! Got a ring to it.
+bram[thinking]: Mari calls June that too, mind. "Little bird." Has done since she was in a bread basket on the counter.
+~ clue c7_wren_bird
+~ clue c7_june_bird
+
+=== bram.ask.c7_uncle
+bram[sad]: The uncle who left in the night? That'd be Theo. I carried him across myself. Should've turned the boat round. Never forgiven myself for not.
+~ clue c1_theo
+
+=== bram.ask.c8_1140
+bram[sad]: The auto-lamp, failing at eleven-forty? On Lantern Night? With me out there?
+bram: Well. I'll be watching for the light, Wren. I'll be watching for it like I've never watched for anything.
+
+=== bram.ask.default
+[if pick(3) == 0] bram[thinking]: Can't help you there, little bird. Not unless it washed up in my shed.
+[if pick(3) == 1] bram[happy]: No idea! But I'll keep an ear out. I've got two, you know. Both enormous.
+[if pick(3) == 2] bram: Hm. Ask Odile. If Odile doesn't know, it hasn't happened yet.

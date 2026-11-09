@@ -1,0 +1,22 @@
+{
+  "mari_reply": {
+    "name": "Mari's Reply",
+    "icon": "envelope",
+    "text": "Folded once. On the outside, in flour-dusted pencil: THEO. Inside, three words, and a letter M."
+  },
+  "ferry_ticket": {
+    "name": "One-Way Ferry Ticket",
+    "icon": "ticket",
+    "text": "MORNING LARK · ONE WAY · 15 OCT · 6:10. June's ticket. \"Hold onto this for me.\""
+  },
+  "lighthouse_key": {
+    "name": "Lighthouse Key",
+    "icon": "key",
+    "text": "Heavy brass, warm from Tobias's pocket. Opens the door at the foot of the Hushwater Light. 112 steps to the lamp."
+  },
+  "paper_lantern": {
+    "name": "Paper Lantern",
+    "icon": "lantern",
+    "text": "Odile's gift for Lantern Night. For someone you've lost — or someone you will."
+  }
+}

@@ -1,0 +1,38 @@
+{
+	"asked": {
+
+	},
+	"clues": [],
+	"examined": {
+		"chute": true
+	},
+	"flags": {
+		"hope": 0,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_odile": true,
+		"night": 1,
+		"visited_harbor": true,
+		"visited_post_office": true
+	},
+	"items": [],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "held",
+			"to": ""
+		}
+	},
+	"location": "post_office",
+	"objective": "Collect the letter from the Chute.",
+	"play_time": 1.16095933333333,
+	"player_pos": [
+		1650.0,
+		1025.0
+	],
+	"saved_at": 1794148408.05933,
+	"spawn": "from_harbor",
+	"version": 1
+}

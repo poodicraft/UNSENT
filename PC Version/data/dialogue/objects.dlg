@@ -1,0 +1,240 @@
+# ═══════════════════════════════════════════════════════════════════
+#  Examinable objects. ("clue" only records a clue once the letter it
+#  belongs to has arrived, so early visits never spoil later letters.)
+# ═══════════════════════════════════════════════════════════════════
+
+# ─── Post office ─────────────────────────────────────────────────────
+
+=== po.umbrella_stand
+n: *A brass umbrella stand by the door. One green umbrella, furled tight and furred with dust. It hasn't been opened in years.*
+[if arrived("umbrella")] n: *A green umbrella. Hm.*
+~ clue c5_po_umbrella
+
+=== po.bell
+~ sfx bell
+n: *Ding.*
+odile[angry]: I'm *right here*, dear.
+
+=== po.clock
+n: *A round wall clock with a cracked face. Its second hand ticks steadily — backwards.*
+[if pick(2) == 0] odile: It's catching up. Leave it alone.
+[if pick(2) == 1] odile: Felix offered to fix it once. I told him it isn't broken, it's *thoughtful*.
+
+=== po.inkwell
+n: *A heavy glass inkwell full of violet ink. Odile's dip pen rests beside it, the nib still wet. Every label in the archive is written in the same violet.*
+~ clue c2_inkwell
+
+=== po.teacup
+n: *A chipped cup of tea, gone cold. It smells powerfully of cinnamon. There are at least three sugars at the bottom.*
+~ clue c1_tea
+
+=== po.pigeonholes
+n: *Hundreds of pigeonholes, floor to ceiling. Each holds letters that arrived through the Chute — delivered long ago, each one tagged in violet ink with a name, a date, and an outcome.*
+[if pick(3) == 0] n: *One tag reads: "To the girl who lent me her pencil, 1962. Delivered. She remembered."*
+[if pick(3) == 1] n: *One tag reads: "To my brother, about the dog. Delivered. Laughed for an hour."*
+[if pick(3) == 2] n: *One tag reads: "To the sea. Delivered (thrown). No reply expected."*
+[if delivered_count() > 0] n: *Somewhere in here, there's a pigeonhole with your first delivery in it. Odile has written your name on the tag. Spelled correctly, even.*
+
+=== po.stairs
+[if can_sleep()] -> po.stairs.sleep
+n: *Narrow stairs up to the attic — your room now. A bed, a washstand, and a round window full of endless dusk.*
+[if $lantern_night] n: *Not tonight. Tonight is Lantern Night.*
+[if not $lantern_night] n: *You're not tired yet. There's still post to deliver.*
+
+=== po.stairs.sleep
+n: *Your little attic room is waiting at the top of the stairs. The day's — the night's — work feels done.*
+* Go to bed. (The next night begins.) -> odile.sleep
+* Not yet. -> END
+
+=== po.chute
+[if chute_waiting()] -> po.chute.collect
+n: *The Chute: a great brass pipe that comes down out of the ceiling and ends in a wire basket. It doesn't connect to anything. It hums, very faintly, like a held breath.*
+[if pick(2) == 0] n: *You put your ear to it. Somewhere far up — or far away — someone is crying. Or laughing. It's hard to tell, through brass.*
+
+=== po.chute.collect
+~ collect_chute
+
+=== po.outbox
+[if has_item("mari_reply")] -> po.outbox.post
+[if $reply_posted] n: *The outbox. Mari's reply is in there, waiting for Bram and the morning ferry. You resist the urge to check it's still there. You check anyway. It is.*
+[if not $reply_posted] n: *A red pillar-box with a brass slot: OUTGOING. For replies, and for the brave. Bram carries the outgoing mail across on the morning ferry.*
+
+=== po.outbox.post
+~ sfx post
+n: *You slide Mari's reply through the slot. It lands with a small, decided sound — the sound of something finally sent.*
+~ take mari_reply
+~ set reply_posted
+~ add hope 1
+~ consequence "Mari's reply is on its way." "Bram will carry it to Port Ardent on the morning run."
+~ objective "Return to Odile when you're ready to sleep."
+
+=== po.cat
+~ sfx purr
+[if pick(4) == 0] n: *Postscript, the post office cat, opens one eye, judges you thoroughly, and closes it again.*
+[if pick(4) == 1] n: *Postscript purrs like a small outboard motor. He is the colour of ink and twice as likely to get on everything.*
+[if pick(4) == 2] n: *Postscript stretches, revealing a white patch on his chest shaped exactly like a postage stamp.*
+[if pick(4) == 3] odile: Don't let him fool you. That cat has eaten more mail than the sea.
+
+# ─── Lantern Square ─────────────────────────────────────────────────
+
+=== sq.lane
+n: *The lane winds up between crooked houses into the sleeping hill-town. Every window is lit; every curtain is drawn. Nothing for you up there tonight.*
+
+=== sq.clock
+[if $clock_running and not $clock_backward] n: *The town clock is ticking. Its great hands crawl forward — past 11:53, past 11:54 — for the first time in seventeen years.*
+[if $clock_backward] n: *The town clock is running... backwards. Gently, cheerfully, quite against the laws of engineering.*
+[if not $clock_running] n: *The great clock face reads 11:52. It has read 11:52 for seventeen years. Pigeons nest in the minute hand.*
+[if arrived("eleven_fifty_two") and not $clock_running] n: *11:52 — the very minute in the typewritten letter.*
+~ clue c6_1152
+
+=== sq.felix_scope
+n: *A long brass telescope pokes out from the clock tower's balcony, aimed at the sky like an accusing finger.*
+[if arrived("far_shore") or arrived("lamp_room")] n: *Someone in the tower is a keen watcher of stars.*
+~ clue c3_felix_scope
+
+=== sq.typewriter
+n: *Felix's workshop window: clocks of every size, all stopped at different times, and an old black typewriter with a sheet of paper still wound into it.*
+n: *The sheet reads: "To the Council, re: unauthorised manual operation of the lighthouse, for the seventeenth year." Every 'e' floats a hair above the line.*
+~ clue c6_typewriter
+
+=== sq.notice
+n: *The notice board. "LANTERN NIGHT — 14th OCTOBER. Remember the Marguerite. Lanterns at the harbour from eleven."*
+n: *Below it, a ferry timetable: "MORNING LARK — 6:10 to Port Ardent (Thursdays and by arrangement). 8:15 from Port Ardent, nightly."*
+n: *And a lost-cat poster for Postscript, dated 2011, never taken down.*
+
+=== sq.fountain
+n: *An old stone fountain. The bottom glitters with seventeen years of coins — Hushwater's wishes, all of them waiting.*
+[if pick(2) == 0] n: *You drop in a button. It seems to count.*
+[if pick(2) == 1] n: *A fish is carved on the rim, worn smooth by children's hands.*
+
+=== sq.bakery_window
+n: *The bakery window is fogged gold from the ovens. Rows of loaves sit in it like sleeping cats.*
+[if $june_mum] n: *A tray of small, lopsided round loaves sits at the front. LANTERN LOAVES — HANDMADE BY JUNE, says a card. One of them has a face.*
+
+=== sq.bakery_lamp
+[if $bakery_lamp_lit] n: *The lamp above the blue door burns gold, steady as a promise.*
+[if $bakery_lamp_lit] -> END
+n: *An iron lamp bracket juts over the bakery's blue door. The lamp is cold and dark. Its wick has been trimmed down to almost nothing.*
+~ clue c1_dark_lamp
+
+=== sq.bakery_door
+n: *A blue door, the paint worn pale around the handle by forty years of hungry hands. Warm air and cinnamon leak around its edges.*
+[if arrived("blue_door")] n: *A blue door. And above it — a lamp.*
+
+=== sq.umbrella
+n: *A green umbrella hangs on a hook by the bakery door, still beaded with sea spray. It looks well travelled.*
+~ clue c5_bakery_umbrella
+
+=== sq.chalkboard
+n: *THE SLEEPLESS LOAF — NEVER CLOSED. "Cinnamon loaves at four o'clock, every morning (such as they are)." Someone has drawn a small, smug sun.*
+~ clue c1_cinnamon_sign
+
+=== sq.bench
+n: *A bench with a folded newspaper on it. PORT ARDENT GAZETTE: "HUSHWATER DUSK ENTERS SEVENTEENTH YEAR. Scientists baffled. Tourists unimpressed."*
+
+=== sq.po_lamp
+n: *Above the post office's blue door, Odile's lamp burns steady, as it has every night for fifty years.*
+[if arrived("blue_door")] n: *Another blue door. Another lamp — this one lit.*
+~ clue c1_po_lamp
+
+# ─── Harbour ─────────────────────────────────────────────────────────
+
+=== hb.shed
+n: *LOST & FOUND — WHAT THE SEA GIVES BACK. Odd boots. A teapot. A ship in a bottle with no ship in it.*
+n: *A little hand-painted sign: "IF YOURS, ASK BRAM. IF NOT YOURS, ALSO ASK BRAM, HE GETS LONELY."*
+
+=== hb.lifering
+n: *A cork life ring, bleached salt-white. Stencilled around it in faded red: MARGUERITE.*
+[if arrived("eleven_fifty_two")] n: *The Marguerite. The boat from the typewritten letter.*
+~ clue c6_marguerite
+
+=== hb.ferry
+n: *The Morning Lark: a stout little ferry with a striped funnel and a hull patched in three different blues. Her name is painted on the bow in careful, slightly wonky letters.*
+
+=== hb.booth
+n: *The ticket booth. A chalk timetable, a jar of boiled sweets, and a clipboard: the passenger manifest for the 6:10.*
+[if arrived("far_shore") or arrived("lamp_room") or arrived("little_bird")] n: *One line, in Bram's blocky pencil: J. FENN — ONE WAY — 15 OCT — 6:10.*
+~ clue c3_manifest
+
+=== hb.memorial
+n: *A grey stone, slick with spray, a jar of sea-lavender at its foot. LOST WITH THE MARGUERITE, 14 OCTOBER 2009.*
+n: *ARLO PIKE. SAMUEL REYES. DANIEL FENN — beloved son, husband and father.*
+~ clue c6_memorial
+[if held("eleven_fifty_two")] -> hb.memorial.offer
+
+=== hb.memorial.offer
+* Leave Felix's letter here, for Daniel. -> hb.memorial.leave
+* Not now. -> END
+
+=== hb.memorial.leave
+~ try_deliver eleven_fifty_two memorial
+
+=== hb.cliff_locked
+n: *Stone steps climb the rocks toward the lighthouse, slick and dark. A hand-painted sign: KEEPER'S PATH. NO VISITORS. THIS MEANS YOU, BRAM.*
+n: *Maybe another night.*
+
+# ─── Lighthouse cliff ───────────────────────────────────────────────
+
+=== cl.first_visit
+~ set visited_cliff
+n: *The wind up here tastes of salt and distance. The lighthouse stands over everything, white and patient, its beam turning slow circles over the bay.*
+
+=== cl.bench
+n: *A weathered bench facing the sea. A brass plaque, polished bright by a thumb: FOR ROSA, WHO LOVED THE STARS.*
+[if arrived("far_shore")] n: *Rosa. Grandma.*
+
+=== cl.window
+n: *Through the cottage window: a narrow bed, a stove, two chairs — one of them never used. On the sill, a photograph in a tin frame.*
+n: *Two young people at the end of the pier, squinting into a summer that's long gone. She wears round spectacles. He's looking at her, not at the camera.*
+~ clue c2_photo
+
+=== cl.logbook
+n: *Tobias's logbook lies open on the porch table, weighted with a stone. Every entry for fifty years is the same: "Lamp lit. Wind NW." "Lamp lit. Wind W." "Lamp lit."*
+[if arrived("eleven_fifty_two")] -> cl.logbook.storm
+
+=== cl.logbook.storm
+n: *You page back. And back. Seventeen years back, to the fourteenth of October, 2009.*
+n: *"Daniel by at nine. Taking Harrow's shift — Felix white as a sail. D. says don't let Felix know I know. Auto-lamp checked: OK."*
+n: *Then, in a different, shaking hand: "11:40. LIGHT OUT."*
+~ clue c6_logbook
+
+=== cl.door
+n: *The lighthouse door: iron-bound oak, painted the same white as the tower. Lettered over the lintel: 112 STEPS TO THE LAMP.*
+~ clue c4_112
+[if has_item("lighthouse_key") or ($lantern_night and lamp_keeper() != "nobody")] -> cl.door.open
+n: *Locked. Tobias keeps the key on his belt.*
+
+=== cl.door.open
+* Climb the 112 steps. -> cl.door.climb
+* Not now. -> END
+
+=== cl.door.climb
+~ sfx door
+~ goto_location lamp_room from_stairs enter
+
+=== cl.edge
+n: *Far below, the sea chews at a reef of black rocks that the fishermen call the Teeth. The spray reaches almost all the way up.*
+n: *This is where the Marguerite went down.*
+
+# ─── Lamp room ──────────────────────────────────────────────────────
+
+=== lr.first_visit
+~ set visited_lamp_room
+n: *A hundred and twelve steps. Your legs are shaking. The whole bay is spread out below, every lit window a little star fallen into the dark.*
+
+=== lr.chart
+n: *A star chart, pinned to the wall and soft as cloth with age. Three small stars low in the west are circled in pencil.*
+n: *In a careful, square hand: ROSA'S CROWN — 14·X·85.*
+~ clue c3_star_chart
+
+=== lr.lamp
+[if lamp_glowing()] n: *The great lens turns, slow and enormous, throwing light across twenty miles of sea. Up close, it hums.*
+[if not lamp_glowing()] n: *The great Fresnel lens: rings of glass like a frozen wave, taller than you. In its heart, a brass oil lamp with a single wick.*
+
+=== lr.auto
+n: *A brass box of gears bolted to the floor. A plate: AUTO-LAMP MK II — INSTALLED 1998. Its seams are crusted white with salt.*
+[if $read_ps_1140] n: *"The automatic lamp fails at 11:40."*
+
+=== lr.view
+n: *Through the storm-glass: the whole of Hushwater. The square. The harbour. The post office, crooked as a dropped letter, its one lamp burning.*
+[if $dawn] n: *And beyond it, the sun — actually, impossibly, up.*

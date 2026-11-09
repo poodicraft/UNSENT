@@ -1,0 +1,58 @@
+{
+	"asked": {
+		"mari:c1_funeral": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"chalkboard": true,
+		"chute": true,
+		"teacup": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"delivered_any": true,
+		"hope": 2,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_mari": true,
+		"met_odile": true,
+		"night": 1,
+		"tutorial_done": true,
+		"visited_harbor": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [
+		"mari_reply"
+	],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		}
+	},
+	"location": "square",
+	"objective": "Post Mari's reply in the post office outbox.",
+	"play_time": 3.25681666666666,
+	"player_pos": [
+		2000.0,
+		1000.0
+	],
+	"saved_at": 1794148410.16925,
+	"spawn": "from_po",
+	"version": 1
+}

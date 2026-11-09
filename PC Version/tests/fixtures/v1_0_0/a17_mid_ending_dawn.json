@@ -1,0 +1,175 @@
+{
+	"asked": {
+		"mari:c1_funeral": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo",
+		"c2_dear_t",
+		"c2_married",
+		"c2_lamp",
+		"c2_pier",
+		"c2_date",
+		"c2_violet",
+		"c3_stargazer",
+		"c3_ferry",
+		"c3_grandpa",
+		"c3_rosa_stars",
+		"c3_postmark",
+		"c3_comet",
+		"c4_keeper",
+		"c4_stairs",
+		"c4_sunrise",
+		"c4_logpaper",
+		"c4_date",
+		"c34_same_hand",
+		"c5_umbrella",
+		"c5_thursday",
+		"c5_crusts",
+		"c5_wheel",
+		"c5_ticketbook",
+		"c4_june_sunrise",
+		"c5_bakery_umbrella",
+		"c8_1140",
+		"c6_daniel",
+		"c6_1152",
+		"c6_clockroom",
+		"c6_marguerite",
+		"c6_dark",
+		"c6_typed",
+		"c6_date",
+		"c7_bird",
+		"c7_ticket",
+		"c7_father",
+		"c7_uncle",
+		"c7_flour",
+		"c6_memorial",
+		"c6_logbook"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"bakery_umbrella": true,
+		"chalkboard": true,
+		"chute": true,
+		"cliff_steps": true,
+		"lighthouse_door": true,
+		"logbook": true,
+		"memorial": true,
+		"outbox": true,
+		"teacup": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"clock_running": true,
+		"dawn": true,
+		"delivered_any": true,
+		"ferry_home": true,
+		"finale": true,
+		"hope": 12,
+		"intro_done": true,
+		"june_after_lamp": true,
+		"june_mum": true,
+		"june_path": "stay",
+		"knows_lamp_order": true,
+		"lamp_lit": true,
+		"lamp_resolved": true,
+		"lamp_sequence": 0,
+		"lantern_night": true,
+		"lantern_started": true,
+		"mari_after_theo": true,
+		"mari_bow": true,
+		"met_bram": true,
+		"met_june": true,
+		"met_mari": true,
+		"met_odile": true,
+		"met_tobias": true,
+		"night": 4,
+		"read_ps_1140": true,
+		"read_second_oven": true,
+		"read_ticking": true,
+		"reply_posted": true,
+		"reunited": true,
+		"theo_home": true,
+		"tobias_after_letter": true,
+		"tobias_knows": true,
+		"tutorial_done": true,
+		"visited_cliff": true,
+		"visited_harbor": true,
+		"visited_lamp_room": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [
+		"lighthouse_key",
+		"ferry_ticket"
+	],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		},
+		"eleven_fifty_two": {
+			"read": true,
+			"state": "delivered",
+			"to": "tobias"
+		},
+		"far_shore": {
+			"read": true,
+			"state": "faded",
+			"to": ""
+		},
+		"lamp_lit": {
+			"read": true,
+			"state": "delivered",
+			"to": "tobias"
+		},
+		"lamp_room": {
+			"read": true,
+			"state": "delivered",
+			"to": "june"
+		},
+		"little_bird": {
+			"read": true,
+			"state": "delivered",
+			"to": "june"
+		},
+		"ps_1140": {
+			"read": true,
+			"state": "kept",
+			"to": "wren"
+		},
+		"second_oven": {
+			"read": true,
+			"state": "kept",
+			"to": "wren"
+		},
+		"ticking": {
+			"read": true,
+			"state": "kept",
+			"to": "wren"
+		},
+		"umbrella": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		}
+	},
+	"location": "harbor",
+	"objective": "Lantern Night. Make sure someone is in the lamp room at 11:40.",
+	"play_time": 10.2280726666667,
+	"player_pos": [
+		1950.0,
+		995.0
+	],
+	"saved_at": 1794148417.13643,
+	"spawn": "finale",
+	"version": 1
+}

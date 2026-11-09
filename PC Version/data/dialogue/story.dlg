@@ -1,0 +1,405 @@
+# ═══════════════════════════════════════════════════════════════════
+#  UNSENT — main story: arrival, nights, Lantern Night, endings
+#
+#  Syntax:  === node.id            start a node
+#           speaker[expr]: text    a line  (n: = narration)
+#           * text -> node         a choice ( * [if cond] text -> node )
+#           -> node                jump      ( [if cond] -> node )
+#           ~ command args         run a command
+#           [if cond] <anything>   conditional instruction
+#           $flag in conditions reads a story flag
+# ═══════════════════════════════════════════════════════════════════
+
+=== intro.harbor
+~ set intro_done
+~ letterbox on
+~ wait 0.6
+n: *In Hushwater, the sun has been setting for seventeen years.*
+n: *Nobody remembers quite when the dusk stopped moving. Only that it did — on the night of the Long Storm — and that the town clock stopped with it, at eight minutes to midnight.*
+n: *The evening ferry is the only boat that still comes. Tonight, it brings one passenger.*
+~ npc bram face left
+bram[happy]: Hushwater! Last stop, only stop. Mind the gulls, mind the gap, and mind the dusk — it gets into your coat.
+wren: Is it always this... orange?
+bram[happy]: Orange, violet, a bit of peach on Sundays. You'll stop noticing. Or you won't, and you'll go a little strange, like the rest of us.
+bram: You'll be the new night clerk. Odile said to send you straight up. Post office is the crooked building at the end of the quay — use the back door, she can't abide the front bell.
+bram[thinking]: Off you go then, little bird. Bram Calloway, captain of the Morning Lark, at your service. Lost and Found's my shed, if you ever lose anything. Most people do, here.
+~ set met_bram
+~ letterbox off
+~ objective "Find the post office at the end of the quay."
+
+=== po.first_visit
+~ set met_odile
+~ letterbox on
+~ npc odile face left
+odile: You're late.
+wren: The ferry was—
+odile[happy]: I know, dear, I'm teasing. The ferry is never late. It's simply never on time. Come in, come in, let me look at you.
+odile[thinking]: Hm. Good eyes. I can tell, even with mine. A kind heart is harder to see. We'll find out.
+odile: I'm Odile Vance, postmistress. This is the Hushwater Post Office — or, as it says on the forms nobody fills in, the *Office of Unsent Letters.*
+* What's an unsent letter? -> po.first_visit.what
+* I don't actually remember applying for this job. -> po.first_visit.apply
+
+=== po.first_visit.what
+odile: Every letter somebody wrote and couldn't bring themselves to post. The apology in the drawer. The confession folded into a library book. The "I'm sorry" that went into the fire.
+odile: They don't vanish, you know. Words don't. They come here.
+-> po.first_visit.chute
+
+=== po.first_visit.apply
+odile[surprised]: Don't you? Your letter of application was very persuasive. Lovely handwriting.
+wren: I don't remember writing one.
+odile[happy]: Then you'll fit in beautifully. Nobody in Hushwater remembers anything properly. It's the dusk.
+-> po.first_visit.chute
+
+=== po.first_visit.chute
+odile: That brass monster behind me is the Chute. Unsent letters arrive through it, when they're ready to be delivered. It doesn't connect to anything. I've checked. Twice.
+odile[sad]: My eyes aren't what they were. The handwriting swims. And lately the Chute has been... odd.
+wren: Odd how?
+odile[thinking]: Some of the letters are dated wrong. Years wrong. Years that haven't *happened* yet.
+~ sfx chute
+~ shake 0.5
+n: *The Chute shudders. Somewhere inside it, something rattles downward — and a little bell rings, bright as a spoon against glass.*
+odile[happy]: Ah. Your first. How punctual. Go on, then — it's in the basket.
+~ arrive blue_door
+~ letterbox off
+~ objective "Collect the letter from the Chute."
+
+=== po.after_first_letter
+~ set tutorial_done
+~ letterbox on
+odile: Well? Who's it for?
+wren: There's no name. Just a "T." at the bottom.
+odile: There never is a name, dear. That would make it a letter, and these are *unsent* letters. You'll have to find out who it was written for.
+odile: Read it closely — click the words that matter, and they'll go in your notes. Turn the envelope over. Then go out and ask people. Hushwater is small. Everyone in it is somebody's clue.
+odile[thinking]: And Wren — never deliver on a guess. You'll need at least two good reasons before you hand a letter to anyone. A letter in the wrong hands is worse than no letter at all.
+odile: The front door goes out to Lantern Square. The back door, to the harbour. If you get stuck, come and ask me. I'm half blind, not half witted.
+~ letterbox off
+~ objective "Find who 'The Light Above the Blue Door' was written for."
+
+# ─── Nights ──────────────────────────────────────────────────────────
+
+=== night.2.start
+~ letterbox on
+odile: Up you get, sleepyhead. The Chute's been rattling since the clock didn't strike three.
+odile[thinking]: Four letters. *Four.* And two of them are dated twenty years from now — I can feel it from here. Future letters are always colder. Like coins from someone else's pocket.
+odile: The cliff path's open, too. Tobias won't thank you for visiting. Visit anyway.
+~ letterbox off
+~ objective "Collect tonight's letters from the Chute."
+
+=== night.3.start
+~ letterbox on
+odile: Two more tonight. One smells of the sea. One smells of bread.
+odile[sad]: And tomorrow's Lantern Night. I always dread the post the night before Lantern Night.
+~ letterbox off
+~ objective "Collect tonight's letters from the Chute."
+
+=== night.4.start
+-> po.lantern_start
+
+=== po.lantern_start
+~ set lantern_started
+~ letterbox on
+n: *Lantern Night. The anniversary of the Long Storm.*
+n: *Rain hammers the windows. The barometer in the hall has fallen so far it has stopped pretending.*
+odile: There you are. Here — take this. A paper lantern. Everyone lights one at the harbour tonight, for whoever they've lost.
+odile[thinking]: Or for whoever they're going to lose. I've always thought that the braver kind.
+~ item paper_lantern
+[if $tobias_knows] -> po.lantern_start.tobias
+odile: Tobias will be up his tower, as always. Bram's bringing the 8:15 across in this weather, Lord help him.
+odile: Go on down to the harbour when you're ready. And deliver what you can before the night is out. Whatever's still in your satchel by midnight... well. Some letters stay unsent.
+~ letterbox off
+~ objective "Lantern Night. Go down to the harbour before 11:40."
+
+=== po.lantern_start.tobias
+odile[shy]: And... Tobias has sent word, through Bram. Eleven-forty. The end of the pier.
+odile[happy]: Forty-one years late, and the man is still *punctual*.
+odile[sad]: Which means someone else has to mind that lamp tonight.
+[if not $read_ps_1140] odile[thinking]: There's a letter in the Chute for you, by the way. It's in my handwriting. I didn't write it. Yet.
+odile: Don't let it go dark, Wren. Not tonight.
+~ letterbox off
+~ objective "Lantern Night. Make sure someone is in the lamp room at 11:40."
+
+# ─── Lantern Night finale ────────────────────────────────────────────
+
+=== finale.lamp_room
+[if lamp_keeper() == "june"] -> finale.lamp_room.june
+[if lamp_keeper() == "tobias"] -> finale.lamp_room.tobias
+-> finale.lamp_room.self
+
+=== finale.lamp_room.self
+~ letterbox on
+~ ambience storm
+n: *Wind screams through the gallery glass. Far below, the sea throws itself against the Teeth.*
+n: *The automatic lamp hums in its brass box — steady, smug.*
+~ wait 0.8
+~ flash
+~ sfx thunder
+~ shake 1.0
+n: *Lightning strikes the rod. Every gear in the box seizes at once with a sound like a bitten-off word.*
+~ set auto_lamp_failed
+~ set lamp_sequence 1
+~ sfx lamp_die
+~ refresh
+n: *The light goes out. It is 11:40.*
+[if $knows_lamp_order] wren: Oil. Wick. Flame. In that order — that's what Tobias said.
+[if not $knows_lamp_order] wren: There has to be an order to this. Think.
+~ letterbox off
+~ objective "Light the lamp before the Morning Lark reaches the Teeth."
+
+=== lamp.valve
+[if $lamp_sequence == 1] -> lamp.valve.ok
+n: *The valve is open. Oil gurgles in the reservoir, sharp and green-smelling.*
+
+=== lamp.valve.ok
+~ sfx valve
+n: *You crank the brass valve. Oil gurgles up into the reservoir.*
+~ set lamp_sequence 2
+
+=== lamp.wick
+[if $lamp_sequence == 1] wren: The wick's bone dry. It needs oil first.
+[if $lamp_sequence == 2] -> lamp.wick.ok
+[if $lamp_sequence == 3] n: *The wick is trimmed square and dark with oil.*
+
+=== lamp.wick.ok
+~ sfx snip
+n: *You trim the charred wick square with the little scissors hanging on their nail. It drinks the oil.*
+~ set lamp_sequence 3
+
+=== lamp.match
+[if $lamp_sequence < 3] wren: Not yet. Oil, wick, then flame — or I'll lose my eyebrows.
+[if $lamp_sequence == 3] -> lamp.ignite
+
+=== lamp.ignite
+~ letterbox on
+~ sfx match
+n: *The first match blows out. The second snaps in half. The third—*
+~ sfx ignite
+~ set lamp_sequence 4
+~ set lamp_lit
+~ set lamp_resolved
+~ set lit_by_wren
+~ refresh
+~ music hope
+n: *The wick catches. The great lens drinks the flame and throws it, a thousand times brighter, out across the black water.*
+n: *And far out in the storm, a small light on the water turns toward it — the Morning Lark, finding her way home.*
+~ wait 1.0
+-> finale.go_harbor
+
+=== finale.lamp_room.june
+~ letterbox on
+n: *June is at the lamp. Her yellow coat hangs on a hook; her sleeves are rolled up like her mother's.*
+june[happy]: Wren! Isn't it awful out there? I love it. Grandpa showed me everything. Oil, wick, flame. I've got it.
+~ wait 0.6
+~ flash
+~ sfx thunder
+~ shake 1.0
+n: *Lightning strikes the rod. The automatic lamp's gears seize with a grinding shriek. The light dies.*
+~ sfx lamp_die
+june[surprised]: Eleven-forty — oh, you *stupid* box—
+n: *But her hands are already moving. Valve. Scissors. Match.*
+~ sfx ignite
+~ set lamp_lit
+~ set lamp_resolved
+~ refresh
+~ music hope
+n: *The flame catches. The lens blazes. The beam swings out across the black water — and far out in the storm, the Morning Lark turns toward it.*
+june[happy]: Whole heart. Whole heart, whole heart.
+june: Go on down to the harbour. I've got this. I've *got* this.
+-> finale.go_harbor
+
+=== finale.lamp_room.tobias
+~ letterbox on
+n: *Tobias stands at the lamp the way he has every night for fifty years — as if the light might bolt if he looked away.*
+tobias: Lantern Night. Hm. Come to watch an old man work?
+~ wait 0.6
+~ flash
+~ sfx thunder
+~ shake 1.0
+n: *At 11:40 the lightning comes. The automatic lamp dies with a shriek of gears — but Tobias's hand is already on the valve. He doesn't even look up.*
+~ sfx ignite
+~ set lamp_lit
+~ set lamp_resolved
+~ refresh
+tobias: Fifty years. Never missed but the once.
+n: *Far out in the storm, the Morning Lark turns toward the light.*
+tobias: Go down to the harbour, clerk. Watch them come in. That's the best part. I never get to see it.
+-> finale.go_harbor
+
+=== finale.go_harbor
+~ letterbox off
+~ fade out 1.2
+~ set finale
+~ goto_location harbor finale
+~ run finale.harbor
+
+=== hb.pier_end
+[if $lantern_night and not $lamp_resolved] -> finale.pier_wait
+[if $lantern_night] n: *The end of the pier. The rain has softened. The lighthouse beam sweeps the water, slow and steady.*
+[if $lantern_night] -> END
+n: *The very end of the pier. Below, the water slaps lazily at the pilings. Ahead: the sea, the dusk, and the thin gold line where the sun should be.*
+[if held("lamp_lit") or delivered("lamp_lit") != ""] n: *"If the lighthouse stays dark, I'll be waiting at the end of the pier."* This is where she waited.
+~ clue c2_pier
+
+=== finale.pier_wait
+n: *It's almost 11:40. The lighthouse beam swings overhead through the rain — steady, for now.*
+[if lamp_keeper() == "nobody" and $read_ps_1140] wren: The letter said the lamp fails at 11:40. Someone has to be up there.
+* Wait here at the end of the pier. -> finale.pier_wait.go
+* Not yet. -> END
+
+=== finale.pier_wait.go
+[if lamp_keeper() == "nobody"] -> finale.pier_dark
+-> finale.pier_light
+
+=== finale.pier_dark
+~ set finale
+~ letterbox on
+~ wait 0.6
+~ flash
+~ sfx thunder
+~ shake 1.0
+n: *At 11:40, lightning splits the sky above the cliff. The lighthouse beam stutters — once, twice — and goes out.*
+~ sfx lamp_die
+n: *There is no one in the lamp room. You know it with a sick, sinking certainty.*
+~ set lamp_failed
+~ set lamp_resolved
+~ refresh
+-> finale.harbor
+
+=== finale.pier_light
+~ set finale
+~ letterbox on
+~ wait 0.6
+~ flash
+~ sfx thunder
+~ shake 1.0
+n: *At 11:40, lightning splits the sky above the cliff. The beam stutters, gutters—*
+n: *—and blazes back, brighter than before. Somebody up there knew exactly what to do.*
+~ set lamp_lit
+~ set lamp_resolved
+~ refresh
+-> finale.harbor
+
+# Replays an interrupted finale after loading a save (see Story.repair_after_load).
+=== resume.finale
+~ set finale
+[if not $lamp_resolved] -> finale.pier_wait.go
+-> finale.harbor
+
+=== finale.harbor
+~ letterbox on
+~ music lantern
+~ refresh
+n: *The harbour is full of people and paper lanterns, bobbing in the rain like a flock of small, stubborn moons.*
+[if $lamp_lit] -> finale.harbor.ferry
+-> finale.harbor.noferry
+
+=== finale.harbor.noferry
+n: *Out on the black water, a small light wavers... turns... and turns away, back toward Port Ardent. The Morning Lark won't risk the Teeth in the dark.*
+[if $reply_posted] mari[sad]: He'd have been on it. I know he would.
+-> finale.reunion
+
+=== finale.harbor.ferry
+~ sfx horn
+n: *Out of the dark comes the Morning Lark — rolling, battered, her running lights blazing — following the beam home.*
+~ set ferry_home
+[if $reply_posted] -> finale.theo
+-> finale.reunion
+
+=== finale.theo
+~ npc theo show 1180 990
+~ npc theo face right
+n: *A big man in a dock jacket is first down the gangplank before it's even tied. He stands on the quay in the rain and looks up the lane, toward a lamp above a blue door.*
+theo[sad]: Mari?
+mari[surprised]: ...Theo?
+n: *Mari drops her lantern, or her umbrella, or both. Nobody is entirely sure afterwards, because nobody was looking at anything except the two of them.*
+mari[sad]: You *idiot*. You beautiful idiot. Twelve years—
+theo[sad]: I saw the light. You left the light on.
+mari[happy]: I *re-lit* the light. There's a difference. Come here.
+~ set theo_home
+-> finale.reunion
+
+=== finale.reunion
+[if $tobias_knows and lamp_keeper() != "tobias"] -> finale.pier_couple
+-> finale.lanterns
+
+=== finale.pier_couple
+n: *At the very end of the pier, under one umbrella, an old man and an old woman stand side by side, looking up at a lighthouse.*
+[if $lamp_lit] odile[happy]: It's lit, you know. You're meant to be up there.
+[if $lamp_lit] tobias: Someone else has the lamp tonight. I had a question to answer.
+[if not $lamp_lit] odile[sad]: It's dark, Tobias. It's dark—
+[if not $lamp_lit] tobias[sad]: I know. I know. I'm here anyway.
+tobias: Forty-one years late. Hm. I'm sorry, Odile.
+odile[happy]: Don't be. You were always going to be late. I simply didn't expect it to be by quite so much.
+~ set reunited
+-> finale.lanterns
+
+=== finale.lanterns
+~ lanterns
+n: *All along the quay, people light their paper lanterns and let them go. They rise into the rain, wobbling, and do not go out.*
+* Light your own lantern. -> finale.mylantern
+
+=== finale.mylantern
+~ take paper_lantern
+~ sfx lantern
+n: *You write a name on yours. You aren't sure whose it is until it's written.*
+n: *It rises with the others.*
+[if $clock_running] -> finale.midnight
+-> finale.judgement
+
+=== finale.midnight
+~ sfx clock_chime
+n: *Across the town, for the first time in seventeen years, the clock tower strikes midnight.*
+-> finale.judgement
+
+=== finale.judgement
+~ letterbox off
+~ judge
+
+# ─── Endings ─────────────────────────────────────────────────────────
+
+=== ending.dawn
+~ letterbox on
+~ music dawn
+~ mood dawn 14
+n: *The storm thins. The rain softens to mist. And along the edge of the sea, the thin gold line that has not moved in seventeen years...*
+~ wait 2.5
+n: *...moves.*
+~ wait 2.0
+n: *It brightens. It swells. It spills over the water like milk from a tipped jug.*
+[if $june_path != "stay"] june[surprised]: Is that — Mum — is that—
+[if $june_path == "stay"] n: *High on the cliff, at the top of a hundred and twelve stairs, a girl in a yellow coat is the first person in Hushwater to see it.*
+n: *For the first time in seventeen years, the sun rises over Hushwater.*
+~ wait 2.0
+odile: Wren. Dear. There's a letter for you. It came through the Chute a minute ago — Postscript brought it down in his mouth, the little horror.
+odile[thinking]: It's addressed to "the Night Clerk, on the morning after Lantern Night." Which is a ridiculous thing to write on an envelope. And yet.
+~ letterbox off
+~ read final_dawn
+~ letterbox on
+-> ending.choice
+
+=== ending.choice
+odile: Well? What will you do now?
+* Stay. Learn the Chute. Keep the Office of Unsent Letters. -> ending.stay
+* [if has_item("ferry_ticket")] Take June's ticket. Ride the 6:10 into the sunrise. -> ending.go
+
+=== ending.stay
+wren: I think I'll stay. Someone has to answer the Chute.
+odile[happy]: Fifty years, it'll be. Fifty years of other people's hearts in your satchel. It's a terrible job.
+odile[happy]: You'll love it.
+~ ending first_light
+
+=== ending.go
+wren: June gave me her ticket. I think... I'd like to see where the sun goes, after it rises.
+odile[sad]: Ah. Well. A wren is a bird, after all.
+odile[happy]: Go on, then. The Chute will find someone. It found you. Write to me — properly. *Sent.*
+~ ending morning_ferry
+
+=== ending.dusk
+~ letterbox on
+~ music sad
+n: *The storm passes, the way storms do. The rain stops. The lanterns drift out to sea, one by one, and go out.*
+n: *And the thin gold line at the edge of the world stays exactly where it has always been.*
+odile[sad]: Not this year, then.
+odile: Come on, dear. There's a letter for you. It came through the Chute while we were all out. It's in your handwriting, if you can believe it.
+~ letterbox off
+~ read final_dusk
+~ ending long_dusk

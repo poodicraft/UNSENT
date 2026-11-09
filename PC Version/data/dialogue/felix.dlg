@@ -1,0 +1,160 @@
+# ═══════════════════════════════════════════════════════════════════
+#  FELIX HARROW — Clockmaker
+#  Precise, pedantic, sardonic; timekeeping metaphors; deep guilt.
+# ═══════════════════════════════════════════════════════════════════
+
+=== felix.talk
+[if $lantern_night] -> felix.lantern
+[if not $met_felix] -> felix.first
+[if $clock_running and not $felix_after_clock] -> felix.after_clock
+[if $felix_locked and not $felix_after_locked] -> felix.after_locked
+[if $mari_knows_felix and not $felix_after_mari] -> felix.after_mari
+-> felix.default
+
+=== felix.first
+~ set met_felix
+n: *Behind the workshop window, a thin man with brass goggles pushed up on his forehead is glaring at a pocket watch as though it owes him money.*
+felix: If you've come about the town clock, it is not broken. It is *resting*. It has been resting for seventeen years. It is very well rested.
+wren: I'm the new night clerk.
+felix[surprised]: Odile's hired an assistant? Good heavens. The causality violations will double.
+felix: Felix Harrow. Clocks, barometers, astrolabes, and the occasional reluctant music box. I keep Hushwater's time. Or I would, if Hushwater kept any.
+* What happened to the clock? -> felix.first.clock
+* Causality violations? -> felix.first.causality
+
+=== felix.first.clock
+felix[sad]: It stopped at 11:52 on the night of the Long Storm. Every gear is perfect. Every spring is wound. I've rebuilt the escapement four times.
+felix: It simply... won't. As if it's waiting for something.
+felix[thinking]: Clocks don't wait. Clocks are the opposite of waiting. That's rather the point of them.
+
+=== felix.first.causality
+felix: Letters from the future, Wren. Odile's Chute. It's a violation of every law I hold dear.
+felix[thinking]: I've asked to inspect it. She says I may, the moment I stop being "a pompous cog". Negotiations are ongoing.
+
+=== felix.default
+[if $clock_running and not $clock_backward] felix[happy]: Listen. No — *listen*. Tick. Tick. Tick. Have you ever heard anything so beautiful?
+[if $clock_backward] felix[thinking]: It's running backwards. Seventeen years of perfect engineering and it runs *backwards*. June says it's her father, being funny. I've decided not to argue with her.
+[if not $clock_running] felix: The escapement is flawless. The mainspring is wound. It should go. It won't go. Do you know how that feels, Wren?
+* How do clocks work, anyway? -> felix.clocks
+* Why do you stay in Hushwater? -> felix.stay
+* I'll let you work. -> END
+
+=== felix.clocks
+felix[happy]: Ah! At last, an intelligent question. A clock is simply a controlled fall. The weight wants to drop; the escapement lets it fall one tooth at a time. Tick. Tick.
+felix[sad]: Every clock in the world is just something falling, very slowly, and very politely.
+
+=== felix.stay
+felix: Somebody has to fix the clock.
+felix[sad]: And somebody has to... be here. When it starts. If it starts. I owe it that.
+
+=== felix.after_clock
+~ set felix_after_clock
+felix[happy]: Wren! Wren. Listen. Do you hear that?
+n: *Above you, the town clock ticks — loud and slow and steady, like a heart that has remembered what it's for.*
+felix[happy]: Eleven fifty-three. Then fifty-four. Then fifty-five. I've been standing here listening to it like a fool for an hour.
+[if not $clock_backward] felix[sad]: Tobias sat with me. All night. Didn't say a word. Best conversation I've ever had.
+
+=== felix.after_locked
+~ set felix_after_locked
+felix: I'd rather not discuss the... letter. It's in a drawer. Drawers are excellent inventions. Better than clocks, some days.
+
+=== felix.after_mari
+~ set felix_after_mari
+felix[sad]: Mari left a bun on my step. With a note. "Not yet. But someday." In flour.
+felix: I haven't eaten it. I'm keeping it. Which is absurd. It's a bun.
+
+=== felix.lantern
+[if $finale] -> felix.finale
+[if $clock_running] felix: I'm staying with the clock tonight. If it chimes midnight — when it chimes midnight — I want to be here.
+[if not $clock_running] felix[sad]: Lantern Night. I'll be in the tower. I always am. I watch the harbour from the clock room. I don't go down.
+
+=== felix.finale
+felix: Lanterns. Hm. Very inexact. Lovely, though.
+
+# ─── Ask about clues ─────────────────────────────────────────────────
+
+=== felix.ask.c6_typed
+felix[thinking]: A high-striking 'e'? That's a worn type-bar. Common in old Remingtons. Mine does it, actually. Annoys me terribly.
+~ clue c6_typewriter
+
+=== felix.ask.c6_typewriter
+felix: My typewriter is a 1949 Remington Rand, and its 'e' strikes high, and I will not be taking questions about it.
+
+=== felix.ask.c6_1152
+felix[sad]: 11:52. I know exactly what minute it is, Wren. I have known it for seventeen years.
+
+=== felix.ask.c6_clockroom
+felix[angry]: The clock room is private. Nobody goes in the clock room.
+felix[sad]: ...Nobody but me.
+
+=== felix.ask.c6_marguerite
+felix[sad]: Daniel Fenn was my friend. We were going to build a boat together. A little one. For June.
+n: *He turns back to the watch, but his hands don't move.*
+
+=== felix.ask.c6_memorial
+-> felix.ask.c6_marguerite
+
+=== felix.ask.c6_daniel
+-> felix.ask.c6_marguerite
+
+=== felix.ask.c6_felix_shift
+felix: ...
+felix[angry]: Who told you that? Bram. Bram and his great flapping mouth.
+felix[sad]: I had a fever. That's all. I had a fever, and Daniel went instead. That's all there is to it.
+n: *He says it the way you'd say a line you've rehearsed a thousand times.*
+
+=== felix.ask.c6_dark
+felix[sad]: The lighthouse went dark at 11:40. I saw it from the clock room. Twelve minutes later...
+felix: I stopped looking at the harbour after that.
+
+=== felix.ask.c6_date
+felix: Fourteenth of October, two thousand and nine. You needn't say it aloud. Some dates have their own weather.
+
+=== felix.ask.c6_logbook
+felix[surprised]: Tobias *knew*? He — Daniel told him? He's known all this time?
+felix[sad]: Seventeen years I've crossed the square to avoid that man. Seventeen years.
+
+=== felix.ask.c6_tobias_guilt
+felix[sad]: Tobias blames himself for the lamp. Of course he does. He's a Fenn. They'd blame themselves for the tide.
+
+=== felix.ask.c3_stargazer
+felix[happy]: Stargazer? Well, I *am* something of a student of the heavens. I set every clock in this town by sidereal time.
+felix[thinking]: Though "stargazer" rather suggests someone who looks at stars for the pleasure of it. I look at them for accuracy.
+~ clue c3_felix_scope
+
+=== felix.ask.c3_felix_scope
+felix: An 1888 Grubb refractor. Four-inch objective. I use it for transit timing. June Fenn calls it "the old man's spyglass". The impertinence.
+
+=== felix.ask.c3_grandpa
+felix: My grandfather? Died in 1979, a clockmaker. Never kept a lamp in his life. Hated lamps. Said they made the shadows lie about the time.
+
+=== felix.ask.c3_granddaughter
+felix: June Fenn is Tobias's granddaughter, yes. Daniel's girl. She has his... she has his way of standing.
+
+=== felix.ask.c4_keeper
+felix: A keeper? I keep time. Badly, lately. But not lighthouses. Tobias keeps the lighthouse. Tobias keeps a great many things. Grudges, mostly.
+
+=== felix.ask.c3_postmark
+felix[angry]: Twenty forty-six! You see? You see? A letter from twenty years hence. A flagrant violation. I should very much like to examine it.
+
+=== felix.ask.c4_date
+-> felix.ask.c3_postmark
+
+=== felix.ask.c34_same_hand
+felix[thinking]: One author, one date, two incompatible histories. That's not a paradox, Wren. That's a *choice*. Paradoxes are much more polite.
+
+=== felix.ask.c1_cinnamon
+felix: Cinnamon? Mari's loaves. Four o'clock. I set my watch by them, since I cannot set it by the town clock.
+
+=== felix.ask.c1_ferry
+felix: The 8:15 arrives at 8:21, on average. Bram has never once been punctual. I keep a chart.
+
+=== felix.ask.c5_wheel
+felix: The man at the wheel is Bram Calloway, who steers by "feel", which is to say, by guesswork and singing.
+
+=== felix.ask.c2_lamp
+felix[sad]: The lamp. Hm. I avoid looking at it, if I can.
+
+=== felix.ask.default
+[if pick(3) == 0] felix: I'm afraid that falls outside my expertise, which is clocks, and the precise measurement of disappointment.
+[if pick(3) == 1] felix[thinking]: No. Nothing. Is that all? I have a mainspring that won't behave.
+[if pick(3) == 2] felix: Hm. Ask Odile. She keeps track of everyone. It's a sort of clockwork, I suppose. Made of gossip.

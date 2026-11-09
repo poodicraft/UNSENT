@@ -1,0 +1,62 @@
+{
+ "width": 2400,
+ "height": 1600,
+ "horizon": 840,
+ "sea": true,
+ "beam": {
+  "x": 1148,
+  "y": 356,
+  "factor": 0.35,
+  "scale": 0.45
+ },
+ "layers": [
+  {
+   "tex": "far.png",
+   "x": -80.0,
+   "y": 754.0,
+   "scale": 2.0,
+   "factor": 0.12,
+   "z": -40,
+   "group": "world"
+  },
+  {
+   "tex": "mid.png",
+   "x": 117.33,
+   "y": 310.67,
+   "scale": 1.3333,
+   "factor": 0.35,
+   "z": -30,
+   "group": "world"
+  },
+  {
+   "tex": "main.png",
+   "x": -80.0,
+   "y": 112.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -10,
+   "group": "world"
+  },
+  {
+   "tex": "fg.png",
+   "x": -80.0,
+   "y": 1245.0,
+   "scale": 1.0,
+   "factor": 1.25,
+   "z": 10,
+   "group": "fg"
+  }
+ ],
+ "props": [
+  {
+   "tex": "ferry.png",
+   "x": 775.0,
+   "y": 634.0,
+   "scale": 1.0,
+   "factor": 1.0,
+   "z": -6,
+   "group": "world",
+   "if": "not $lantern_night or $ferry_home"
+  }
+ ]
+}

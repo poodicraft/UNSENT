@@ -1,0 +1,122 @@
+{
+	"asked": {
+		"mari:c1_funeral": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo",
+		"c2_dear_t",
+		"c2_married",
+		"c2_lamp",
+		"c2_pier",
+		"c2_date",
+		"c2_violet",
+		"c3_stargazer",
+		"c3_ferry",
+		"c3_grandpa",
+		"c3_rosa_stars",
+		"c3_postmark",
+		"c3_comet",
+		"c4_keeper",
+		"c4_stairs",
+		"c4_sunrise",
+		"c4_logpaper",
+		"c4_date",
+		"c34_same_hand",
+		"c5_umbrella",
+		"c5_thursday",
+		"c5_crusts",
+		"c5_wheel",
+		"c5_ticketbook",
+		"c4_june_sunrise"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"chalkboard": true,
+		"chute": true,
+		"cliff_steps": true,
+		"outbox": true,
+		"teacup": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"delivered_any": true,
+		"hope": 7,
+		"intro_done": true,
+		"june_path": "stay",
+		"knows_lamp_order": true,
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_june": true,
+		"met_mari": true,
+		"met_odile": true,
+		"met_tobias": true,
+		"night": 2,
+		"read_second_oven": true,
+		"reply_posted": true,
+		"tobias_knows": true,
+		"tutorial_done": true,
+		"visited_cliff": true,
+		"visited_harbor": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [
+		"lighthouse_key",
+		"ferry_ticket"
+	],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		},
+		"far_shore": {
+			"read": true,
+			"state": "faded",
+			"to": ""
+		},
+		"lamp_lit": {
+			"read": true,
+			"state": "delivered",
+			"to": "tobias"
+		},
+		"lamp_room": {
+			"read": true,
+			"state": "delivered",
+			"to": "june"
+		},
+		"ps_1140": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"second_oven": {
+			"read": true,
+			"state": "kept",
+			"to": "wren"
+		},
+		"umbrella": {
+			"read": true,
+			"state": "held",
+			"to": ""
+		}
+	},
+	"location": "harbor",
+	"objective": "The night's work is done. Return to Odile when you're ready to sleep — or keep exploring.",
+	"play_time": 4.184058,
+	"player_pos": [
+		1665.0,
+		995.0
+	],
+	"saved_at": 1794148411.08419,
+	"spawn": "from_cliff",
+	"version": 1
+}
