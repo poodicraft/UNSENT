@@ -627,16 +627,25 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _title_mode or Story.busy or (Story.main and Story.main.input_blocked()):
 		_pressing = false
 		return
+	# Use the event's own position (not the OS cursor): with touch input the
+	# cursor position can lag behind or differ from where the finger is.
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_pressing = true
-			_handle_tap(get_global_mouse_position())
+			_handle_tap(_event_world_pos(event))
 		else:
 			_pressing = false
 	elif event is InputEventMouseMotion and _pressing and _pending.is_empty():
-		var wp := get_global_mouse_position()
+		if not (event.button_mask & MOUSE_BUTTON_MASK_LEFT):
+			_pressing = false
+			return
+		var wp := _event_world_pos(event)
 		if wp.y > horizon - 120:
 			player.walk_to(clamp_to_band(wp))
+
+
+func _event_world_pos(event: InputEvent) -> Vector2:
+	return get_canvas_transform().affine_inverse() * (event as InputEventMouse).position
 
 
 func _handle_tap(wp: Vector2) -> void:
@@ -790,11 +799,7 @@ func _process(delta: float) -> void:
 		G.node.visible = G.on > 0.01
 	# player proximity labels
 	if player:
-		for hid in hotspots:
-			var h: Node2D = hotspots[hid]
-			h.near = h.visible and absf(h.rect.get_center().x - player.position.x) < 170.0 and not Story.busy
-		for nid in npcs:
-			npcs[nid].show_label = absf(npcs[nid].position.x - player.position.x) < 220.0 and not Story.busy
+		_layout_tags()
 	# storm lightning
 	if Story.f("lantern_night") and not Story.f("dawn"):
 		_storm_timer -= delta
@@ -802,6 +807,56 @@ func _process(delta: float) -> void:
 			_storm_timer = randf_range(7.0, 16.0)
 			if not Story.busy:
 				lightning(0.5)
+
+
+## Name tags for people and things near the player. Tags never pile up on
+## each other: the nearest wins, and a tag that would cover one already
+## shown stays hidden until the player moves closer to it.
+func _layout_tags() -> void:
+	var px := player.position.x
+	var quiet := Story.busy
+	var cands: Array = []
+	for nid in npcs:
+		var a: Node2D = npcs[nid]
+		var d := absf(a.position.x - px)
+		if a.visible and d < 220.0 and not quiet:
+			cands.append([d - 90.0, a, "npc"])   # people come first
+		else:
+			a.show_label = false
+	for hid in hotspots:
+		var h: Node2D = hotspots[hid]
+		if not h.visible:
+			h.near = false
+			continue
+		var d := absf(h.rect.get_center().x - px)
+		if h.is_exit():
+			h.near = d < 170.0 and not quiet
+			cands.append([d, h, "exit"])
+		elif d < 170.0 and not quiet:
+			cands.append([d, h, "obj"])
+		else:
+			h.near = false
+			h.tag_ok = true
+	cands.sort_custom(func(x, y): return x[0] < y[0])
+	var taken: Array = []
+	var vr := get_viewport_rect()
+	for c in cands:
+		var r: Rect2 = c[1].tag_screen_rect()
+		var ok := r.size.x > 0.0 and vr.intersects(r)
+		for t in taken:
+			if t.grow(4.0).intersects(r):
+				ok = false
+				break
+		if ok:
+			taken.append(r)
+		match c[2]:
+			"npc":
+				c[1].show_label = ok
+			"exit":
+				c[1].tag_ok = ok
+			"obj":
+				c[1].near = ok
+				c[1].tag_ok = true
 
 
 func lightning(strength := 1.0) -> void:

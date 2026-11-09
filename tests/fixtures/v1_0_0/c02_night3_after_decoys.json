@@ -1,0 +1,120 @@
+{
+	"asked": {
+		"mari:c1_funeral": true,
+		"odile:c5_crusts": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo",
+		"c2_dear_t",
+		"c2_married",
+		"c2_lamp",
+		"c2_pier",
+		"c2_date",
+		"c2_violet",
+		"c3_stargazer",
+		"c3_ferry",
+		"c3_grandpa",
+		"c3_rosa_stars",
+		"c3_postmark",
+		"c3_comet",
+		"c4_keeper",
+		"c4_stairs",
+		"c4_sunrise",
+		"c4_logpaper",
+		"c4_date",
+		"c34_same_hand",
+		"c5_umbrella",
+		"c5_thursday",
+		"c5_crusts",
+		"c5_wheel",
+		"c5_ticketbook",
+		"c5_po_umbrella",
+		"c5_odile_gulls",
+		"c3_felix_scope"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"chalkboard": true,
+		"chute": true,
+		"felix_scope": true,
+		"teacup": true,
+		"umbrella_stand": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"delivered_any": true,
+		"felix_has_letter": true,
+		"hope": 2,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_felix": true,
+		"met_mari": true,
+		"met_odile": true,
+		"night": 3,
+		"odile_kept_umbrella": true,
+		"tutorial_done": true,
+		"visited_harbor": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [
+		"mari_reply"
+	],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		},
+		"eleven_fifty_two": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"far_shore": {
+			"read": true,
+			"state": "delivered",
+			"to": "felix"
+		},
+		"lamp_lit": {
+			"read": true,
+			"state": "held",
+			"to": ""
+		},
+		"lamp_room": {
+			"read": true,
+			"state": "held",
+			"to": ""
+		},
+		"little_bird": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"umbrella": {
+			"read": true,
+			"state": "delivered",
+			"to": "odile"
+		}
+	},
+	"location": "post_office",
+	"objective": "Collect tonight's letters from the Chute.",
+	"play_time": 3.6672397272727,
+	"player_pos": [
+		1195.0,
+		1025.0
+	],
+	"saved_at": 1794148431.44803,
+	"spawn": "bed",
+	"version": 1
+}

@@ -7,11 +7,24 @@ signal busy_changed(is_busy: bool)
 const DAWN_HOPE := 7
 
 var main: Node = null           # set by main.gd
+## True while a scene, conversation or letter follow-up is playing.
+## When a scene starts we remember the last calm state of the world: if the
+## app is closed mid-scene, that calm state is what gets autosaved, so a save
+## never captures a half-finished scene. When the scene ends, we autosave.
 var busy := false:
 	set(v):
 		if busy != v:
 			busy = v
+			if v:
+				stable_state = GameState.to_dict().duplicate(true)
+				_last_activity = Time.get_ticks_msec()
+			else:
+				stable_state = {}
 			busy_changed.emit(v)
+var stable_state: Dictionary = {}
+var _last_activity := 0
+var _resume_nodes: Array = []
+var _resume_letter := ""
 
 var _expr_cache: Dictionary = {}
 var _expr_failed: Dictionary = {}
@@ -255,6 +268,9 @@ func _finish() -> void:
 	check_arrivals()
 	if world:
 		world.refresh()
+	# The scene is over and the world is calm: keep the progress.
+	if main and main.title == null:
+		GameState.autosave()
 
 
 ## Executes a node chain (following -> jumps). Returns when it ends.
@@ -303,6 +319,7 @@ func _exec(node_id: String) -> void:
 
 
 func _say(who: String, expr: String, text: String) -> void:
+	_last_activity = Time.get_ticks_msec()
 	var actor = world.npc(who) if world else null
 	if actor:
 		actor.set_talking(true, expr)
@@ -443,6 +460,30 @@ func letter_closed(letter_id: String) -> void:
 		await _finish()
 
 
+## True if closing this letter makes the story react (a letter addressed to
+## you, or the first night's lesson).
+func letter_has_hooks(letter_id: String) -> bool:
+	var L := Data.letter(letter_id)
+	var auto: bool = L.get("auto_keep", false) and GameState.letter_state(letter_id) == "held"
+	var tutorial: bool = letter_id == "blue_door" and not f("tutorial_done")
+	return auto or tutorial
+
+
+## The satchel calls this right before it closes: once every panel is out of
+## the way (so the scene that follows can be seen and tapped), it runs the
+## letter's follow-up — and keeping the letter, if the player chose that.
+func after_satchel_read(letter_id: String, keep: bool, satchel: Node = null) -> void:
+	var guard := 0
+	while is_instance_valid(satchel) and satchel.is_inside_tree() and not satchel.is_queued_for_deletion() and guard < 300:
+		guard += 1
+		await get_tree().process_frame
+	if ui:
+		await ui.dismiss_all()
+	await letter_closed(letter_id)
+	if keep:
+		await keep_letter(letter_id)
+
+
 func _check_same_hand() -> void:
 	if GameState.is_read("far_shore") and GameState.is_read("lamp_room"):
 		_give_clue("c34_same_hand")
@@ -490,6 +531,7 @@ func _value(s: String) -> Variant:
 
 
 func _cmd(cmd: String, args: Array) -> void:
+	_last_activity = Time.get_ticks_msec()
 	match cmd:
 		"set":
 			GameState.set_flag(_arg(args, 0), _value(_arg(args, 1, "true")) if args.size() > 1 else true)
@@ -838,3 +880,246 @@ func fates() -> Array:
 		mood = "sad"
 	out.append({"who": "bram", "text": t, "mood": mood})
 	return out
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  Loading saves: repair & resume
+# ═══════════════════════════════════════════════════════════════════
+# Version 1.0.0 could autosave in the middle of a scene (whenever the app was
+# sent to the background). These rules bring any such save back to a
+# consistent state and replay whatever was interrupted, so every save can
+# always be finished. They are idempotent: a healthy save passes unchanged.
+
+## Called right after a save is read, before the world is built.
+func repair_after_load() -> void:
+	_resume_nodes.clear()
+	_resume_letter = ""
+	busy = false
+	_pending_ending = ""
+	_end_requested = false
+	_abort = false
+	var fixes: Array = []
+	var night := maxi(1, int(f("night")))
+	GameState.set_flag("night", night)
+	if not Data.locations.has(GameState.location):
+		GameState.location = "post_office"
+		GameState.spawn = "default"
+		GameState.player_pos = null
+		fixes.append("unknown location")
+
+	# The arrival on the quay was cut short: replay it.
+	if f("intro_done") and not f("met_bram"):
+		GameState.flags.erase("intro_done")
+		GameState.location = "harbor"
+		GameState.spawn = "intro"
+		GameState.player_pos = null
+		fixes.append("intro")
+	# Odile's welcome was cut short before the first letter came: replay it.
+	if f("met_odile") and GameState.letter_state("blue_door") == "":
+		GameState.flags.erase("met_odile")
+		fixes.append("first visit")
+
+	# Delivery scenes that were cut short: apply what they would have done.
+	for id in Data.letter_order:
+		if _repair_outcome(id):
+			fixes.append("outcome " + id)
+
+	# A night began but its letters never arrived.
+	var missing := false
+	for id in Data.letter_order:
+		var L := Data.letter(id)
+		var n := int(L.get("arrive_night", 0))
+		if n >= 2 and n <= night and not L.get("manual_arrival", false) and GameState.letter_state(id) == "":
+			GameState.arrive(id)
+			if n == night:
+				missing = true
+	if night >= 4 and not f("lantern_night"):
+		GameState.set_flag("lantern_night", true)
+		missing = true
+	if missing:
+		fixes.append("night %d start" % night)
+		GameState.location = "post_office"
+		GameState.spawn = "bed"
+		GameState.player_pos = null
+		if night < 4:
+			_resume_nodes.append("night.%d.start" % night)
+		# Lantern Night's opening replays by itself on entering the post office.
+	for id in Data.letter_order:
+		var L2 := Data.letter(id)
+		if L2.has("arrive_if") and GameState.letter_state(id) == "" and eval(L2.arrive_if):
+			GameState.arrive(id)
+
+	# Lantern Night's finale was under way: replay it from the harbour.
+	if f("lantern_night") and (f("finale") or f("lamp_resolved") or f("dawn")):
+		GameState.flags.erase("dawn")
+		GameState.location = "harbor"
+		GameState.spawn = "finale"
+		GameState.player_pos = null
+		_resume_nodes = ["resume.finale"]
+		fixes.append("finale")
+	elif f("lantern_started") and not GameState.has_item("paper_lantern"):
+		GameState.add_item("paper_lantern")
+	# The lamp sequence can't be half-done unless the lightning has struck.
+	if int(f("lamp_sequence")) > 0 and not f("auto_lamp_failed") and not f("lamp_resolved"):
+		GameState.set_flag("auto_lamp_failed", true)
+
+	# The first letter was collected but Odile's lesson never followed.
+	if GameState.letter_state("blue_door") == "held" and not f("tutorial_done"):
+		if GameState.is_read("blue_door"):
+			_resume_nodes.push_front("po.after_first_letter")
+		else:
+			_resume_letter = "blue_door"
+		fixes.append("tutorial")
+
+	_repair_objective()
+	var unread := 0
+	for id in GameState.held_letters():
+		if not GameState.is_read(id):
+			unread += 1
+	GameState.unseen_letters = unread
+	if not fixes.is_empty():
+		print("Save repaired: ", ", ".join(fixes))
+
+
+## Applies the lasting effects of a delivery scene that didn't finish.
+## Only state that is clearly missing is added; nothing is ever removed.
+func _repair_outcome(letter_id: String) -> bool:
+	var st := GameState.letter_state(letter_id)
+	if not st in ["delivered", "kept"]:
+		return false
+	var who := GameState.letter_to(letter_id)
+	var node: String = Data.letter(letter_id).get("outcomes", {}).get(who, {}).get("node", "")
+	if node == "" or not Data.dialogue.has(node):
+		return false
+	var changed := false
+	for ins in Data.dialogue[node]:
+		if ins.t != "cmd":
+			continue
+		if ins.has("if") and not eval(ins["if"]):
+			continue
+		var a: Array = ins.args
+		match ins.cmd:
+			"set":
+				var k: String = _arg(a, 0)
+				var cur: Variant = GameState.flags.get(k, null)
+				if cur == null or cur is bool and cur == false or cur is String and cur == "":
+					GameState.set_flag(k, _value(_arg(a, 1, "true")) if a.size() > 1 else true)
+					changed = true
+			"item":
+				var iid: String = _arg(a, 0)
+				var used: bool = iid == "mari_reply" and bool(f("reply_posted"))
+				if not GameState.has_item(iid) and not used:
+					GameState.add_item(iid)
+					changed = true
+			"arrive":
+				if GameState.arrive(_arg(a, 0)):
+					changed = true
+			"fade_letter":
+				var fl: String = _arg(a, 0)
+				if GameState.letter_state(fl) in ["held", "chute"]:
+					GameState.fade_letter(fl)
+					changed = true
+			"return_letter":
+				if GameState.letter_state(_arg(a, 0)) in ["delivered", "kept"]:
+					GameState.return_letter(_arg(a, 0))
+					changed = true
+	return changed
+
+
+## The objective shown in the HUD, rebuilt when the saved one no longer fits.
+func _repair_objective() -> void:
+	var o := GameState.objective
+	var night := int(f("night"))
+	var stale := o == ""
+	if o.find("Chute") >= 0 and o.begins_with("Collect") and not chute_waiting():
+		stale = true
+	if o.begins_with("Post Mari's reply") and not GameState.has_item("mari_reply"):
+		stale = true
+	if o.begins_with("Find the post office") and f("met_odile"):
+		stale = true
+	if o.find("ready to sleep") >= 0 and not can_sleep():
+		stale = true
+	if chute_waiting() and not o.begins_with("Collect") and not f("lantern_night"):
+		stale = true
+	if not stale:
+		return
+	var n := ""
+	if not f("intro_done"):
+		n = ""
+	elif not f("met_odile"):
+		n = "Find the post office at the end of the quay."
+	elif chute_waiting():
+		n = "Collect the letter from the Chute." if night <= 1 else "Collect tonight's letters from the Chute."
+	elif GameState.has_item("mari_reply"):
+		n = "Post Mari's reply in the post office outbox."
+	elif f("lantern_night"):
+		n = "Lantern Night. Make sure someone is in the lamp room at 11:40." if f("tobias_knows") else "Lantern Night. Go down to the harbour before 11:40."
+	elif can_sleep():
+		n = "The night's work is done. Return to Odile when you're ready to sleep — or keep exploring."
+	elif night <= 1:
+		n = "Find who 'The Light Above the Blue Door' was written for."
+	else:
+		n = "Read the new letters. Find who each one belongs to."
+	GameState.set_objective(n)
+
+
+## Called once the loaded world is on screen: replays interrupted scenes.
+func resume_after_load() -> void:
+	if _resume_letter != "":
+		var id := _resume_letter
+		_resume_letter = ""
+		busy = true
+		_end_requested = false
+		_abort = false
+		await ui.open_letter(id)
+		await _after_letter_hooks(id)
+		await _finish()
+	var nodes := _resume_nodes.duplicate()
+	_resume_nodes.clear()
+	for n in nodes:
+		if Data.dialogue.has(n):
+			await run(n)
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  Safety net
+# ═══════════════════════════════════════════════════════════════════
+# If a scene ever stalls with nothing on screen to tap (no dialogue, no
+# panel, no card) the player would be frozen. After a long quiet spell the
+# director gives control back instead.
+
+func _process(_delta: float) -> void:
+	if not busy or main == null or ui == null:
+		return
+	var now := Time.get_ticks_msec()
+	if _waiting_on_player():
+		_last_activity = now
+		return
+	if now - _last_activity > 20000:
+		push_warning("Story: a scene stalled; returning control to the player.")
+		_abort = true
+		_end_requested = true
+		_pending_ending = ""
+		if ui.dialogue:
+			ui.dialogue.close()
+		ui.letterbox(false)
+		ui.fade_instant(0.0)
+		busy = false
+		_conversation_npc = ""
+		if world:
+			world.refresh()
+
+
+func _waiting_on_player() -> bool:
+	if ui.modal_open() or main._changing:
+		return true
+	if ui.dialogue.is_open():
+		return true
+	for c in ui.overlay.get_child(0).get_children():
+		if c.has_signal("done"):
+			return true
+	var w = world
+	if w and w.player and w.player.moving:
+		return true
+	return false
+

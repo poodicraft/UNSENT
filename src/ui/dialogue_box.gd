@@ -64,6 +64,7 @@ func _ready() -> void:
 	_panel.offset_left = 18
 	_panel.offset_right = -18
 	_panel.offset_bottom = -26
+	_panel.offset_top = -26
 	_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_panel)
@@ -109,7 +110,23 @@ func _ready() -> void:
 	_cont.visible = false
 
 
+## Keeps the box sitting on the bottom edge (above the gesture bar), sized
+## to its text: it grows upwards for long lines and shrinks back for short.
+func _fit_panel() -> void:
+	var bottom := -(12.0 + Kit.safe_insets(self).y)
+	var h := _panel.get_combined_minimum_size().y
+	if not is_equal_approx(_panel.offset_bottom, bottom) or not is_equal_approx(_panel.offset_top, bottom - h):
+		_panel.offset_bottom = bottom
+		_panel.offset_top = bottom - h
+	_choices.offset_bottom = _panel.offset_top - 18.0
+	_choices.offset_top = _choices.offset_bottom
+	_cont.offset_bottom = bottom - 10.0
+	_cont.offset_top = _cont.offset_bottom - 30.0
+
+
 func _process(delta: float) -> void:
+	if visible:
+		_fit_panel()
 	if _typing:
 		var speed := 46.0 * Settings.text_speed
 		if Settings.text_speed >= 2.9:
@@ -125,8 +142,7 @@ func _process(delta: float) -> void:
 				_blip_acc = 0.0
 				Audio.blip(_voice)
 	if _cont.visible:
-		_cont.offset_top = -66 + sin(Time.get_ticks_msec() / 220.0) * 4.0
-		_cont.offset_bottom = _cont.offset_top + 30
+		_cont.position.y += sin(Time.get_ticks_msec() / 220.0) * 4.0
 
 
 func _finish_typing() -> void:
@@ -152,12 +168,15 @@ func _ensure_open() -> void:
 	_open = true
 	visible = true
 	_panel.modulate.a = 0.0
-	_panel.position.y += 40
+	# Fade and a gentle pop — never move the box itself, so its layout
+	# (and the text inside) always stays where it belongs.
+	_panel.scale = Vector2(0.97, 0.97)
+	_panel.pivot_offset = Vector2(_panel.size.x * 0.5, _panel.size.y)
 	if _tween and _tween.is_valid():
 		_tween.kill()
 	_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	_tween.tween_property(_panel, "modulate:a", 1.0, 0.22)
-	_tween.tween_property(_panel, "position:y", _panel.position.y - 40, 0.28)
+	_tween.tween_property(_panel, "scale", Vector2.ONE, 0.26)
 
 
 func is_open() -> bool:
@@ -188,6 +207,7 @@ func say(who: String, expr: String, text: String) -> void:
 		_voice = float(Data.characters.get(who, {}).get("voice", 1.0))
 	for k in ["normal_font_size", "italics_font_size", "bold_font_size"]:
 		_text.add_theme_font_size_override(k, Settings.font(29))
+	_fit_panel()
 	_total = _text.get_total_character_count()
 	_visible_chars = 0.0
 	_text.visible_characters = 0
@@ -207,7 +227,7 @@ func choose(options: Array, hub := false) -> int:
 	_clear_choices()
 	_choosing = true
 	_cont.visible = false
-	_choices.offset_bottom = -26 - _panel.size.y - 18
+	_fit_panel()
 	for i in options.size():
 		var b: Button = Kit.dark_button(options[i], 82) if hub and options[i] == "Goodbye" else Kit.button(options[i], 82)
 		b.alignment = HORIZONTAL_ALIGNMENT_CENTER

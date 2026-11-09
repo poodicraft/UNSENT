@@ -14,6 +14,7 @@ var _bg: ColorRect
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 func _gui_input(e: InputEvent) -> void:
@@ -28,6 +29,7 @@ func play(id: String) -> void:
 	_bg = ColorRect.new()
 	_bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_bg.color = Color(0.03, 0.03, 0.07, 0.0)
+	_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_bg)
 	var t := create_tween()
 	t.tween_property(_bg, "color:a", 0.55 if dawn else 0.7, 1.5)
@@ -105,6 +107,7 @@ func _end_card(E: Dictionary) -> void:
 	v.add_child(title)
 	var line := ColorRect.new()
 	line.color = Color(Kit.GOLD, 0.8)
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	line.custom_minimum_size = Vector2(200, 2)
 	line.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	v.add_child(line)

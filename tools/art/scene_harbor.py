@@ -141,7 +141,8 @@ def ferry(out):
         L.sheet(ellipse(px, 846, 8, 8, 14), LIT if i % 2 == 0 else "#d8c08a", shadow=0.1, edge=0.03, seed=10 + i)
         if i % 2 == 0:
             L.glow(px, 846, 18, "#ffb04a", 0.5)
-    layer_text(L, 1166, 874, "MORNING LARK", "Cinzel.ttf", 13, "#efe2c4")
+    # the name sits on the stern's plate (the hull's slanted end left no room)
+    layer_text(L, 1095, 876, "MORNING LARK", "Cinzel.ttf", 12, "#efe2c4")
     # cabin + wheelhouse
     L.sheet(rrect(900, 740, 230, 86, 8), "#e3d8c2", seed=20)
     for i, wx in enumerate(range(916, 1110, 44)):
@@ -174,9 +175,10 @@ def booth(L):
     L.ink(rect(x0 + 18, 744, 114, 70), "#5a3a2a", 5, closed=True)
     layer_text(L, x0 + 75, 734, "TICKETS", "Cinzel.ttf", 13, "#f0dcae")
     L.sheet(rect(x0 + 10, 830, 130, 70), "#22262c", seed=63)
-    for i, t in enumerate(("6:10 → PORT ARDENT", "8:15 ← HOME")):
-        layer_text(L, x0 + 75, 850 + i * 24, t, "Caveat.ttf", 15, "#f2efe6", alpha=0.9)
-    L.sheet(rect(x0 + 100, 812, 26, 30), "#efe6d2", shadow=0.25, shadow_off=(2, 2), shadow_blur=1.5, seed=64)
+    # (no arrow glyphs: the chalk font doesn't have them)
+    for i, t in enumerate(("6:10 · PORT ARDENT", "8:15 · HOME")):
+        layer_text(L, x0 + 75, 854 + i * 24, t, "Caveat.ttf", 14, "#f2efe6", alpha=0.9)
+    L.sheet(rect(x0 + 112, 808, 22, 24), "#efe6d2", shadow=0.25, shadow_off=(2, 2), shadow_blur=1.5, seed=64)
 
 
 def memorial(L):
@@ -206,9 +208,11 @@ def cliff_steps(L):
     rope(L, [(1600, 880)] + [(1622 + i * 24, 838 - i * 46) for i in range(10)], "#c8b48a", 3)
     for i in range(0, 10, 3):
         L.sheet(rect(1620 + i * 24, 846 - i * 46, 6, 40), WOOD_DARK, seed=85 + i)
-    L.sheet(rect(1544, 826, 8, 104), WOOD_DARK, seed=83)
-    L.sheet(rect(1500, 800, 120, 34), "#e9dcc0", seed=84)
-    layer_text(L, 1560, 817, "KEEPER'S PATH", "Cinzel.ttf", 12, "#3a2e3a")
+    # signpost stands just right of the memorial, its board above the stone,
+    # so it never covers the name carved on it
+    L.sheet(rect(1572, 790, 8, 140), WOOD_DARK, seed=83)
+    L.sheet(rect(1516, 762, 120, 34), "#e9dcc0", seed=84)
+    layer_text(L, 1576, 779, "KEEPER'S PATH", "Cinzel.ttf", 12, "#3a2e3a")
 
 
 def main_layer(out):

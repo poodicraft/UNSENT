@@ -1,0 +1,45 @@
+{
+	"asked": {
+
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel"
+	],
+	"examined": {
+		"chute": true
+	},
+	"flags": {
+		"hope": 0,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_odile": true,
+		"night": 1,
+		"tutorial_done": true,
+		"visited_harbor": true,
+		"visited_post_office": true
+	},
+	"items": [],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "held",
+			"to": ""
+		}
+	},
+	"location": "post_office",
+	"objective": "Find who 'The Light Above the Blue Door' was written for.",
+	"play_time": 1.215252,
+	"player_pos": [
+		1650.0,
+		1025.0
+	],
+	"saved_at": 1794148408.11241,
+	"spawn": "from_harbor",
+	"version": 1
+}

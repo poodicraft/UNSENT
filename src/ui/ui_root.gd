@@ -14,6 +14,7 @@ var root: Control
 var hud: Control
 var dialogue: Control
 var modal_layer: Control
+var screens: Control
 var overlay: CanvasLayer
 var _fade: ColorRect
 var _flash: ColorRect
@@ -90,6 +91,13 @@ func _ready() -> void:
 	dialogue = DialogueBox.new()
 	root.add_child(dialogue)
 
+	# Full-screen screens (title, ending) sit above the HUD and dialogue but
+	# BELOW modals, so a popup opened from the title is on top and tappable.
+	screens = Control.new()
+	screens.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	screens.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.add_child(screens)
+
 	modal_layer = Control.new()
 	modal_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -125,6 +133,14 @@ func _ready() -> void:
 	set_world_ui(false)
 
 
+func _process(delta: float) -> void:
+	# The HUD steps back while a panel is open, so nothing shows through
+	# behind the panel's own text.
+	var want := 0.0 if not _modals.is_empty() else 1.0
+	if not is_equal_approx(hud.modulate.a, want):
+		hud.modulate.a = move_toward(hud.modulate.a, want, delta * 7.0)
+
+
 ## Shows/hides in-game UI (HUD + atmosphere) — hidden on the title screen.
 func set_world_ui(on: bool) -> void:
 	hud.visible = on
@@ -149,12 +165,33 @@ func pop_modal(m: Control) -> void:
 
 ## Android back / Escape: close the top modal, or open the pause menu.
 func back_pressed() -> bool:
+	while not _modals.is_empty() and not is_instance_valid(_modals.back()):
+		_modals.pop_back()
 	if not _modals.is_empty():
 		var top: Control = _modals.back()
 		if top.has_method("on_back"):
 			top.on_back()
-			return true
+		return true
 	return false
+
+
+## Closes every open panel, top first, exactly as Back would.
+func dismiss_all() -> void:
+	var guard := 0
+	while not _modals.is_empty() and guard < 16:
+		guard += 1
+		var top: Control = _modals.back()
+		if not is_instance_valid(top):
+			_modals.pop_back()
+			continue
+		if top.has_method("on_back"):
+			top.on_back()
+		for i in 40:
+			await get_tree().process_frame
+			if _modals.is_empty() or _modals.back() != top:
+				break
+		if not _modals.is_empty() and _modals.back() == top:
+			pop_modal(top)
 
 
 # ─── Overlays ────────────────────────────────────────────────────────
@@ -322,6 +359,14 @@ func open_pause() -> void:
 
 func open_settings() -> void:
 	var p := Panels.SettingsPanel.new()
+	push_modal(p)
+	p.open()
+	await p.closed
+	pop_modal(p)
+
+
+func open_credits() -> void:
+	var p := Panels.CreditsPanel.new()
 	push_modal(p)
 	p.open()
 	await p.closed

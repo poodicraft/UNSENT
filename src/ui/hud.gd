@@ -19,10 +19,7 @@ var _obj_tween: Tween
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var safe := DisplayServer.get_display_safe_area()
-	var win := DisplayServer.window_get_size()
-	if win.y > 0 and safe.position.y > 0:
-		_top_margin = maxf(34.0, float(safe.position.y) / float(win.y) * 1280.0 + 12.0)
+	_top_margin = maxf(34.0, Kit.safe_insets(self).x + 10.0)
 
 	_pause = Kit.icon_button("pause", 88)
 	_pause.position = Vector2(26, _top_margin)
@@ -67,7 +64,7 @@ func _ready() -> void:
 	_banner = Kit.label("", 40, Kit.CREAM, "display", HORIZONTAL_ALIGNMENT_CENTER)
 	_banner.anchor_left = 0.0
 	_banner.anchor_right = 1.0
-	_banner.offset_top = _top_margin + 120
+	_banner.offset_top = _top_margin + 150
 	_banner.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.6))
 	_banner.add_theme_constant_override("shadow_offset_y", 3)
 	_banner.modulate.a = 0.0
@@ -78,12 +75,16 @@ func _ready() -> void:
 	_banner_line.anchor_right = 0.5
 	_banner_line.offset_left = -90
 	_banner_line.offset_right = 90
-	_banner_line.offset_top = _top_margin + 178
-	_banner_line.offset_bottom = _top_margin + 180
+	_banner_line.offset_top = _top_margin + 208
+	_banner_line.offset_bottom = _top_margin + 210
 	_banner_line.modulate.a = 0.0
 	_banner_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_banner_line)
 
+	Settings.changed.connect(func():
+		_objective.add_theme_font_size_override("font_size", Settings.font(21))
+		_banner.add_theme_font_size_override("font_size", Settings.font(40))
+		_badge.add_theme_font_size_override("font_size", Settings.font(20)))
 	GameState.objective_changed.connect(_on_objective)
 	GameState.letter_changed.connect(func(_id): _refresh_badge())
 	_on_objective(GameState.objective)
@@ -145,6 +146,10 @@ func bump_badge() -> void:
 func clear_badge() -> void:
 	GameState.unseen_clues = 0
 	GameState.unseen_letters = 0
+	_refresh_badge()
+
+
+func refresh_badge() -> void:
 	_refresh_badge()
 
 

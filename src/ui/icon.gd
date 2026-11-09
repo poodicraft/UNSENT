@@ -12,6 +12,10 @@ var color := Color.WHITE:
 var pad := 0.26
 
 
+func _init() -> void:
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+
 func _draw() -> void:
 	var s := minf(size.x, size.y)
 	var o := (size - Vector2(s, s)) * 0.5
@@ -57,6 +61,10 @@ func _draw() -> void:
 			draw_line(P.call(0.85, 0.15), P.call(0.15, 0.85), c, w * 1.3, true)
 		"check":
 			draw_polyline(PackedVector2Array([P.call(0.1, 0.52), P.call(0.4, 0.8), P.call(0.92, 0.2)]), c, w * 1.4, true)
+		"dot":
+			draw_circle(P.call(0.5, 0.5), u * 0.36, c, true, -1.0, true)
+		"ring":
+			draw_circle(P.call(0.5, 0.5), u * 0.33, c, false, maxf(1.5, w * 1.1), true)
 		"star":
 			var pts := PackedVector2Array()
 			for i in 10:

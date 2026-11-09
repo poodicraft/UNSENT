@@ -6,6 +6,7 @@ extends Control
 
 const Kit := preload("res://src/ui/ui_kit.gd")
 const Icon := preload("res://src/ui/icon.gd")
+const TapCard := preload("res://src/ui/tap_card.gd")
 
 signal closed
 
@@ -13,6 +14,9 @@ const PAPER_COLORS := {
 	"hotel": "#f3ead8", "fine": "#f5ecdc", "airmail": "#edf2f6", "logbook": "#efe6d0",
 	"ticket": "#f1e0c0", "typed": "#f6f3ec", "kraft": "#cfae80", "silver": "#e8edf4",
 }
+
+## The paper textures are drawn for this width (see tools/art/ui_art.py).
+const PAPER_MAX_W := 660.0
 
 var letter_id := ""
 var L: Dictionary = {}
@@ -25,16 +29,23 @@ var _back: VBoxContainer
 var _body: RichTextLabel
 var _sig: RichTextLabel
 var _flip_btn: Button
+var _close_btn: Button
+var _x_btn: Button
 var _counter: Label
 var _origin: Label
 var _leads_box: VBoxContainer
+var _frame: MarginContainer
 var _showing_back := false
 var _flipping := false
+var _closing := false
 
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	# Closing must work no matter what else is going on.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_viewport().size_changed.connect(_apply_safe_area)
 
 
 func on_back() -> void:
@@ -48,56 +59,65 @@ func open(id: String) -> void:
 	Audio.sfx("letter_open")
 
 	_backdrop = ColorRect.new()
-	_backdrop.color = Color(0.03, 0.03, 0.07, 0.86)
+	_backdrop.color = Color(0.03, 0.03, 0.07, 0.88)
 	_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_backdrop)
 
-	var top := VBoxContainer.new()
-	top.anchor_left = 0.0
-	top.anchor_right = 1.0
-	top.offset_left = 120
-	top.offset_right = -120
-	top.offset_top = 40
-	top.add_theme_constant_override("separation", 4)
-	top.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(top)
-	var title := Kit.label(L.get("title", ""), 30, Kit.CREAM, "display", HORIZONTAL_ALIGNMENT_CENTER)
-	top.add_child(title)
+	# Everything lives in one column inside the safe area: header, the
+	# scrolling letter, and a bottom bar with big thumb-sized buttons.
+	_frame = MarginContainer.new()
+	_frame.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_frame)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override("separation", 12)
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_frame.add_child(col)
+
+	var head := HBoxContainer.new()
+	head.add_theme_constant_override("separation", 10)
+	head.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	col.add_child(head)
+	var spacer := Control.new()
+	spacer.custom_minimum_size = Vector2(88, 0)
+	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	head.add_child(spacer)
+	var titles := VBoxContainer.new()
+	titles.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	titles.add_theme_constant_override("separation", 2)
+	titles.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	head.add_child(titles)
+	var title := Kit.label(L.get("title", ""), 29, Kit.CREAM, "display", HORIZONTAL_ALIGNMENT_CENTER)
+	titles.add_child(title)
 	_origin = Kit.label("", 21, Kit.MUTED, "italic", HORIZONTAL_ALIGNMENT_CENTER)
-	top.add_child(_origin)
+	titles.add_child(_origin)
+	_counter = Kit.label("", 20, Kit.GOLD, "serif_bold", HORIZONTAL_ALIGNMENT_CENTER)
+	titles.add_child(_counter)
+	_x_btn = Kit.icon_button("close", 88)
+	_x_btn.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	_x_btn.pressed.connect(_close)
+	head.add_child(_x_btn)
 
-	var close := Kit.icon_button("close", 84)
-	close.anchor_left = 1.0
-	close.anchor_right = 1.0
-	close.offset_left = -108
-	close.offset_right = -24
-	close.offset_top = 32
-	close.offset_bottom = 116
-	close.pressed.connect(_close)
-	add_child(close)
-
-	_scroll = ScrollContainer.new()
-	_scroll.anchor_left = 0.0
-	_scroll.anchor_right = 1.0
-	_scroll.anchor_top = 0.0
-	_scroll.anchor_bottom = 1.0
-	_scroll.offset_top = 150
-	_scroll.offset_bottom = -150
-	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	add_child(_scroll)
+	_scroll = Kit.scroller()
+	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	col.add_child(_scroll)
 	_content = VBoxContainer.new()
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content.add_theme_constant_override("separation", 26)
 	_scroll.add_child(_content)
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 30)
-	margin.add_theme_constant_override("margin_right", 30)
+	margin.add_theme_constant_override("margin_left", 22)
+	margin.add_theme_constant_override("margin_right", 22)
 	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_content.add_child(margin)
 	_sheet = PanelContainer.new()
 	_sheet.add_theme_stylebox_override("panel", _paper_style())
-	_sheet.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# Never wider than the paper itself: on wide screens the sheet is centred
+	# instead of stretched (which would distort the printed letterheads).
+	_sheet.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_sheet.mouse_filter = Control.MOUSE_FILTER_PASS
 	margin.add_child(_sheet)
 
 	_build_front()
@@ -105,46 +125,57 @@ func open(id: String) -> void:
 	_back.visible = false
 
 	var lm := MarginContainer.new()
-	lm.add_theme_constant_override("margin_left", 30)
-	lm.add_theme_constant_override("margin_right", 30)
+	lm.add_theme_constant_override("margin_left", 26)
+	lm.add_theme_constant_override("margin_right", 26)
 	_content.add_child(lm)
 	_leads_box = VBoxContainer.new()
 	_leads_box.add_theme_constant_override("separation", 10)
 	lm.add_child(_leads_box)
 	var pad := Control.new()
-	pad.custom_minimum_size = Vector2(0, 30)
+	pad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pad.custom_minimum_size = Vector2(0, 24)
 	_content.add_child(pad)
 
 	var bottom := HBoxContainer.new()
-	bottom.anchor_left = 0.0
-	bottom.anchor_right = 1.0
-	bottom.anchor_top = 1.0
-	bottom.anchor_bottom = 1.0
-	bottom.offset_left = 30
-	bottom.offset_right = -30
-	bottom.offset_top = -126
-	bottom.offset_bottom = -34
-	bottom.add_theme_constant_override("separation", 16)
-	add_child(bottom)
-	_flip_btn = Kit.button("Turn over", 88)
+	bottom.add_theme_constant_override("separation", 14)
+	var bm := MarginContainer.new()
+	bm.add_theme_constant_override("margin_left", 22)
+	bm.add_theme_constant_override("margin_right", 22)
+	bm.add_child(bottom)
+	col.add_child(bm)
+	_flip_btn = Kit.dark_button("Turn over", 92)
 	_flip_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_flip_btn.size_flags_stretch_ratio = 1.0
 	_flip_btn.pressed.connect(_flip)
 	bottom.add_child(_flip_btn)
-	var cbox := PanelContainer.new()
-	cbox.add_theme_stylebox_override("panel", Kit.box(Color(0.1, 0.11, 0.2, 0.9), 40, 2, Color(Kit.GOLD, 0.5), 0, 10))
-	cbox.custom_minimum_size = Vector2(230, 0)
-	bottom.add_child(cbox)
-	_counter = Kit.label("", 22, Kit.GOLD, "serif_bold", HORIZONTAL_ALIGNMENT_CENTER)
-	_counter.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	cbox.add_child(_counter)
+	_close_btn = Kit.button("Close", 92)
+	_close_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_close_btn.size_flags_stretch_ratio = 1.0
+	_close_btn.pressed.connect(_close)
+	bottom.add_child(_close_btn)
 
+	_apply_safe_area()
 	_refresh()
 	modulate.a = 0.0
-	_sheet.pivot_offset = Vector2(330, 300)
-	_sheet.scale = Vector2(0.94, 0.94)
+	_sheet.scale = Vector2(0.96, 0.96)
 	var t := create_tween().set_parallel(true).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	t.tween_property(self, "modulate:a", 1.0, 0.25)
-	t.tween_property(_sheet, "scale", Vector2.ONE, 0.35)
+	t.tween_property(self, "modulate:a", 1.0, 0.22)
+	t.tween_property(_sheet, "scale", Vector2.ONE, 0.32)
+	await get_tree().process_frame
+	if is_instance_valid(_sheet):
+		_sheet.pivot_offset = _sheet.size * 0.5
+
+
+func _apply_safe_area() -> void:
+	if _frame == null or _sheet == null or not is_inside_tree():
+		return
+	var vw := get_viewport_rect().size.x
+	_sheet.custom_minimum_size.x = minf(vw - 24.0 - 44.0, PAPER_MAX_W)
+	var ins := Kit.safe_insets(self)
+	_frame.add_theme_constant_override("margin_top", int(ins.x) + 10)
+	_frame.add_theme_constant_override("margin_bottom", int(ins.y) + 18)
+	_frame.add_theme_constant_override("margin_left", 12)
+	_frame.add_theme_constant_override("margin_right", 12)
 
 
 func _paper_style() -> StyleBox:
@@ -239,6 +270,7 @@ func _build_back() -> void:
 	var front := Kit.label(env.get("front", ""), 27, _ink(), "italic", HORIZONTAL_ALIGNMENT_CENTER)
 	_back.add_child(front)
 	var sep := ColorRect.new()
+	sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	sep.color = Color(_ink(), 0.25)
 	sep.custom_minimum_size = Vector2(0, 2)
 	_back.add_child(sep)
@@ -249,33 +281,30 @@ func _build_back() -> void:
 
 
 func _detail_chip(d: Dictionary) -> Control:
-	var b := Button.new()
-	b.focus_mode = Control.FOCUS_NONE
-	b.custom_minimum_size = Vector2(0, 96)
 	var cid: String = d.get("clue", "")
 	var found := cid != "" and GameState.has_clue(cid)
+	var card := TapCard.new()
 	var sb := Kit.box(Color(1, 1, 1, 0.35) if not found else Color("#f0d68a"), 14, 2, Color(_ink(), 0.35), 0, 14)
-	b.add_theme_stylebox_override("normal", sb)
-	b.add_theme_stylebox_override("hover", sb)
-	b.add_theme_stylebox_override("pressed", sb)
-	b.add_theme_stylebox_override("hover_pressed", sb)
+	sb.content_margin_left = 18
+	sb.content_margin_right = 18
+	var sd := sb.duplicate()
+	sd.bg_color = Color(1, 1, 1, 0.55) if not found else Color("#f5e0a0")
+	card.set_styles(sb, sd)
+	card.custom_minimum_size = Vector2(0, 88)
 	var v := VBoxContainer.new()
-	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	v.offset_left = 18
-	v.offset_right = -18
-	v.offset_top = 10
+	v.add_theme_constant_override("separation", 2)
 	v.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	b.add_child(v)
+	card.add_child(v)
 	v.add_child(Kit.label(String(d.get("label", "")).to_upper(), 18, Color(_ink(), 0.6), "display"))
 	v.add_child(Kit.label(d.get("text", ""), 25, _ink(), "serif"))
-	b.pressed.connect(func():
+	card.pressed.connect(func():
 		if cid != "" and not GameState.has_clue(cid):
 			Story._give_clue(cid)
 			_refresh()
 			_rebuild_back()
 		else:
 			Audio.sfx("paper", -6.0))
-	return b
+	return card
 
 
 func _rebuild_back() -> void:
@@ -352,22 +381,44 @@ func _refresh_leads() -> void:
 		var nm := Kit.label("You" if ld.who == "wren" else Data.char_name(ld.who), 25, Data.char_color(ld.who) if ld.who != "memorial" else Kit.CREAM, "serif_bold")
 		nm.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		h.add_child(nm)
-		var dots := ""
+		var marks := HBoxContainer.new()
+		marks.add_theme_constant_override("separation", 6)
+		marks.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		marks.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		h.add_child(marks)
 		for i in maxi(need, ld.support):
-			dots += "● " if i < ld.support else "○ "
-		for t in [[dots.strip_edges(), Kit.GOLD], ["✗%d" % ld.refute if ld.refute > 0 else "", Kit.BAD], ["✓" if ld.ready else "", Kit.GOOD]]:
-			if t[0] == "":
-				continue
-			var mk := Kit.label(t[0], 24, t[1], "serif_bold")
-			mk.autowrap_mode = TextServer.AUTOWRAP_OFF
-			mk.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			h.add_child(mk)
+			marks.add_child(Kit.mark("dot" if i < ld.support else "ring", Kit.GOLD, 20))
+		if ld.refute > 0:
+			var gap := Control.new()
+			gap.custom_minimum_size = Vector2(6, 0)
+			marks.add_child(gap)
+			marks.add_child(Kit.mark("cross", Kit.BAD, 20))
+			var n := Kit.label(str(ld.refute), 22, Kit.BAD, "serif_bold")
+			n.autowrap_mode = TextServer.AUTOWRAP_OFF
+			n.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			marks.add_child(n)
+		if ld.ready:
+			marks.add_child(Kit.mark("check", Kit.GOOD, 26))
 		_leads_box.add_child(row)
-	var tip := "● supporting clues   ✗ contradicting clues   ✓ enough to deliver"
-	_leads_box.add_child(Kit.label(tip, 19, Kit.MUTED, "italic"))
+	# Legend, as a flowing row: it wraps instead of running off the edge.
+	var legend := HFlowContainer.new()
+	legend.add_theme_constant_override("h_separation", 18)
+	legend.add_theme_constant_override("v_separation", 4)
+	legend.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for it in [["dot", Kit.GOLD, "supporting clue"], ["cross", Kit.BAD, "contradicting clue"], ["check", Kit.GOOD, "enough to deliver"]]:
+		var pair := HBoxContainer.new()
+		pair.add_theme_constant_override("separation", 6)
+		pair.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		pair.add_child(Kit.mark(it[0], it[1], 18))
+		var tl := Kit.label(it[2], 19, Kit.MUTED, "italic")
+		tl.autowrap_mode = TextServer.AUTOWRAP_OFF
+		pair.add_child(tl)
+		legend.add_child(pair)
+	_leads_box.add_child(legend)
 	_leads_box.add_child(Kit.label("To deliver, find the person and choose \"Deliver a letter…\" when you talk to them.", 20, Kit.MUTED, "italic"))
 	if "wren" in L.get("candidates", []) and Story.can_deliver(letter_id, "wren") and not Story.busy:
 		var keep := Kit.dark_button("Keep it — I think this one is mine", 80)
+		Kit.in_list(keep)
 		keep.pressed.connect(func():
 			set_meta("action", "keep")
 			_close())
@@ -416,8 +467,12 @@ func _flip() -> void:
 
 
 func _close() -> void:
+	if _closing:
+		return
+	_closing = true
 	Audio.sfx("letter_fold", -2.0)
 	var t := create_tween()
-	t.tween_property(self, "modulate:a", 0.0, 0.18)
-	await t.finished
+	t.tween_property(self, "modulate:a", 0.0, 0.16)
+	# A timer that runs even if the tree were paused: the letter ALWAYS closes.
+	await get_tree().create_timer(0.17, true, false, true).timeout
 	closed.emit()

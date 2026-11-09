@@ -55,6 +55,7 @@ func _ready() -> void:
 	title.add_theme_constant_override("shadow_outline_size", 10)
 	logo.add_child(title)
 	var line := ColorRect.new()
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	line.color = Color(Kit.GOLD, 0.8)
 	line.custom_minimum_size = Vector2(220, 2)
 	line.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -125,18 +126,4 @@ func _draw() -> void:
 
 
 func show_credits() -> void:
-	var Panels := preload("res://src/ui/panels.gd")
-	var m := Panels.Modal.new()
-	add_child(m)
-	var p := m.sheet(false)
-	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 14)
-	p.add_child(v)
-	v.add_child(Kit.label("UNSENT", 40, Kit.CREAM, "display", HORIZONTAL_ALIGNMENT_CENTER))
-	v.add_child(Kit.label("Chapter One · The Long Dusk", 24, Kit.GOLD, "italic", HORIZONTAL_ALIGNMENT_CENTER))
-	var txt := "Story, design, code, art direction, music and sound: created for this game.\n\nAll environments, characters, music and sound effects are generated procedurally by the tools in this project — no stock assets.\n\nFonts: Lora, Cinzel, Caveat, Dancing Script, Patrick Hand, Gochi Hand, Kalam, Handlee (SIL Open Font License) and Special Elite (Apache 2.0).\n\nBuilt with the Godot Engine (MIT)."
-	v.add_child(Kit.label(txt, 23, Kit.CREAM, "serif", HORIZONTAL_ALIGNMENT_CENTER))
-	var b := Kit.button("Close", 84)
-	b.pressed.connect(func(): m.queue_free())
-	v.add_child(b)
-	m.appear(p)
+	await Story.main.ui.open_credits()

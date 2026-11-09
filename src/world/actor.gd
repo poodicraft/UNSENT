@@ -124,6 +124,17 @@ func hit_rect() -> Rect2:
 	return Rect2(position + Vector2(-48 * s, -h * s - 6 * s), Vector2(96 * s, (h + 20) * s))
 
 
+## The name label's rectangle on screen (for keeping labels apart).
+func tag_screen_rect() -> Rect2:
+	if _font == null or not is_inside_tree():
+		return Rect2()
+	var nm := Data.char_first_name(id)
+	var w := _font.get_string_size(nm, HORIZONTAL_ALIGNMENT_LEFT, -1, 22).x
+	var h := 270.0 * float(Data.characters.get(id, {}).get("puppet", {}).get("height", 1.0))
+	var p := Vector2(-w * 0.5, -h - 26)
+	return get_canvas_transform() * get_global_transform() * Rect2(p + Vector2(-12, -24), Vector2(w + 24, 34))
+
+
 func _draw() -> void:
 	# Soft ground shadow (drawn unscaled by facing).
 	var rx := 40.0 * float(Data.characters.get(id, {}).get("puppet", {}).get("build", 1.0))

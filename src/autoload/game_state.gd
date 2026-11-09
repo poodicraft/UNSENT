@@ -7,7 +7,7 @@ signal item_changed(id: String, gained: bool)
 signal letter_changed(id: String)
 signal objective_changed(text: String)
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 const SLOTS := ["auto", "1", "2", "3"]
 const META_PATH := "user://meta.json"
 
@@ -249,46 +249,98 @@ func to_dict() -> Dictionary:
 
 func from_dict(d: Dictionary) -> void:
 	new_game()
-	flags = d.get("flags", flags)
+	var fl: Variant = d.get("flags", null)
+	if fl is Dictionary:
+		for k in fl:
+			flags[k] = fl[k]
 	# JSON turns ints into floats; restore integer-valued counters.
 	for k in ["night", "hope", "lamp_sequence"]:
 		if flags.has(k):
 			flags[k] = int(flags[k])
-	clues = d.get("clues", [])
-	items = d.get("items", [])
-	letters = d.get("letters", {})
-	asked = d.get("asked", {})
-	examined = d.get("examined", {})
-	location = d.get("location", "post_office")
-	spawn = d.get("spawn", "default")
+	clues = _array(d.get("clues", []))
+	items = _array(d.get("items", []))
+	letters = {}
+	var ld: Variant = d.get("letters", {})
+	if ld is Dictionary:
+		for id in ld:
+			var e: Variant = ld[id]
+			if e is Dictionary and Data.letters.has(id):
+				letters[id] = {"state": str(e.get("state", "")), "to": str(e.get("to", "")), "read": bool(e.get("read", false))}
+	asked = d.get("asked", {}) if d.get("asked", {}) is Dictionary else {}
+	examined = d.get("examined", {}) if d.get("examined", {}) is Dictionary else {}
+	location = str(d.get("location", "post_office"))
+	spawn = str(d.get("spawn", "default"))
 	var pp = d.get("player_pos", null)
 	player_pos = Vector2(pp[0], pp[1]) if pp is Array and pp.size() == 2 else null
-	objective = d.get("objective", "")
-	play_time = d.get("play_time", 0.0)
+	objective = str(d.get("objective", ""))
+	play_time = float(d.get("play_time", 0.0))
 	unseen_clues = 0
 	unseen_letters = 0
 	in_game = true
 	state_changed.emit()
 
 
+func _array(v: Variant) -> Array:
+	var out: Array = []
+	if v is Array:
+		for x in v:
+			var sx := str(x)
+			if not sx in out:
+				out.append(sx)
+	return out
+
+
 func _slot_path(slot: String) -> String:
 	return "user://save_%s.json" % slot
 
 
-func save_game(slot: String) -> bool:
-	var f := FileAccess.open(_slot_path(slot), FileAccess.WRITE)
+## Writes a save safely: to a temporary file first, then swapped in, with the
+## previous version kept as a backup. A save can't be lost to a crash or a
+## phone switching off halfway through writing.
+func save_game(slot: String, data: Dictionary = {}) -> bool:
+	var d: Dictionary = data if not data.is_empty() else to_dict()
+	d["version"] = SAVE_VERSION
+	d["saved_at"] = Time.get_unix_time_from_system()
+	var path := _slot_path(slot)
+	var tmp := path + ".tmp"
+	var f := FileAccess.open(tmp, FileAccess.WRITE)
 	if f == null:
 		push_warning("Save failed: %s" % slot)
 		return false
-	f.store_string(JSON.stringify(to_dict()))
+	f.store_string(JSON.stringify(d))
 	f.close()
+	# Only replace the real save once the new one reads back correctly.
+	var check: Variant = JSON.parse_string(FileAccess.get_file_as_string(tmp))
+	if not (check is Dictionary):
+		push_warning("Save verify failed: %s" % slot)
+		return false
+	if FileAccess.file_exists(path):
+		var bak := path.replace(".json", ".bak.json")
+		if FileAccess.file_exists(bak):
+			DirAccess.remove_absolute(bak)
+		DirAccess.rename_absolute(path, bak)
+	if DirAccess.rename_absolute(tmp, path) != OK:
+		# Couldn't swap files: write the save in place instead.
+		var direct := FileAccess.open(path, FileAccess.WRITE)
+		if direct == null:
+			return false
+		direct.store_string(JSON.stringify(d))
+		direct.close()
 	return true
 
 
+func _read_save(slot: String) -> Variant:
+	var path := _slot_path(slot)
+	for p in [path, path + ".tmp", path.replace(".json", ".bak.json")]:
+		if FileAccess.file_exists(p):
+			var v: Variant = JSON.parse_string(FileAccess.get_file_as_string(p))
+			if v is Dictionary and v.has("flags"):
+				return v
+	return null
+
+
 func load_game(slot: String) -> bool:
-	if not has_save(slot):
-		return false
-	var v = JSON.parse_string(FileAccess.get_file_as_string(_slot_path(slot)))
+	var v: Variant = _read_save(slot)
 	if not (v is Dictionary):
 		return false
 	from_dict(v)
@@ -296,18 +348,19 @@ func load_game(slot: String) -> bool:
 
 
 func has_save(slot: String) -> bool:
-	return FileAccess.file_exists(_slot_path(slot))
+	var p := _slot_path(slot)
+	return FileAccess.file_exists(p) or FileAccess.file_exists(p.replace(".json", ".bak.json")) or FileAccess.file_exists(p + ".tmp")
 
 
 func delete_save(slot: String) -> void:
-	if has_save(slot):
-		DirAccess.remove_absolute(_slot_path(slot))
+	var p := _slot_path(slot)
+	for f in [p, p.replace(".json", ".bak.json"), p + ".tmp"]:
+		if FileAccess.file_exists(f):
+			DirAccess.remove_absolute(f)
 
 
 func slot_info(slot: String) -> Dictionary:
-	if not has_save(slot):
-		return {}
-	var v = JSON.parse_string(FileAccess.get_file_as_string(_slot_path(slot)))
+	var v: Variant = _read_save(slot)
 	if not (v is Dictionary):
 		return {}
 	var fl: Dictionary = v.get("flags", {})
@@ -338,8 +391,14 @@ func most_recent_slot() -> String:
 	return best
 
 
+## Autosave. In the middle of a scene this stores the calm moment just before
+## the scene began (see Story.busy), never a half-played scene.
 func autosave() -> void:
-	if in_game:
+	if not in_game:
+		return
+	if Story.busy and not Story.stable_state.is_empty():
+		save_game("auto", Story.stable_state.duplicate(true))
+	else:
 		save_game("auto")
 
 

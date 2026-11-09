@@ -168,7 +168,7 @@
     "spawns": {"default": [200, 1015], "from_stairs": [200, 1015]},
     "on_enter": [
       {"node": "lr.first_visit", "if": "not $visited_lamp_room and not $lantern_night"},
-      {"node": "finale.lamp_room", "if": "$lantern_night and not $lamp_resolved"}
+      {"node": "finale.lamp_room", "if": "$lantern_night and not $lamp_resolved and $lamp_sequence == 0"}
     ],
     "objects": [
       {"id": "stairs_down", "label": "Stairs down", "rect": [60, 820, 170, 200], "stand": [150, 1015], "exit": {"to": "cliff", "spawn": "from_lighthouse"}, "arrow": "down"},

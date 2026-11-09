@@ -266,6 +266,76 @@ static func icon_button(icon: String, size := 92) -> Button:
 	return b
 
 
+## A small drawn mark (dot, ring, check, cross…) sized like text. Used
+## instead of symbol characters, which the game's fonts don't all contain.
+static func mark(kind: String, color: Color, size := 24) -> Control:
+	var Icon := preload("res://src/ui/icon.gd")
+	var ic := Icon.new()
+	ic.kind = kind
+	ic.color = color
+	ic.pad = 0.12
+	var px := float(Settings.font(size))
+	ic.custom_minimum_size = Vector2(px, px)
+	ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	return ic
+
+
+## Puts a drawn mark at the start of a button, before its text.
+static func lead_mark(b: Button, kind: String, color: Color) -> void:
+	var m := mark(kind, color, 26)
+	m.anchor_top = 0.5
+	m.anchor_bottom = 0.5
+	var px := m.custom_minimum_size.x
+	m.offset_left = 22
+	m.offset_right = 22 + px
+	m.offset_top = -px * 0.5
+	m.offset_bottom = px * 0.5
+	b.add_child(m)
+	for st in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+		if b.has_theme_stylebox_override(st):
+			var sb: StyleBox = b.get_theme_stylebox(st).duplicate()
+			sb.content_margin_left = 34 + px
+			b.add_theme_stylebox_override(st, sb)
+
+
+## Lets a control sit inside a ScrollContainer without blocking finger
+## scrolling: it still receives taps, but drags pass through to the scroller.
+static func in_list(c: Control) -> Control:
+	c.mouse_filter = Control.MOUSE_FILTER_PASS
+	return c
+
+
+## A vertical scroller tuned for fingers: a small dead zone so a slightly
+## shaky tap still counts as a tap, and no horizontal scrolling.
+static func scroller() -> ScrollContainer:
+	var s := ScrollContainer.new()
+	s.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	s.scroll_deadzone = 22
+	s.follow_focus = false
+	return s
+
+
+## Screen insets (top, bottom) in UI units that must stay clear of the
+## status bar, camera cut-out and gesture bar. Never less than a comfortable
+## minimum so nothing hugs the rounded corners of a phone.
+static func safe_insets(node: CanvasItem) -> Vector2:
+	var top := 0.0
+	var bottom := 0.0
+	if OS.has_feature("mobile") and node.is_inside_tree():
+		var win := DisplayServer.window_get_size()
+		var safe := DisplayServer.get_display_safe_area()
+		var vs := node.get_viewport_rect().size
+		if win.y > 0 and safe.size.y > 0:
+			var k := vs.y / float(win.y)
+			top = clampf(float(safe.position.y) * k, 0.0, 180.0)
+			bottom = clampf(float(win.y - safe.end.y) * k, 0.0, 140.0)
+	return Vector2(maxf(top, 26.0), maxf(bottom, 14.0))
+
+
+static func version() -> String:
+	return str(ProjectSettings.get_setting("application/config/version", "1.0.1"))
+
+
 static func origin_color(origin: String) -> Color:
 	match origin:
 		"past": return PAST

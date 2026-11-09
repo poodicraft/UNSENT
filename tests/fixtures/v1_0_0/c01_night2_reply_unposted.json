@@ -1,0 +1,78 @@
+{
+	"asked": {
+		"mari:c1_funeral": true
+	},
+	"clues": [
+		"c1_ferry",
+		"c1_lamp",
+		"c1_cinnamon",
+		"c1_funeral",
+		"c1_hotel",
+		"c1_tea",
+		"c1_dark_lamp",
+		"c1_cinnamon_sign",
+		"c1_theo"
+	],
+	"examined": {
+		"bakery_lamp": true,
+		"chalkboard": true,
+		"chute": true,
+		"teacup": true
+	},
+	"flags": {
+		"bakery_lamp_lit": true,
+		"delivered_any": true,
+		"hope": 2,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_mari": true,
+		"met_odile": true,
+		"night": 2,
+		"tutorial_done": true,
+		"visited_harbor": true,
+		"visited_post_office": true,
+		"visited_square": true
+	},
+	"items": [
+		"mari_reply"
+	],
+	"letters": {
+		"blue_door": {
+			"read": true,
+			"state": "delivered",
+			"to": "mari"
+		},
+		"far_shore": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"lamp_lit": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"lamp_room": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		},
+		"umbrella": {
+			"read": false,
+			"state": "chute",
+			"to": ""
+		}
+	},
+	"location": "post_office",
+	"objective": "Collect tonight's letters from the Chute.",
+	"play_time": 3.11774477777775,
+	"player_pos": [
+		1195.0,
+		1025.0
+	],
+	"saved_at": 1794148430.88278,
+	"spawn": "bed",
+	"version": 1
+}

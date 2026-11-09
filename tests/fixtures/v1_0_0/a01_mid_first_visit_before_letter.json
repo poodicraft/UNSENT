@@ -1,0 +1,34 @@
+{
+	"asked": {
+
+	},
+	"clues": [],
+	"examined": {
+
+	},
+	"flags": {
+		"hope": 0,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"met_odile": true,
+		"night": 1,
+		"visited_harbor": true,
+		"visited_post_office": true
+	},
+	"items": [],
+	"letters": {
+
+	},
+	"location": "post_office",
+	"objective": "Find the post office at the end of the quay.",
+	"play_time": 1.12653333333333,
+	"player_pos": [
+		1650.0,
+		1025.0
+	],
+	"saved_at": 1794148408.02221,
+	"spawn": "from_harbor",
+	"version": 1
+}

@@ -278,6 +278,12 @@ n: *—and blazes back, brighter than before. Somebody up there knew exactly wha
 ~ refresh
 -> finale.harbor
 
+# Replays an interrupted finale after loading a save (see Story.repair_after_load).
+=== resume.finale
+~ set finale
+[if not $lamp_resolved] -> finale.pier_wait.go
+-> finale.harbor
+
 === finale.harbor
 ~ letterbox on
 ~ music lantern

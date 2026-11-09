@@ -14,7 +14,7 @@ Read them closely, explore the town, question its people, connect the clues, and
 who each letter is really for. Deliver them, and the world changes. Deliver the future,
 and the future changes too.
 
-- **Download:** [`build/UNSENT.apk`](build/UNSENT.apk) (signed, Android 7.0+, ~62 MB)
+- **Download:** [`build/UNSENT.apk`](build/UNSENT.apk) — version **1.0.1** (signed, Android 7.0+, ~62 MB)
 - **Engine:** Godot 4.5.1 (GDScript), GL Compatibility renderer
 - **No ads, no login, no internet, zero Android permissions.**
 
@@ -35,8 +35,19 @@ and the future changes too.
 adb install -r build/UNSENT.apk
 ```
 
-> The APK is signed with a bundled *development* key (see [Signing](#signing)). If you
-> later install a build signed with a different key, uninstall the old one first.
+**Updating from 1.0.0 — your progress is kept**
+
+Install `build/UNSENT.apk` straight over the version you already have (open it and tap
+**Update**). Do **not** uninstall first: uninstalling an Android app deletes its saved games.
+Version 1.0.1 has the same app ID (`com.unsent.hushwater`) and the same signing key as 1.0.0
+and a higher version number, so Android installs it as an update and keeps every save,
+your settings and the endings you've found. Tap **Continue** on the title screen to pick up
+where you left off. Saves made by 1.0.0 in the middle of a scene are repaired on load: the
+interrupted moment simply plays again.
+
+> The APK is signed with a bundled *development* key (see [Signing](#signing)). A build signed
+> with a different key can't update this one; Android would ask you to uninstall first, which
+> deletes saves — so always build updates with the same key.
 
 ## How to play
 
@@ -47,6 +58,8 @@ adb install -r build/UNSENT.apk
 | Talk to someone | Tap them |
 | Advance dialogue | Tap anywhere |
 | Read letters, notes, people, items | Satchel button (top right) |
+| Close a letter or panel | **Close** button at the bottom, **×** at the top, Android **Back**, or (for pop-ups) tap outside |
+| Scroll a letter or list | Drag with your finger |
 | Pause, save, load, settings | Pause button (top left) or Android **Back** |
 
 **The loop:** collect a letter from the Chute → read it (tap the underlined words; turn the
@@ -199,9 +212,31 @@ Characters are defined in `data/characters.json` and drawn by `src/world/puppet.
 # Validate every script, dialogue jump target, clue, item, letter and condition
 godot --headless --path . -s tests/check_scripts.gd
 
-# Four complete playthroughs through the real story engine (all three endings,
-# decoys, evidence rules, save/load): 84 checks
+# 159 checks: four complete playthroughs (all three endings, decoys, evidence
+# rules, save/load); 23 real saves made by version 1.0.0 (including ones taken
+# mid-scene) must load with nothing lost and be playable to an ending; save
+# safety (crash-proof writes, backups); and an explorer that examines every
+# object and asks everyone about everything from every saved moment
 godot --headless --path . -- --playtest=all
+
+# Play with real finger-touch events (title, dialogue, walking, the Chute,
+# closing letters with Close / × / Back, satchel, pause, tap-outside, loading
+# an old save from the title screen): 51 checks
+xvfb-run godot --path . --resolution 720x1280 -- --test=touch_test
+xvfb-run godot --path . --resolution 1080x2400 -- --test=touch_test
+
+# The update as a player meets it: leave 1.0.0's files on the "phone" (an
+# autosave taken mid-scene, a manual save, settings, endings), start the new
+# version, tap Continue, and check that every clue, letter, flag and setting is
+# kept and the interrupted scene resumes: 22 checks
+godot --path . -- --test=upgrade_test --phase=setup
+xvfb-run godot --path . --resolution 1080x2400 -- --test=upgrade_test --phase=check
+
+# Text-fit audit: every screen, letter, envelope, card, menu and ending, built
+# with the longest real content at all three text sizes on three screen shapes;
+# every text must be on screen, inside its frame, not cut off and not
+# overlapping anything (plus the floating name tags in every scene)
+xvfb-run godot --path . --resolution 720x1280 -- --test=ui_audit [--size=0|1|2] [--shots]
 
 # Drive the real UI with simulated taps (title → intro → walk → Chute → letter → talk)
 xvfb-run godot --path . --resolution 720x1280 -- --uismoke
@@ -209,6 +244,31 @@ xvfb-run godot --path . --resolution 720x1280 -- --uismoke
 # Screenshot every location and screen into build/shots/
 xvfb-run godot --path . --resolution 1080x1920 -- --tour
 ```
+
+## Changelog
+
+### 1.0.1
+- **Letters always close.** A big **Close** button now sits at the bottom of every letter,
+  next to *Turn over*; the **×** moved inside the phone's safe area (clear of the status bar
+  and camera cut-out) and grew; Android **Back** closes it too. The satchel got a bottom
+  **Close** button as well.
+- **Progress is safe.** Saves are written crash-proof (temporary file, verified, then swapped
+  in, with the previous save kept as a backup). Autosaves made mid-scene store the calm moment
+  before the scene, so a scene interrupted by a call or a locked screen simply replays. Saves
+  from 1.0.0 load unchanged, and any that were taken mid-scene are repaired on load.
+- **Text always fits.** The dialogue box sizes itself to the text and can no longer slide
+  below the screen; pop-ups can no longer open with their buttons off-screen; save slots,
+  letter cards and envelope details grow with their text; the letter header no longer
+  overlaps the letter; long panels scroll; object name tags never pile up or leave the
+  screen; evidence marks (● ✓ ✗) are drawn instead of relying on font symbols; painted signs
+  in the scenery were moved where lamps, ladders and signposts no longer cover them.
+- **Fixes:** pop-ups opened from the title screen (New Game confirmation, Load Game,
+  Settings) were hidden behind it and couldn't be tapped; lists couldn't be scrolled by
+  dragging on their buttons; "tap to continue" cards ignored taps outside the card; Back on
+  the credits quit the game; first-visit scenes on the cliff and in the lamp room never
+  played; re-entering the lamp room mid-storm reset the lamp sequence; scenes reacting to a
+  letter read from the satchel played hidden behind it; save times showed UTC instead of
+  local time; the HUD no longer shows through open panels.
 
 ## Project structure
 

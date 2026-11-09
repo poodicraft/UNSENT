@@ -32,6 +32,12 @@ func _ready() -> void:
 		await _route_lamp()
 	if route in ["all", "decoys"]:
 		await _route_decoys()
+	if route == "fixtures":
+		await _make_fixtures()
+	if route in ["all", "compat"]:
+		await _route_compat()
+	if route in ["all", "explore"]:
+		await _route_explore()
 	print("\nPLAYTEST: %d checks, %d failures" % [checks, failures.size()])
 	for f in failures:
 		print("  FAILED: ", f)
@@ -285,3 +291,278 @@ func _route_decoys() -> void:
 	await goto("post_office", "from_square")
 	await talk("odile", [["ask", "c2_violet"]], ["Do you want me to deliver", "Give it back"])
 	expect(Story.delivered("lamp_lit") == "odile" and f("odile_burned"), "Odile asked for her letter back and burned it")
+
+
+# ─── Save fixtures (authentic saves from this build, incl. mid-scene) ──
+
+func checkpoint(name: String) -> void:
+	ui.snap(name)
+
+
+func _make_fixtures() -> void:
+	ui.snap_dir = ProjectSettings.globalize_path("res://tests/fixtures/v1_0_0")
+	# Route A: the ferry route, with checkpoints between steps and mid-scene snaps
+	ui.snap_markers = {
+		"My eyes aren't what they were": "a01_mid_first_visit_before_letter",
+		"[reading] blue_door": "a02_reading_first_letter",
+		"That idiot. That beautiful": "a04_mid_outcome_blue_door",
+		"[card] Night Two": "a06_mid_night_card_2",
+		"I lit it. Of course I lit it.": "a08_mid_outcome_lamp_lit",
+		"I'm the keeper now.": "a09_mid_outcome_lamp_room",
+		"Felix wrote this. That night.": "a12_mid_outcome_eleven",
+		"[card] Lantern Night": "a14_mid_night_card_4",
+		"The harbour is full of people": "a16_mid_finale_harbor",
+		"...moves.": "a17_mid_ending_dawn",
+	}
+	begin("fixtures A (ferry)")
+	await goto("harbor", "intro")
+	checkpoint("a00_after_intro")
+	await goto("post_office", "from_harbor")
+	await examine("chute")
+	checkpoint("a03_after_tutorial")
+	await examine("teacup")
+	await goto("square", "from_po")
+	await examine("bakery_lamp")
+	await examine("chalkboard")
+	await talk("mari", [["ask", "c1_funeral"], ["deliver", "blue_door"]])
+	checkpoint("a05_holding_reply")
+	await goto("post_office", "from_square")
+	await examine("outbox")
+	await sleep_now()
+	checkpoint("a07_night2_start")
+	await examine("chute")
+	await goto("harbor", "from_po")
+	await examine("cliff_steps")
+	await talk("tobias", [["deliver", "lamp_lit"]])
+	await goto("harbor", "from_cliff")
+	await talk("june", [["deliver", "lamp_room"]])
+	checkpoint("a10_night2_mid")
+	await goto("post_office", "from_harbor")
+	await goto("square", "from_po")
+	await examine("bakery_umbrella")
+	await talk("mari", [["deliver", "umbrella"]])
+	await goto("post_office", "from_square")
+	await examine("chute")
+	await sleep_now()
+	checkpoint("a11_night3_start")
+	await examine("chute")
+	await goto("harbor", "from_po")
+	await examine("memorial", ["Not now"])
+	await examine("cliff_steps")
+	await examine("logbook")
+	await talk("tobias", [["deliver", "eleven_fifty_two"]])
+	await goto("cliff", "from_harbor")
+	await talk("june", [["deliver", "little_bird"]])
+	await goto("harbor", "from_cliff")
+	await goto("post_office", "from_harbor")
+	await examine("chute")
+	checkpoint("a13_night3_done")
+	await sleep_now()
+	checkpoint("a15_lantern_night_start")
+	await goto("harbor", "from_po")
+	await examine("cliff_steps")
+	ui.prefer = ["Climb", "Take June's ticket", "Light your own"]
+	await examine("lighthouse_door")
+	print("  fixture route A ending: ", main.last_ending)
+	# Route B: Wren lights the lamp (nobody keeper) with a mid-sequence snap
+	ui.snap_markers = {"The light goes out. It is 11:40.": "b02_lamp_failed_mid_sequence"}
+	begin("fixtures B (lamp)")
+	await night_one()
+	await examine("chute")
+	await goto("harbor", "from_po")
+	await talk("june", [["deliver", "far_shore"]])
+	await examine("cliff_steps")
+	await talk("tobias", [["deliver", "lamp_lit"]])
+	await goto("harbor", "from_cliff")
+	await goto("post_office", "from_harbor")
+	await goto("square", "from_po")
+	await talk("mari", [["ask", "c5_thursday"], ["deliver", "umbrella"]])
+	await goto("post_office", "from_square")
+	await examine("chute")
+	await sleep_now()
+	await examine("chute")
+	await goto("harbor", "from_po")
+	await examine("memorial", ["Not now"])
+	await examine("cliff_steps")
+	await talk("june", [["ask", "c6_marguerite"], ["deliver", "eleven_fifty_two"]])
+	await talk("june", [["deliver", "little_bird"]])
+	await goto("harbor", "from_cliff")
+	await goto("post_office", "from_harbor")
+	await sleep_now()
+	checkpoint("b01_lantern_night_nobody_keeper")
+	await goto("harbor", "from_po")
+	await examine("cliff_steps")
+	ui.prefer = ["Climb", "Stay", "Light your own"]
+	await examine("lighthouse_door")
+	checkpoint("b03_in_lamp_room_after_failure")
+	print("  fixture route B ending: ", main.last_ending)
+	# Route C: careless player who never posted the reply, on night 3
+	ui.snap_markers = {}
+	begin("fixtures C (dusk)")
+	await night_one(false)
+	checkpoint("c01_night2_reply_unposted")
+	await examine("chute")
+	await examine("umbrella_stand")
+	await talk("odile", [["ask", "c5_crusts"], ["deliver", "umbrella"]], ["Not yet", "That's all"])
+	await goto("square", "from_po")
+	await examine("felix_scope")
+	await talk("felix", [["deliver", "far_shore"]])
+	await goto("post_office", "from_square")
+	await sleep_now()
+	checkpoint("c02_night3_after_decoys")
+	ui.snap_dir = ""
+
+
+# ─── Save compatibility: every v1.0.0 save must load and finish ──────
+
+const Bot := preload("res://tests/bot.gd")
+
+
+func _route_compat() -> void:
+	print("\n══ ROUTE: save compatibility (v1.0.0 fixtures) ══")
+	var dir := "res://tests/fixtures/v1_0_0"
+	var names: Array = []
+	for fname in DirAccess.get_files_at(dir):
+		if fname.ends_with(".json"):
+			names.append(fname)
+	names.sort()
+	for fname in names:
+		var raw: String = FileAccess.get_file_as_string(dir.path_join(String(fname)))
+		var before: Dictionary = JSON.parse_string(raw)
+		# Install the old save in slot 3 exactly as it would sit on the phone
+		var fh := FileAccess.open("user://save_3.json", FileAccess.WRITE)
+		fh.store_string(raw)
+		fh.close()
+		main.last_ending = ""
+		ui.transcript.clear()
+		await main.load_slot("3")
+		await get_tree().process_frame
+		var label: String = String(fname).get_basename()
+		# nothing the player achieved may be lost
+		var lost: Array = []
+		for k in before.get("flags", {}):
+			if not GameState.flags.has(k):
+				lost.append("flag " + k)
+		for c in before.get("clues", []):
+			if not GameState.has_clue(c):
+				lost.append("clue " + c)
+		for lid in before.get("letters", {}):
+			var old_state: String = before.letters[lid].get("state", "")
+			var new_state := GameState.letter_state(lid)
+			if old_state in ["delivered", "kept", "faded"] and new_state != old_state:
+				lost.append("letter %s %s->%s" % [lid, old_state, new_state])
+			if old_state == "held" and new_state == "":
+				lost.append("letter %s lost" % lid)
+		expect(lost.is_empty(), "%s: progress preserved %s" % [label, "" if lost.is_empty() else str(lost)])
+		var bot = Bot.new(self)
+		var ending: String = await bot.run_to_end()
+		expect(ending != "", "%s: playable to an ending (got '%s')" % [label, ending])
+		if ending == "":
+			for l in bot.log_lines.slice(-12):
+				print("      bot: ", l)
+	await _save_safety()
+
+
+## New saves: mid-scene autosaves keep the calm state; a damaged save file
+## falls back to its backup; the old save format still loads.
+func _save_safety() -> void:
+	print("\n══ ROUTE: save safety ══")
+	main.last_ending = ""
+	var raw := FileAccess.get_file_as_string("res://tests/fixtures/v1_0_0/a07_night2_start.json")
+	var fh := FileAccess.open("user://save_2.json", FileAccess.WRITE)
+	fh.store_string(raw)
+	fh.close()
+	await main.load_slot("2")
+	await get_tree().process_frame
+	expect(GameState.letter_state("lamp_lit") == "chute", "night-2 save loaded (letters in the Chute)")
+	# A scene starts...
+	Story.busy = true
+	GameState.collect_chute()
+	GameState.set_flag("mid_scene_marker", true)
+	GameState.autosave()   # e.g. the phone locks right now
+	Story.busy = false
+	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("user://save_auto.json"))
+	expect(not saved.flags.has("mid_scene_marker"), "a mid-scene autosave stores the calm moment before the scene")
+	expect(saved.letters.get("lamp_lit", {}).get("state", "") == "chute", "...so the interrupted scene can simply be replayed")
+	GameState.flags.erase("mid_scene_marker")
+	# Save twice so a backup exists, then damage the main file.
+	GameState.save_game("1")
+	GameState.set_flag("second_save", true)
+	GameState.save_game("1")
+	expect(FileAccess.file_exists("user://save_1.bak.json"), "saving keeps the previous save as a backup")
+	var bad := FileAccess.open("user://save_1.json", FileAccess.WRITE)
+	bad.store_string("{\"flags\": {\"nig")   # a write cut off by a crash
+	bad.close()
+	expect(GameState.load_game("1"), "a damaged save still loads (from its backup)")
+	expect(GameState.letter_state("lamp_lit") == "held", "...with its progress intact")
+	expect(not GameState.slot_info("1").is_empty(), "the save list still shows the damaged slot")
+	GameState.delete_save("1")
+	GameState.delete_save("2")
+	GameState.delete_save("3")
+	expect(not GameState.has_save("1"), "deleting a save removes its backup too")
+
+
+# ─── Exploration: touch everything, from every saved moment ─────────
+
+## From each saved moment: go everywhere reachable, examine every object,
+## talk to everyone and ask them about every clue. Nothing may get stuck,
+## and no scene may error. (Choices pick the non-committal answer.)
+func _route_explore() -> void:
+	print("\n══ ROUTE: explore everything from every saved moment ══")
+	var dir := "res://tests/fixtures/v1_0_0"
+	var names: Array = []
+	for fname in DirAccess.get_files_at(dir):
+		if fname.ends_with(".json"):
+			names.append(fname)
+	names.sort()
+	var careful := ["Not yet", "Not now", "No", "Leave it", "Goodbye", "That's all", "Nothing", "I'll leave", "I'll let you", "See you", "Stay a moment"]
+	var deep := ["a03_after_tutorial.json", "a10_night2_mid.json", "a13_night3_done.json", "b01_lantern_night_nobody_keeper.json"]
+	var interactions := 0
+	for fname in names:
+		var raw: String = FileAccess.get_file_as_string(dir.path_join(String(fname)))
+		var fh := FileAccess.open("user://save_3.json", FileAccess.WRITE)
+		fh.store_string(raw)
+		fh.close()
+		main.last_ending = ""
+		await main.load_slot("3")
+		await get_tree().process_frame
+		if main.last_ending != "":
+			continue
+		var bot = Bot.new(self)
+		var stuck := false
+		for loc in Data.locations:
+			if main.last_ending != "" or not bot.can_reach(loc):
+				continue
+			await bot.go(loc)
+			if GameState.location != loc or main.last_ending != "":
+				continue
+			for hid in main.world.hotspots.keys():
+				var h = main.world.hotspots.get(hid)
+				if h == null or not h.visible or h.is_exit():
+					continue
+				await examine(hid, careful)
+				interactions += 1
+				if Story.busy or main._changing:
+					stuck = true
+					expect(false, "%s: examining %s in %s left the game busy" % [fname, hid, loc])
+					Story.busy = false
+				if GameState.location != loc or main.last_ending != "":
+					break
+			if GameState.location != loc or main.last_ending != "":
+				continue
+			for nid in main.world.npcs.keys():
+				var plan: Array = []
+				if String(fname) in deep:
+					for c in GameState.clues:
+						plan.append(["ask", c])
+				await talk(nid, plan, careful)
+				interactions += 1
+				if Story.busy or main._changing:
+					stuck = true
+					expect(false, "%s: talking to %s in %s left the game busy" % [fname, nid, loc])
+					Story.busy = false
+				if GameState.location != loc or main.last_ending != "":
+					break
+		expect(not stuck, "%s: explored every place without getting stuck" % fname)
+	print("  (%d interactions)" % interactions)
+

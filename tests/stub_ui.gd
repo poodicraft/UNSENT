@@ -12,8 +12,31 @@ var prefer: Array = []
 var dialogue: Node
 var hud: Node
 var root: Control
+var screens: Control
+var overlay: Node
 var _pending_ask := ""
 var _pending_letter := ""
+## Fixture capture: text marker -> fixture name. When a line containing the
+## marker is shown, the current game state is written to snap_dir.
+var snap_markers: Dictionary = {}
+var snap_dir := ""
+
+
+func snap(name: String) -> void:
+	if snap_dir == "":
+		return
+	DirAccess.make_dir_recursive_absolute(snap_dir)
+	var f := FileAccess.open(snap_dir.path_join(name + ".json"), FileAccess.WRITE)
+	f.store_string(JSON.stringify(GameState.to_dict(), "\t"))
+	f.close()
+	print("    [fixture] ", name)
+
+
+func _check_snap(text: String) -> void:
+	for m in snap_markers.keys():
+		if text.find(m) >= 0:
+			snap(snap_markers[m])
+			snap_markers.erase(m)
 
 
 class StubDialogue extends Node:
@@ -23,6 +46,7 @@ class StubDialogue extends Node:
 	func say(who: String, expr: String, text: String) -> void:
 		_open = true
 		owner_ui.transcript.append("%s: %s" % [who, text])
+		owner_ui._check_snap(text)
 		await get_tree().process_frame
 
 	func choose(options: Array, hub := false) -> int:
@@ -61,6 +85,9 @@ class StubHud extends Node:
 	func _on_objective(_t: String) -> void:
 		pass
 
+	func refresh_badge() -> void:
+		pass
+
 
 func _init() -> void:
 	dialogue = StubDialogue.new()
@@ -70,6 +97,11 @@ func _init() -> void:
 	add_child(hud)
 	root = Control.new()
 	add_child(root)
+	screens = Control.new()
+	add_child(screens)
+	overlay = Node.new()
+	overlay.add_child(Node.new())
+	add_child(overlay)
 
 
 func _hub_choice(options: Array) -> int:
@@ -104,6 +136,14 @@ func back_pressed() -> bool:
 	return false
 
 
+func dismiss_all() -> void:
+	await get_tree().process_frame
+
+
+func open_credits() -> void:
+	pass
+
+
 func fade(_out: bool, _secs := 0.8) -> void:
 	await get_tree().process_frame
 
@@ -134,6 +174,7 @@ func toast_clue(cid: String) -> void:
 
 func card(title: String, subtitle: String, _on_black := false) -> void:
 	transcript.append("[card] %s — %s" % [title, subtitle])
+	_check_snap("[card] " + title)
 	await get_tree().process_frame
 
 
@@ -151,6 +192,7 @@ func delivery_flourish(letter_id: String, who: String) -> void:
 ## every envelope detail.
 func open_letter(letter_id: String) -> void:
 	GameState.mark_read(letter_id)
+	_check_snap("[reading] " + letter_id)
 	var L: Dictionary = Data.letter(letter_id)
 	var re := RegEx.new()
 	re.compile("\\[\\[[^|\\]]+\\|([a-z0-9_]+)\\]\\]")

@@ -16,7 +16,7 @@ bram[happy]: Bram Calloway, captain of the Morning Lark. You'll be the new night
 
 === bram.default
 [if $night == 1] bram[happy]: Wren! Little bird! How's the post? Heavy? Light? Somewhere in between, like a good loaf?
-[if $night == 2] bram[happy]: ♪ Oh, the dusk came down on Hushwater, and it never went away... ♪ I'm working on a second verse. It's mostly the first verse again.
+[if $night == 2] bram[happy]: *(singing)* Oh, the dusk came down on Hushwater, and it never went away... *(stops)* I'm working on a second verse. It's mostly the first verse again.
 [if $night == 3] bram: Lantern Night tomorrow. I'll be bringing the 8:15 across in it. Barometer's dropping like a stone in a bucket.
 * What's in the Lost & Found? -> bram.lostfound
 * Tell me about the ferry. -> bram.ferry

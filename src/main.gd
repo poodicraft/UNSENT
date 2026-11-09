@@ -14,6 +14,7 @@ var last_ending := ""
 var title: Control = null
 var _holder: Node2D
 var _changing := false
+var _in_ending := false
 
 
 func _ready() -> void:
@@ -26,12 +27,14 @@ func _ready() -> void:
 	add_child(ui)
 	var args := OS.get_cmdline_user_args()
 	for a in args:
-		if a == "--tour" or a == "--uismoke" or a.begins_with("--playtest"):
+		if a == "--tour" or a == "--uismoke" or a.begins_with("--playtest") or a.begins_with("--test="):
 			var path := "res://tests/playthrough.gd"
 			if a == "--tour":
 				path = "res://tests/screenshot_tour.gd"
 			elif a == "--uismoke":
 				path = "res://tests/ui_smoke.gd"
+			elif a.begins_with("--test="):
+				path = "res://tests/%s.gd" % a.substr(7)
 			var T: Script = load(path)
 			if T and T.can_instantiate():
 				add_child(T.new())
@@ -69,7 +72,7 @@ func show_title() -> void:
 	world.title_mode()
 	Audio.play_music("theme", 2.5)
 	title = TitleScreen.new()
-	ui.root.add_child(title)
+	ui.screens.add_child(title)
 	title.action.connect(_on_title_action)
 	ui.fade_instant(1.0)
 	await ui.fade(false, 1.6)
@@ -112,16 +115,21 @@ func new_game() -> void:
 func load_slot(slot: String) -> void:
 	if slot == "":
 		return
+	await ui.dismiss_all()
 	await ui.fade(true, 0.8)
 	_close_title()
 	if not GameState.load_game(slot):
 		ui.toast("That save couldn't be loaded.", "fade")
 		show_title()
 		return
+	# Older saves may have been made mid-scene: make them whole again.
+	Story.repair_after_load()
 	ui.set_world_ui(true)
 	ui.hud._on_objective(GameState.objective)
+	ui.hud.refresh_badge()
 	var pos: Variant = GameState.player_pos
-	await goto_location(GameState.location, GameState.spawn, false, false, pos)
+	await goto_location(GameState.location, GameState.spawn, true, false, pos)
+	await Story.resume_after_load()
 
 
 func go_title() -> void:
@@ -151,17 +159,22 @@ func goto_location(loc_id: String, spawn: String, run_on_enter := true, fade := 
 	world = Location.new()
 	_holder.add_child(world)
 	world.build(loc_id, spawn, saved_pos)
+	# Pick the arrival scene before marking the place visited, so first-visit
+	# scenes ("not $visited_cliff") can play.
+	var arrival := ""
+	if run_on_enter:
+		for e in world.def.get("on_enter", []):
+			if Story.eval(e.get("if", "true")):
+				arrival = e.node
+				break
 	GameState.set_flag("visited_" + loc_id, true)
 	_changing = false
 	await ui.fade(false, 0.5)
 	ui.hud.show_location(Data.locations.get(loc_id, {}).get("name", ""))
 	if not Story.busy:
 		GameState.autosave()
-	if run_on_enter and not Story.busy:
-		for e in world.def.get("on_enter", []):
-			if Story.eval(e.get("if", "true")):
-				await Story.run(e.node)
-				break
+	if arrival != "" and not Story.busy:
+		await Story.run(arrival)
 
 
 # ─── Endings ─────────────────────────────────────────────────────────
@@ -171,12 +184,15 @@ func play_ending(id: String) -> void:
 	last_ending = id
 	if test_mode:
 		return
+	_in_ending = true
+	await ui.dismiss_all()
 	ui.set_world_ui(false)
 	var e := EndingScreen.new()
-	ui.root.add_child(e)
+	ui.screens.add_child(e)
 	await e.play(id)
 	e.queue_free()
 	GameState.delete_save("auto")
+	_in_ending = false
 	go_title()
 
 
@@ -190,7 +206,8 @@ func _notification(what: int) -> void:
 			GameState.autosave()
 			get_tree().quit()
 		NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT:
-			if title == null and not _changing:
+			# Mid-scene this stores the calm moment before the scene began.
+			if title == null and not _changing and not _in_ending:
 				GameState.autosave()
 
 
@@ -201,6 +218,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _back() -> void:
 	if ui.back_pressed():
+		return
+	if _in_ending or _changing:
 		return
 	if title:
 		get_tree().quit()

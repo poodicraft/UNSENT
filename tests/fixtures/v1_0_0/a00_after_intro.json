@@ -1,0 +1,32 @@
+{
+	"asked": {
+
+	},
+	"clues": [],
+	"examined": {
+
+	},
+	"flags": {
+		"hope": 0,
+		"intro_done": true,
+		"june_path": "",
+		"lamp_sequence": 0,
+		"met_bram": true,
+		"night": 1,
+		"visited_harbor": true
+	},
+	"items": [],
+	"letters": {
+
+	},
+	"location": "harbor",
+	"objective": "Find the post office at the end of the quay.",
+	"play_time": 0.982742666666667,
+	"player_pos": [
+		1010.0,
+		1000.0
+	],
+	"saved_at": 1794148407.89615,
+	"spawn": "intro",
+	"version": 1
+}

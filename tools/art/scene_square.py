@@ -143,10 +143,11 @@ def clock_tower(L):
 def bakery(L):
     x, w = 1180, 480
     top = house(L, x, BASE, w, 470, "#c9955f", "#6b3d48", roof_h=120, roof_type="mansard", seed=70, chimney=True)
-    # sign board
-    L.sheet(rect(1214, 626, 290, 46), "#3a2a2a", seed=71)
-    L.ink(rect(1218, 630, 282, 38), "#e8c77a", 2, closed=True)
-    layer_text(L, 1359, 649, "THE SLEEPLESS LOAF", "Cinzel.ttf", 20, "#f3dfb0")
+    # sign board — over the shop window, clear of the lamp above the door
+    # (the lamp hangs at x 1420..1470, so the board must end before it)
+    L.sheet(rect(1190, 626, 214, 46), "#3a2a2a", seed=71)
+    L.ink(rect(1194, 630, 206, 38), "#e8c77a", 2, closed=True)
+    layer_text(L, 1297, 649, "THE SLEEPLESS LOAF", "Cinzel.ttf", 18, "#f3dfb0")
     # upstairs windows
     for i, wx in enumerate((1210, 1330, 1450, 1560)):
         window(L, wx, 500, 66, 86, lit=(i != 2), panes=(2, 2), seed=72 + i * 3, curtain="#b0605a")
@@ -176,10 +177,11 @@ def bakery(L):
     L.ink([(1553, 800), (1548, 940)], "#2d5a42", 2)
     L.sheet(ellipse(1546, 783, 8, 5, 10), "#7a4a2a", seed=126)
     # chalkboard A-frame
-    L.sheet([(1584, 992), (1600, 850), (1654, 850), (1670, 992)], "#5a4030", seed=127)
-    L.sheet([(1594, 970), (1606, 862), (1648, 862), (1660, 970)], "#24262c", seed=128, edge=0.05)
+    # (wide enough that every chalk line sits inside the board)
+    L.sheet([(1570, 992), (1588, 846), (1666, 846), (1684, 992)], "#5a4030", seed=127)
+    L.sheet([(1580, 972), (1595, 858), (1659, 858), (1674, 972)], "#24262c", seed=128, edge=0.05)
     for i, t in enumerate(("CINNAMON", "LOAVES", "4 o'clock", "every morning")):
-        layer_text(L, 1627, 884 + i * 21, t, "Caveat.ttf", 15 if i < 2 else 13, "#f2efe6", alpha=0.9)
+        layer_text(L, 1627, 880 + i * 22, t, "Caveat.ttf", 14 if i < 2 else 12, "#f2efe6", alpha=0.9)
 
 
 def post_office_front(L):
@@ -235,8 +237,9 @@ def main_layer(out):
     L.sheet([(632, 760), (710, 730), (788, 760)], WOOD_DARK, seed=333)
     for i, (nx, ny, nw, nh, c) in enumerate([(652, 772, 56, 70, "#efe6d2"), (714, 770, 54, 44, "#f3dcb0"), (716, 818, 52, 40, "#e7eef3")]):
         L.sheet(rect(nx, ny, nw, nh), c, shadow=0.25, shadow_off=(2, 3), shadow_blur=2, seed=334 + i)
-        for k in range(int(nh / 10)):
-            L.ink([(nx + 6, ny + 10 + k * 9), (nx + nw - 8, ny + 10 + k * 9)], "#6a6070", 1.4, alpha=0.6)
+        first = 22 if i == 0 else 10     # the first notice has a title; lines start below it
+        for k in range(int((nh - first) / 9)):
+            L.ink([(nx + 6, ny + first + k * 9), (nx + nw - 8, ny + first + k * 9)], "#6a6070", 1.4, alpha=0.6)
     layer_text(L, 680, 782, "LANTERN", "Cinzel.ttf", 7, "#8a3a30")
     # fountain
     fx = 980

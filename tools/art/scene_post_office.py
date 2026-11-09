@@ -129,16 +129,18 @@ def archive(L):
                 labels.append(rect(x0 + i * cw + cw / 2 - 8, y0 + (j + 1) * ch - 9, 16, 5))
     L.sheet(env, "#efe4cc", shadow=0.3, shadow_off=(1, 2), shadow_blur=1.5, edge=0.1, seed=123)
     L.sheet(labels, "#8a6ab8", shadow=0, edge=0, seed=124)
-    # sign above
-    L.sheet(rect(x0 - 10, y0 - 120, x1 - x0 + 20, 58), "#1d2236", seed=125)
-    L.ink(rect(x0 - 4, y0 - 114, x1 - x0 + 8, 46), "#d9b46c", 2, closed=True)
-    layer_text(L, (x0 + x1) / 2, y0 - 91, "THE OFFICE OF UNSENT LETTERS", "Cinzel.ttf", 17, "#e8c77a")
+    # sign, mounted on the cabinet's cornice — low enough to be on screen on
+    # every phone shape, and clear of the hanging lamp above it
+    L.sheet(rect(x0 - 10, y0 - 64, x1 - x0 + 20, 48), "#1d2236", seed=125)
+    L.ink(rect(x0 - 4, y0 - 58, x1 - x0 + 8, 36), "#d9b46c", 2, closed=True)
+    layer_text(L, (x0 + x1) / 2, y0 - 40, "THE OFFICE OF UNSENT LETTERS", "Cinzel.ttf", 17, "#e8c77a")
     # rolling ladder
-    L.ink([(1060, 260), (1010, FLOOR - 4)], "#6a4a34", 7)
-    L.ink([(1100, 260), (1050, FLOOR - 4)], "#6a4a34", 7)
+    # (it leans on the cabinet below the sign, never across its lettering)
+    L.ink([(1058, 292), (1010, FLOOR - 4)], "#6a4a34", 7)
+    L.ink([(1098, 292), (1050, FLOOR - 4)], "#6a4a34", 7)
     for k in range(9):
         t = (k + 1) / 10
-        L.ink([(1060 - 50 * t, 260 + (FLOOR - 264) * t), (1100 - 50 * t, 260 + (FLOOR - 264) * t)], "#6a4a34", 5)
+        L.ink([(1058 - 48 * t, 292 + (FLOOR - 296) * t), (1098 - 48 * t, 292 + (FLOOR - 296) * t)], "#6a4a34", 5)
 
 
 def stairs(L):
@@ -221,18 +223,18 @@ def back_door(L):
 
 
 def wall_decor(L):
-    # framed map of the coast
-    L.sheet(rect(250, 160, 160, 120), WOOD, seed=200)
-    L.sheet(rect(260, 170, 140, 100), "#e8dcc0", shadow=0.1, seed=201)
-    L.ink([(270, 240), (300, 220), (330, 236), (360, 210), (390, 226)], "#5a7a9a", 3)
-    L.sheet(ellipse(372, 200, 5, 5, 8), "#a33a32", seed=202)
-    layer_text(L, 330, 182, "HUSHWATER", "Cinzel.ttf", 9, "#5a4a3a")
-    # poster
-    L.sheet(rect(1470, 170, 120, 160), "#e6d0a8", shadow=0.3, seed=203)
-    layer_text(L, 1530, 196, "ROYAL", "Cinzel.ttf", 11, "#7a2a26")
-    layer_text(L, 1530, 214, "MAIL", "Cinzel.ttf", 18, "#7a2a26")
-    L.sheet([(1500, 250), (1560, 250), (1560, 300), (1500, 300)], "#efe4cc", shadow=0.1, seed=204)
-    L.ink([(1500, 250), (1530, 274), (1560, 250)], "#7a2a26", 2)
+    # framed map of the coast (hung low enough to be on screen on every phone)
+    L.sheet(rect(140, 240, 150, 112), WOOD, seed=200)
+    L.sheet(rect(150, 250, 130, 92), "#e8dcc0", shadow=0.1, seed=201)
+    L.ink([(158, 322), (186, 304), (214, 318), (242, 294), (270, 308)], "#5a7a9a", 3)
+    L.sheet(ellipse(254, 284, 5, 5, 8), "#a33a32", seed=202)
+    layer_text(L, 215, 262, "HUSHWATER", "Cinzel.ttf", 9, "#5a4a3a")
+    # poster (below the hanging lamp, never under it)
+    L.sheet(rect(1470, 238, 120, 156), "#e6d0a8", shadow=0.3, seed=203)
+    layer_text(L, 1530, 262, "ROYAL", "Cinzel.ttf", 11, "#7a2a26")
+    layer_text(L, 1530, 281, "MAIL", "Cinzel.ttf", 18, "#7a2a26")
+    L.sheet([(1500, 314), (1560, 314), (1560, 364), (1500, 364)], "#efe4cc", shadow=0.1, seed=204)
+    L.ink([(1500, 314), (1530, 338), (1560, 314)], "#7a2a26", 2)
     # potted fern
     L.sheet(rrect(1610, 524, 50, 46, 6), "#a0583a", seed=205)
     for k in range(7):
